@@ -1,0 +1,30 @@
+services:
+  # The Web Server and PHP Container
+  web:
+    image: php:8.2-apache
+    container_name: my_apache_php
+    ports:
+      - "8080:80" # Maps port 8080 on your machine to port 80 in the container
+    volumes:
+      - ./src:/var/www/html # Syncs your local 'src' folder to the container's web root
+      - ./.env:/var/www/.env # Syncs environment file to exactly where backend expects it
+    depends_on:
+      - db
+
+  # The Database Container
+  db:
+    image: mysql:8.0
+    container_name: my_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecretroot
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql # Makes sure your database data survives container restarts
+
+# This defines the named volume for persistent database storage
+volumes:
+  db_data:

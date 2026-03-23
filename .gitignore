@@ -1,0 +1,4 @@
+futureVersion/
+.agent/
+.agents/
+.env
