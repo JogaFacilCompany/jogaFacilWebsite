@@ -1,4 +1,5 @@
-futureVersion/
 .agent/
 .agents/
 .env
+.gitignore
+
