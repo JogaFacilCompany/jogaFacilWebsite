@@ -5,29 +5,11 @@ if (isset($_SESSION['usuarioLogado']) && $_SESSION['usuarioTipo'] === 'locador')
     header('Location: ../pages/dashboard-locador.php');
     exit;
 }
-require_once __DIR__ . '/../crud/readUsuarios.php';
-require_once __DIR__ . '/../config/csrf.php';
+require_once __DIR__ . '/../config/auth.php';
 
+$loginError = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $loginError = 'Requisição inválida. Tente novamente.';
-    } else {
-        $inputEmail = trim($_POST['email'] ?? '');
-        $inputSenha = $_POST['senha'] ?? '';
-
-        $foundUser = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
-
-        if ($foundUser && $foundUser['tipo'] === 'locador') {
-            session_regenerate_id(true);
-            $_SESSION['usuarioLogado'] = $foundUser['id'];
-            $_SESSION['usuarioNome']   = $foundUser['nome'];
-            $_SESSION['usuarioTipo']   = $foundUser['tipo'];
-            header('Location: ../pages/dashboard-locador.php');
-            exit;
-        } else {
-            $loginError = 'Credenciais inválidas. Verifique e-mail e senha de locador.';
-        }
-    }
+    $loginError = processLoginAttempt('locador', '../pages/dashboard-locador.php');
 }
 
 $flashMessage = $_SESSION['flashMessage'] ?? null;

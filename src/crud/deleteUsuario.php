@@ -1,6 +1,7 @@
 <?php
 // crud/deleteUsuario.php – Backend Specialist | camelCase enforced
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/userTypes.php';
 
 function deleteUsuario(int $userId): array {
     if ($userId <= 0) {
@@ -31,12 +32,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'locador') {
+    if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::LOCADOR) {
         header('Location: ../pages/login-locador.php');
         exit;
     }
 
     $targetUserId = (int)($_POST['id'] ?? 0);
+
+    if ($targetUserId === (int)$_SESSION['usuarioLogado']) {
+        $_SESSION['flashMessage'] = 'Não é possível remover sua própria conta.';
+        $_SESSION['flashType']    = 'warning';
+        header('Location: ../pages/dashboard-locador.php');
+        exit;
+    }
+
     $responseData = deleteUsuario($targetUserId);
     $_SESSION['flashMessage'] = $responseData['mensagem'];
     $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';

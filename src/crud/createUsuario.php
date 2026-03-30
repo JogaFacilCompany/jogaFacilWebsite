@@ -1,6 +1,7 @@
 <?php
 // crud/createUsuario.php – Backend Specialist | camelCase enforced
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/userTypes.php';
 
 function isValidCpf(string $cpfInput): bool {
     $cpfDigits = preg_replace('/[^0-9]/', '', $cpfInput);
@@ -26,8 +27,7 @@ function createUsuario(array $inputData): array {
     $userType = $inputData['tipo']   ?? '';
     $fromDash = ($inputData['source'] ?? '') === 'dashboard';
 
-    $allowedTypes = ['locador', 'locatario', 'gerente'];
-    if (!in_array($userType, $allowedTypes)) {
+    if (!in_array($userType, UserTypes::ALL, true)) {
         return ['sucesso' => false, 'mensagem' => 'Tipo de usuário inválido.'];
     }
 
@@ -45,7 +45,7 @@ function createUsuario(array $inputData): array {
 
     // CPF only required on the public signup page (not from dashboard admin panel)
     $inputCpf = null;
-    if ($userType === 'locatario' && !$fromDash) {
+    if ($userType === UserTypes::LOCATARIO && !$fromDash) {
         $rawCpf = $inputData['cpf'] ?? '';
         if (!isValidCpf($rawCpf)) {
             return ['sucesso' => false, 'mensagem' => 'CPF inválido. Verifique o número informado.'];
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($fromDash) {
             header('Location: ../pages/dashboard-locador.php');
         } else {
-            $redirectPage = ($_POST['tipo'] === 'locador' || $_POST['tipo'] === 'gerente')
+            $redirectPage = ($_POST['tipo'] === UserTypes::LOCADOR || $_POST['tipo'] === UserTypes::GERENTE)
                 ? 'login-locador.php'
                 : 'login-locatario.php';
             header('Location: ../pages/' . $redirectPage);

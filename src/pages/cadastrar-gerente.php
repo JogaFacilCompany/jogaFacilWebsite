@@ -1,10 +1,8 @@
 <?php
 // pages/cadastrar-gerente.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
-if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'locador') {
-    header('Location: ../pages/login-locador.php');
-    exit;
-}
+require_once __DIR__ . '/../config/auth.php';
+requireLocadorAuth();
 require_once __DIR__ . '/../config/csrf.php';
 
 $flashMessage = $_SESSION['flashMessage'] ?? null;

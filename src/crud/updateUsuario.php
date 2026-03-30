@@ -1,6 +1,7 @@
 <?php
 // crud/updateUsuario.php – Backend Specialist | camelCase enforced
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/userTypes.php';
 
 function updateUsuario(int $userId, array $inputData): array {
     $pdo = getDbConnection();
@@ -51,12 +52,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'locador') {
+    if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::LOCADOR) {
         header('Location: ../pages/login-locador.php');
         exit;
     }
 
     $targetUserId = (int)($_POST['id'] ?? 0);
+
+    if ($targetUserId === (int)$_SESSION['usuarioLogado']) {
+        $_SESSION['flashMessage'] = 'Use as configurações de perfil para editar sua própria conta.';
+        $_SESSION['flashType']    = 'warning';
+        header('Location: ../pages/dashboard-locador.php');
+        exit;
+    }
+
     $responseData = updateUsuario($targetUserId, $_POST);
     $_SESSION['flashMessage'] = $responseData['mensagem'];
     $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';

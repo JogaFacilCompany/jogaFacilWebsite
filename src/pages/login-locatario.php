@@ -5,28 +5,11 @@ if (isset($_SESSION['usuarioLogado'])) {
     header('Location: ../index.php');
     exit;
 }
-require_once __DIR__ . '/../crud/readUsuarios.php';
-require_once __DIR__ . '/../config/csrf.php';
+require_once __DIR__ . '/../config/auth.php';
 
+$loginError = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $loginError = 'Requisição inválida. Tente novamente.';
-    } else {
-        $inputEmail = trim($_POST['email'] ?? '');
-        $inputSenha = $_POST['senha'] ?? '';
-        $foundUser  = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
-
-        if ($foundUser && $foundUser['tipo'] === 'locatario') {
-            session_regenerate_id(true);
-            $_SESSION['usuarioLogado'] = $foundUser['id'];
-            $_SESSION['usuarioNome']   = $foundUser['nome'];
-            $_SESSION['usuarioTipo']   = $foundUser['tipo'];
-            header('Location: ../index.php');
-            exit;
-        } else {
-            $loginError = 'Credenciais inválidas ou usuário não é locatário.';
-        }
-    }
+    $loginError = processLoginAttempt('locatario', '../index.php');
 }
 
 $flashMessage = $_SESSION['flashMessage'] ?? null;

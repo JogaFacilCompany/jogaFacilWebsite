@@ -41,9 +41,8 @@ function getDbConnection(): PDO {
         error_log('DB connection error: ' . $errorMessage);
         http_response_code(500);
         die(json_encode([
-            'sucesso' => false, 
+            'sucesso' => false,
             'mensagem' => 'Erro interno ao conectar ao banco de dados.',
-            'debug' => $errorMessage
         ]));
     }
 }
