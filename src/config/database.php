@@ -17,7 +17,7 @@ function loadEnv(string $envPath): void {
     }
 }
 
-loadEnv(__DIR__ . '/../.env');
+loadEnv(__DIR__ . '/../../.env');
 
 function getDbConnection(): PDO {
     $dbHost = getenv('DB_HOST') ?: '127.0.0.1';
@@ -37,8 +37,13 @@ function getDbConnection(): PDO {
 
         return new PDO($dataSrcName, $dbUser, $dbPass, $pdoOptions);
     } catch (PDOException $connectionError) {
-        error_log('DB connection error: ' . $connectionError->getMessage());
+        $errorMessage = $connectionError->getMessage();
+        error_log('DB connection error: ' . $errorMessage);
         http_response_code(500);
-        die(json_encode(['sucesso' => false, 'mensagem' => 'Erro interno ao conectar ao banco de dados.']));
+        die(json_encode([
+            'sucesso' => false, 
+            'mensagem' => 'Erro interno ao conectar ao banco de dados.',
+            'debug' => $errorMessage
+        ]));
     }
 }
