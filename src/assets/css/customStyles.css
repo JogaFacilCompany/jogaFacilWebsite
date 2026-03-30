@@ -4,26 +4,33 @@
    DESIGN TOKENS – (futureVersion palette)
    ================================================================ */
 :root {
-    --verdeBandeira:   #009c3b;
-    --verdeEscuro:     #006425;
-    --amareloOuro:     #FFDF00;
-    --amareloClaro:    #FFEE66;
+    --verdeBandeira: #009c3b;
+    --verdeEscuro: #006425;
+    --amareloOuro: #FFDF00;
+    --amareloClaro: #FFEE66;
 
-    --bgMain:          #111827;   /* gray-900 */
-    --bgCard:          #1f2937;   /* gray-800 */
-    --bgCardBorder:    #374151;   /* gray-700 */
-    --bgSection:       #0f172a;   /* slate-900 */
+    --bgMain: #111827;
+    /* gray-900 */
+    --bgCard: #1f2937;
+    /* gray-800 */
+    --bgCardBorder: #374151;
+    /* gray-700 */
+    --bgSection: #0f172a;
+    /* slate-900 */
 
-    --textPrimary:     #f9fafb;   /* gray-50  */
-    --textSecondary:   #9ca3af;   /* gray-400 */
-    --textMuted:       #6b7280;   /* gray-500 */
+    --textPrimary: #f9fafb;
+    /* gray-50  */
+    --textSecondary: #9ca3af;
+    /* gray-400 */
+    --textMuted: #6b7280;
+    /* gray-500 */
 
-    --radiusSm:    8px;
-    --radiusMd:    12px;
-    --radiusLg:    16px;
-    --radiusXl:    24px;
-    --shadowCard:  0 4px 20px rgba(0,0,0,0.35);
-    --transition:  all 0.25s ease;
+    --radiusSm: 8px;
+    --radiusMd: 12px;
+    --radiusLg: 16px;
+    --radiusXl: 24px;
+    --shadowCard: 0 4px 20px rgba(0, 0, 0, 0.35);
+    --transition: all 0.25s ease;
 }
 
 /* ================================================================
@@ -55,7 +62,7 @@ body {
    ================================================================ */
 .mainHeader {
     background-color: var(--verdeBandeira) !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
 .logoTitle {
@@ -66,17 +73,17 @@ body {
 
 .customYellowBtn {
     background-color: var(--amareloOuro) !important;
-    border-color:     var(--amareloOuro) !important;
-    color:            #111111 !important;
-    font-weight:      700;
-    transition:       var(--transition);
-    border-radius:    50px !important;
+    border-color: var(--amareloOuro) !important;
+    color: #111111 !important;
+    font-weight: 700;
+    transition: var(--transition);
+    border-radius: 50px !important;
 }
 
 .customYellowBtn:hover {
     background-color: var(--amareloClaro) !important;
-    transform:        translateY(-1px);
-    box-shadow:       0 4px 14px rgba(255, 223, 0, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(255, 223, 0, 0.4);
 }
 
 /* ================================================================
@@ -87,7 +94,7 @@ body {
     background-image: none !important;
     position: relative;
     overflow: hidden;
-    padding-bottom: 40px; 
+    padding-bottom: 40px;
 }
 
 
@@ -112,11 +119,12 @@ body {
     font-weight: 900;
     letter-spacing: -1px;
     color: #ffffff;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .heroSubtitle {
-    color: #d1fae5; /* emerald-100 */
+    color: #d1fae5;
+    /* emerald-100 */
     font-size: 1.1rem;
     max-width: 600px;
     margin: 0 auto;
@@ -158,11 +166,11 @@ body {
 
 .heroSearchBtn {
     background-color: var(--verdeBandeira) !important;
-    border-color:     var(--verdeBandeira) !important;
-    border-radius:    50px !important;
-    color:            #fff !important;
-    font-weight:      600;
-    transition:       var(--transition);
+    border-color: var(--verdeBandeira) !important;
+    border-radius: 50px !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: var(--transition);
 }
 
 .heroSearchBtn:hover {
@@ -180,29 +188,29 @@ body {
 
 .categoryBtn {
     border-radius: 50px !important;
-    border:        1px solid var(--bgCardBorder) !important;
-    font-weight:   500;
-    transition:    var(--transition);
-    padding:       8px 20px;
-    cursor:        pointer;
+    border: 1px solid var(--bgCardBorder) !important;
+    font-weight: 500;
+    transition: var(--transition);
+    padding: 8px 20px;
+    cursor: pointer;
 }
 
 .categoryBtn.active {
     background-color: var(--amareloOuro) !important;
-    border-color:     var(--amareloOuro) !important;
-    color:            #111 !important;
-    font-weight:      700;
-    box-shadow:       0 4px 12px rgba(255, 223, 0, 0.35);
+    border-color: var(--amareloOuro) !important;
+    color: #111 !important;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(255, 223, 0, 0.35);
 }
 
 .categoryBtn:not(.active) {
     background-color: var(--bgCard) !important;
-    color:            var(--textSecondary) !important;
+    color: var(--textSecondary) !important;
 }
 
 .categoryBtn:not(.active):hover {
     background-color: var(--bgCardBorder) !important;
-    color:            var(--textPrimary) !important;
+    color: var(--textPrimary) !important;
 }
 
 /* ================================================================
@@ -224,32 +232,32 @@ body {
    ================================================================ */
 .arenaCard {
     background-color: var(--bgCard) !important;
-    border:           1px solid var(--bgCardBorder) !important;
-    border-radius:    var(--radiusLg) !important;
-    overflow:         hidden;
-    transition:       transform 0.3s ease, box-shadow 0.3s ease;
-    cursor:           pointer;
-    text-decoration:  none;
-    display:          block;
-    color:            inherit;
+    border: 1px solid var(--bgCardBorder) !important;
+    border-radius: var(--radiusLg) !important;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    color: inherit;
 }
 
 .arenaCard:hover {
-    transform:  translateY(-6px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.4) !important;
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
     text-decoration: none;
     color: inherit;
 }
 
 .arenaCardImgWrapper {
     position: relative;
-    height:   200px;
+    height: 200px;
     overflow: hidden;
 }
 
 .arenaCardImg {
-    width:      100%;
-    height:     100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
@@ -260,42 +268,42 @@ body {
 
 /* Badge – Recomendado */
 .arenaCardBadge {
-    position:         absolute;
-    top:              12px;
-    left:             12px;
+    position: absolute;
+    top: 12px;
+    left: 12px;
     background-color: var(--amareloOuro);
-    color:            var(--verdeEscuro);
-    font-size:        0.7rem;
-    font-weight:      700;
-    padding:          4px 10px;
-    border-radius:    50px;
-    z-index:          2;
-    text-transform:   uppercase;
-    letter-spacing:   0.5px;
-    box-shadow:       0 2px 8px rgba(0,0,0,0.2);
+    color: var(--verdeEscuro);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .arenaCardBadgeNear {
     background-color: #3b82f6;
-    color:            #fff;
+    color: #fff;
 }
 
 /* Rating pill */
 .arenaCardRating {
-    position:         absolute;
-    top:              12px;
-    right:            12px;
+    position: absolute;
+    top: 12px;
+    right: 12px;
     background-color: rgba(17, 24, 39, 0.85);
-    backdrop-filter:  blur(4px);
-    color:            var(--textPrimary);
-    font-size:        0.82rem;
-    font-weight:      700;
-    padding:          4px 10px;
-    border-radius:    8px;
-    z-index:          2;
-    display:          flex;
-    align-items:      center;
-    gap:              4px;
+    backdrop-filter: blur(4px);
+    color: var(--textPrimary);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .arenaCardRating .starIcon {
@@ -309,37 +317,38 @@ body {
 }
 
 .arenaCardName {
-    font-size:     1.05rem;
-    font-weight:   700;
-    color:         var(--textPrimary);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--textPrimary);
     margin-bottom: 4px;
-    white-space:   nowrap;
-    overflow:      hidden;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .arenaCardAddress {
-    font-size:     0.85rem;
-    color:         var(--textSecondary);
+    font-size: 0.85rem;
+    color: var(--textSecondary);
     margin-bottom: 12px;
-    display:       flex;
-    align-items:   center;
-    gap:           4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .arenaCardSports {
-    display:   flex;
+    display: flex;
     flex-wrap: wrap;
-    gap:       6px;
+    gap: 6px;
 }
 
 .sportChip {
     background-color: rgba(0, 156, 59, 0.15);
-    color:            #4ade80; /* green-400 */
-    font-size:        0.75rem;
-    font-weight:      500;
-    padding:          3px 10px;
-    border-radius:    6px;
+    color: #4ade80;
+    /* green-400 */
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 6px;
 }
 
 /* ================================================================
@@ -347,7 +356,7 @@ body {
    ================================================================ */
 .mainFooter {
     background-color: var(--bgSection) !important;
-    border-top:       1px solid var(--bgCardBorder);
+    border-top: 1px solid var(--bgCardBorder);
     margin-top: auto;
 }
 
@@ -361,22 +370,23 @@ body {
    ================================================================ */
 .authPageBody {
     background-color: var(--bgMain);
-    color:            var(--textPrimary);
+    color: var(--textPrimary);
 }
 
 .loginFormCard {
-    border-radius:    var(--radiusLg);
+    border-radius: var(--radiusLg);
     background-color: var(--bgCard);
-    border:           1px solid var(--bgCardBorder);
-    box-shadow:       var(--shadowCard);
+    border: 1px solid var(--bgCardBorder);
+    box-shadow: var(--shadowCard);
+    color: var(--textPrimary) !important;
 }
 
 .formInput {
     background-color: var(--bgMain) !important;
-    border-color:     var(--bgCardBorder) !important;
-    color:            var(--textPrimary) !important;
-    border-radius:    var(--radiusSm) !important;
-    transition:       border-color 0.2s;
+    border-color: var(--bgCardBorder) !important;
+    color: var(--textPrimary) !important;
+    border-radius: var(--radiusSm) !important;
+    transition: border-color 0.2s;
 }
 
 .formInput::placeholder {
@@ -385,38 +395,38 @@ body {
 
 .formInput:focus {
     border-color: var(--verdeBandeira) !important;
-    box-shadow:   0 0 0 3px rgba(0, 156, 59, 0.2) !important;
-    outline:      none;
+    box-shadow: 0 0 0 3px rgba(0, 156, 59, 0.2) !important;
+    outline: none;
 }
 
 .submitBtn {
     background-color: var(--verdeBandeira) !important;
-    border-color:     var(--verdeBandeira) !important;
-    color:            #fff !important;
-    border-radius:    var(--radiusSm) !important;
-    padding:          10px 0;
-    font-weight:      600;
-    transition:       var(--transition);
+    border-color: var(--verdeBandeira) !important;
+    color: #fff !important;
+    border-radius: var(--radiusSm) !important;
+    padding: 10px 0;
+    font-weight: 600;
+    transition: var(--transition);
 }
 
 .submitBtn:hover {
     background-color: var(--verdeEscuro) !important;
-    transform:        translateY(-1px);
-    box-shadow:       0 4px 12px rgba(0, 156, 59, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 156, 59, 0.3);
 }
 
 .alertMessage {
     border-radius: var(--radiusSm);
-    font-size:     0.92rem;
+    font-size: 0.92rem;
 }
 
 .authLink {
-    color:           #4ade80;
+    color: #4ade80;
     text-decoration: none;
 }
 
 .authLink:hover {
-    color:           var(--amareloOuro);
+    color: var(--amareloOuro);
     text-decoration: underline;
 }
 
@@ -425,29 +435,29 @@ body {
    ================================================================ */
 .dashboardCard {
     background-color: var(--bgCard) !important;
-    border:           1px solid var(--bgCardBorder) !important;
-    border-radius:    var(--radiusMd) !important;
-    color:            var(--textPrimary) !important;
+    border: 1px solid var(--bgCardBorder) !important;
+    border-radius: var(--radiusMd) !important;
+    color: var(--textPrimary) !important;
 }
 
 .dashboardTitle {
     font-size: 1.6rem;
-    color:     var(--textPrimary);
+    color: var(--textPrimary);
 }
 
 .dashboardTable th {
-    font-weight:     600;
-    color:           var(--textSecondary);
-    font-size:       0.82rem;
-    text-transform:  uppercase;
-    letter-spacing:  0.5px;
+    font-weight: 600;
+    color: var(--textSecondary);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     background-color: var(--bgSection) !important;
 }
 
 .dashboardTable td {
-    color:            var(--textPrimary);
+    color: var(--textPrimary);
     background-color: var(--bgCard) !important;
-    border-color:     var(--bgCardBorder) !important;
+    border-color: var(--bgCardBorder) !important;
 }
 
 .dashboardTable tbody tr:hover td {
@@ -456,7 +466,7 @@ body {
 
 .editarBtn {
     border-radius: 6px;
-    font-size:     0.82rem;
+    font-size: 0.82rem;
 }
 
 /* ================================================================
@@ -466,78 +476,78 @@ body {
 /* Hero banner */
 .arenaDetailHero {
     position: relative;
-    width:    100%;
-    height:   340px;
+    width: 100%;
+    height: 340px;
     overflow: hidden;
 }
 
 .arenaDetailHeroImg {
-    width:      100%;
-    height:     100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
 .arenaDetailHeroOverlay {
-    position:   absolute;
-    inset:      0;
-    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%);
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 60%);
 }
 
 .arenaDetailHeroMeta {
-    position:   absolute;
-    bottom:     24px;
-    left:       24px;
-    color:      #fff;
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    color: #fff;
 }
 
 .arenaDetailHeroName {
-    font-size:   2rem;
+    font-size: 2rem;
     font-weight: 800;
-    margin:      0;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .arenaDetailHeroAddr {
-    font-size:  0.9rem;
-    opacity:    0.85;
+    font-size: 0.9rem;
+    opacity: 0.85;
     margin-top: 4px;
-    display:    flex;
+    display: flex;
     align-items: center;
-    gap:         4px;
+    gap: 4px;
 }
 
 .arenaDetailRating {
-    position:         absolute;
-    bottom:           24px;
-    right:            24px;
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
     background-color: var(--amareloOuro);
-    color:            var(--verdeEscuro);
-    font-weight:      700;
-    font-size:        1rem;
-    padding:          8px 14px;
-    border-radius:    10px;
-    display:          flex;
-    align-items:      center;
-    gap:              6px;
+    color: var(--verdeEscuro);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 8px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 /* Info cards */
 .detailInfoCard {
     background-color: var(--bgCard);
-    border:           1px solid var(--bgCardBorder);
-    border-radius:    var(--radiusMd);
-    padding:          20px 24px;
-    margin-bottom:    16px;
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 20px 24px;
+    margin-bottom: 16px;
 }
 
 .detailInfoCardTitle {
-    font-size:     1.1rem;
-    font-weight:   700;
-    color:         var(--textPrimary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--textPrimary);
     margin-bottom: 12px;
-    display:       flex;
-    align-items:   center;
-    gap:           8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .detailInfoCardTitle .cardTitleIcon {
@@ -546,9 +556,9 @@ body {
 }
 
 .detailInfoRow {
-    font-size:     0.92rem;
+    font-size: 0.92rem;
     margin-bottom: 6px;
-    color:         var(--textSecondary);
+    color: var(--textSecondary);
 }
 
 .detailInfoRow strong {
@@ -556,84 +566,85 @@ body {
 }
 
 .detailCancelText {
-    color:     #f87171; /* red-400 */
+    color: #f87171;
+    /* red-400 */
     font-size: 0.88rem;
 }
 
 .facilidadesList {
-    display:   grid;
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap:       8px;
+    gap: 8px;
     list-style: none;
-    padding:    0;
-    margin:     0;
+    padding: 0;
+    margin: 0;
 }
 
 .facilidadesItem {
-    font-size:   0.9rem;
-    color:       var(--textSecondary);
-    display:     flex;
+    font-size: 0.9rem;
+    color: var(--textSecondary);
+    display: flex;
     align-items: center;
-    gap:         6px;
+    gap: 6px;
 }
 
 .facilidadesItem::before {
-    content:          '●';
-    color:            var(--verdeBandeira);
-    font-size:        0.6rem;
+    content: '●';
+    color: var(--verdeBandeira);
+    font-size: 0.6rem;
 }
 
 .detailPhone {
-    font-size:   1.2rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    color:       var(--textPrimary);
-    margin-top:  4px;
+    color: var(--textPrimary);
+    margin-top: 4px;
 }
 
 /* Booking widget */
 .bookingWidget {
     background-color: var(--bgCard);
-    border:           1px solid var(--bgCardBorder);
-    border-radius:    var(--radiusMd);
-    padding:          20px 24px;
-    position:         sticky;
-    top:              24px;
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 20px 24px;
+    position: sticky;
+    top: 24px;
 }
 
 .bookingWidgetTitle {
-    font-size:     1.15rem;
-    font-weight:   700;
-    color:         var(--textPrimary);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--textPrimary);
     margin-bottom: 16px;
 }
 
 /* Period tabs */
 .periodTabsWrapper {
     background-color: var(--bgSection);
-    border-radius:    8px;
-    padding:          4px;
-    display:          flex;
-    gap:              4px;
-    margin-bottom:    16px;
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
 }
 
 .periodTab {
-    flex:          1;
-    padding:       8px 0;
-    font-size:     0.85rem;
-    font-weight:   600;
-    border:        none;
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
     border-radius: 6px;
-    cursor:        pointer;
-    transition:    var(--transition);
-    background:    transparent;
-    color:         var(--textMuted);
+    cursor: pointer;
+    transition: var(--transition);
+    background: transparent;
+    color: var(--textMuted);
 }
 
 .periodTab.active {
     background-color: var(--bgCard);
-    color:            var(--verdeBandeira);
-    box-shadow:       0 1px 4px rgba(0,0,0,0.3);
+    color: var(--verdeBandeira);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .periodTab:not(.active):hover {
@@ -642,59 +653,59 @@ body {
 
 /* Slot grid */
 .slotsGrid {
-    display:   grid;
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap:       10px;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
 .slotBtn {
-    padding:       10px 6px;
-    border:        1px solid var(--bgCardBorder);
+    padding: 10px 6px;
+    border: 1px solid var(--bgCardBorder);
     border-radius: var(--radiusSm);
-    background:    var(--bgMain);
-    color:         var(--textPrimary);
-    font-size:     0.9rem;
-    font-weight:   700;
-    cursor:        pointer;
-    text-align:    center;
-    transition:    var(--transition);
+    background: var(--bgMain);
+    color: var(--textPrimary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition);
 }
 
 .slotBtn:hover {
     border-color: var(--amareloOuro);
-    box-shadow:   0 2px 8px rgba(255, 223, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(255, 223, 0, 0.15);
 }
 
 .slotBtn.selected {
     background-color: var(--verdeBandeira);
-    border-color:     var(--verdeBandeira);
-    color:            #fff;
-    transform:        scale(1.04);
-    box-shadow:       0 4px 14px rgba(0, 156, 59, 0.35);
+    border-color: var(--verdeBandeira);
+    color: #fff;
+    transform: scale(1.04);
+    box-shadow: 0 4px 14px rgba(0, 156, 59, 0.35);
 }
 
 .slotPrice {
-    font-size:  0.7rem;
+    font-size: 0.7rem;
     font-weight: 400;
-    opacity:    0.8;
+    opacity: 0.8;
     margin-top: 2px;
 }
 
 /* Lobby toggle card */
 .lobbyCard {
-    border:        2px solid var(--bgCardBorder);
+    border: 2px solid var(--bgCardBorder);
     border-radius: var(--radiusMd);
-    padding:       14px 16px;
-    display:       flex;
-    gap:           14px;
-    align-items:   flex-start;
-    cursor:        pointer;
-    transition:    var(--transition);
+    padding: 14px 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: var(--transition);
     margin-bottom: 20px;
-    background:    transparent;
-    width:         100%;
-    text-align:    left;
+    background: transparent;
+    width: 100%;
+    text-align: left;
 }
 
 .lobbyCard:hover {
@@ -702,61 +713,61 @@ body {
 }
 
 .lobbyCard.active {
-    border-color:     var(--verdeBandeira);
+    border-color: var(--verdeBandeira);
     background-color: rgba(0, 156, 59, 0.07);
 }
 
 .lobbyIconWrapper {
     background-color: #374151;
-    color:            var(--textMuted);
-    border-radius:    50%;
-    padding:          8px;
-    flex-shrink:      0;
-    font-size:        1rem;
-    display:          flex;
-    align-items:      center;
-    justify-content:  center;
-    transition:       var(--transition);
+    color: var(--textMuted);
+    border-radius: 50%;
+    padding: 8px;
+    flex-shrink: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
 }
 
 .lobbyCard.active .lobbyIconWrapper {
     background-color: var(--verdeBandeira);
-    color:            #fff;
+    color: #fff;
 }
 
 .lobbyTitle {
-    font-size:     0.95rem;
-    font-weight:   700;
-    color:         var(--textPrimary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--textPrimary);
     margin-bottom: 4px;
 }
 
 .lobbyDesc {
     font-size: 0.8rem;
-    color:     var(--textMuted);
+    color: var(--textMuted);
     line-height: 1.45;
 }
 
 .lobbyRadio {
-    margin-left:   auto;
-    flex-shrink:   0;
-    width:         22px;
-    height:        22px;
+    margin-left: auto;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    border:        2px solid var(--bgCardBorder);
-    display:       flex;
-    align-items:   center;
+    border: 2px solid var(--bgCardBorder);
+    display: flex;
+    align-items: center;
     justify-content: center;
-    transition:    var(--transition);
-    margin-top:    2px;
+    transition: var(--transition);
+    margin-top: 2px;
 }
 
 .lobbyRadioInner {
-    width:            10px;
-    height:           10px;
-    border-radius:    50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
     background-color: var(--verdeBandeira);
-    display:          none;
+    display: none;
 }
 
 .lobbyCard.active .lobbyRadioInner {
@@ -765,30 +776,30 @@ body {
 
 /* Booking CTA button */
 .bookingConfirmBtn {
-    width:         100%;
-    padding:       14px;
-    border:        none;
+    width: 100%;
+    padding: 14px;
+    border: none;
     border-radius: var(--radiusMd);
-    font-size:     1rem;
-    font-weight:   700;
-    cursor:        pointer;
-    transition:    var(--transition);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
 }
 
 .bookingConfirmBtn.enabled {
     background-color: var(--verdeBandeira);
-    color:            #fff;
-    box-shadow:       0 4px 16px rgba(0, 156, 59, 0.35);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0, 156, 59, 0.35);
 }
 
 .bookingConfirmBtn.enabled:hover {
     background-color: var(--verdeEscuro);
-    transform:        translateY(-2px);
-    box-shadow:       0 8px 24px rgba(0, 156, 59, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 156, 59, 0.4);
 }
 
 .bookingConfirmBtn.disabled {
     background-color: var(--bgCardBorder);
-    color:            var(--textMuted);
-    cursor:           not-allowed;
+    color: var(--textMuted);
+    cursor: not-allowed;
 }

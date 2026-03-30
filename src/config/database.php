@@ -24,7 +24,7 @@ function getDbConnection(): PDO {
     $dbName = getenv('DB_NAME') ?: '';
     $dbUser = getenv('DB_USER') ?: '';
     $dbPass = getenv('DB_PASS') ?: '';
-    $dbPort = getenv('DB_PORT') ?: '3307';
+    $dbPort = getenv('DB_PORT') ?: '3306';
 
     $dataSrcName = "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset=utf8mb4";
 

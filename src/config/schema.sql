@@ -1,6 +1,3 @@
--- Joga Fácil – Database Schema
--- Run this via phpMyAdmin or MySQL Workbench
-
 CREATE DATABASE IF NOT EXISTS jogafacil CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE jogafacil;
 

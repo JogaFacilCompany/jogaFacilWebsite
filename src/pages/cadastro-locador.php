@@ -16,14 +16,14 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
     <title>Cadastro de Locador – Joga Fácil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/customStyles.css" rel="stylesheet">
-</head>
+</head> 
 <body class="authPageBody d-flex flex-column min-vh-100">
 <?php include __DIR__ . '/../includes/header.php'; ?>
 
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 480px; width: 100%;">
         <h3 class="formTitle fw-bold text-center mb-1">Cadastro de Locador</h3>
-        <p class="text-muted text-center small mb-4">Crie sua conta para gerenciar suas quadras</p>
+        <p class="text-center small mb-4">Crie sua conta para gerenciar suas quadras</p>
 
         <?php if ($flashMessage): ?>
             <div class="alert alert-<?= $flashType ?> alertMessage" role="alert"><?= htmlspecialchars($flashMessage) ?></div>
@@ -51,7 +51,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 
             <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Cadastrar como Locador</button>
         </form>
-        <p class="text-center mt-3 small">Já tem uma conta? <a href="../pages/login-locador.php" class="authLink text-success fw-medium">Entrar</a></p>
+        <p class="text-center mt-3 small">Já tem uma conta? <a href="../pages/escolher-login.php" class="authLink text-success fw-medium">Entrar</a></p>
     </div>
 </main>
 

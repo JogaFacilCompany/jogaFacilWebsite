@@ -13,8 +13,8 @@ $baseUrl = (strpos($_SERVER['SCRIPT_NAME'], '/pages/') !== false || strpos($_SER
                 <a href="<?= $baseUrl ?>pages/dashboard-locador.php" class="text-white text-decoration-none fw-medium">Painel</a>
                 <a href="<?= $baseUrl ?>pages/logout.php" class="btn btn-outline-light rounded-pill px-3">Sair</a>
             <?php else: ?>
-                <a href="<?= $baseUrl ?>pages/login-locador.php" class="text-white text-decoration-none fw-medium">Entrar</a>
-                <a href="<?= $baseUrl ?>pages/cadastro-locador.php" class="btn btn-warning fw-bold text-dark rounded-pill px-4 shadow-sm customYellowBtn">Cadastre sua Arena</a>
+                <a href="<?= $baseUrl ?>pages/escolher-login.php" class="text-white text-decoration-none fw-medium">Entrar</a>
+                <a href="<?= $baseUrl ?>pages/escolher-cadastro.php" class="btn btn-warning fw-bold text-dark rounded-pill px-4 shadow-sm customYellowBtn">Cadastre-se</a>
             <?php endif; ?>
         </nav>
     </div>

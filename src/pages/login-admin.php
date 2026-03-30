@@ -1,5 +1,5 @@
 <?php
-// pages/login-locatario.php
+// pages/login-admin.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (isset($_SESSION['usuarioLogado'])) {
     header('Location: ../index.php');
@@ -16,15 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputSenha = $_POST['senha'] ?? '';
         $foundUser  = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
 
-        if ($foundUser && $foundUser['tipo'] === 'locatario') {
+        if ($foundUser && $foundUser['tipo'] === 'admin') {
             session_regenerate_id(true);
             $_SESSION['usuarioLogado'] = $foundUser['id'];
             $_SESSION['usuarioNome']   = $foundUser['nome'];
             $_SESSION['usuarioTipo']   = $foundUser['tipo'];
-            header('Location: ../index.php');
+            header('Location: ../pages/dashboard-locador.php');
             exit;
         } else {
-            $loginError = 'Credenciais inválidas ou usuário não é locatário.';
+            // Note: If no 'admin' role exists in DB ENUM yet, this will obviously reject everyone not explicitly set to admin.
+            $loginError = 'Acesso Negado. Você não possui privilégios de Administrador.';
         }
     }
 }
@@ -38,7 +39,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login do Locatário – Joga Fácil</title>
+    <title>Login do Administrador – Joga Fácil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/customStyles.css" rel="stylesheet">
 </head>
@@ -47,8 +48,8 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 440px; width: 100%;">
-        <h3 class="formTitle fw-bold text-center mb-1">Entrar como Locatário</h3>
-        <p class="text-white-50 text-center small mb-4">Acesse sua conta para reservar quadras</p>
+        <h3 class="formTitle fw-bold text-center mb-1 text-danger">Acesso Administrativo</h3>
+        <p class="text-white-50 text-center small mb-4">Acesso restrito a administradores do sistema</p>
 
         <?php if (!empty($loginError)): ?>
             <div class="alert alert-danger alertMessage"><?= htmlspecialchars($loginError) ?></div>
@@ -57,20 +58,19 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>
         <?php endif; ?>
 
-        <form action="" method="POST" id="loginLocatarioForm" novalidate>
+        <form action="" method="POST" id="loginAdminForm" novalidate>
             <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
             <div class="mb-3">
-                <label for="inputEmail" class="form-label fw-medium">E-mail</label>
-                <input type="email" class="form-control formInput" id="inputEmail" name="email" placeholder="email@exemplo.com" required>
+                <label for="inputEmail" class="form-label fw-medium">E-mail de Admin</label>
+                <input type="email" class="form-control formInput" id="inputEmail" name="email" placeholder="admin@jogafacil.com" required>
             </div>
             <div class="mb-3">
                 <label for="inputSenha" class="form-label fw-medium">Senha</label>
-                <input type="password" class="form-control formInput" id="inputSenha" name="senha" placeholder="Sua senha" required>
+                <input type="password" class="form-control formInput" id="inputSenha" name="senha" placeholder="Sua senha secreta" required>
             </div>
-            <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Entrar</button>
+            <button type="submit" class="btn btn-danger w-100 submitBtn fw-bold mt-2" style="background-color: #ef4444; border-color: #ef4444;">Autenticar Admin</button>
         </form>
-        <p class="text-center mt-4 small">Não tem conta? <a href="../pages/escolher-cadastro.php" class="authLink text-success fw-medium">Cadastre-se</a></p>
-        <p class="text-center mt-1 small"><a href="../pages/escolher-login.php" class="text-white-50 text-decoration-none">Voltar para opções de login</a></p>
+        <p class="text-center mt-4 small"><a href="../pages/escolher-login.php" class="text-white-50 text-decoration-none">Voltar para opções de login</a></p>
     </div>
 </main>
 

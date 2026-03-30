@@ -49,7 +49,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 440px; width: 100%;">
         <h3 class="formTitle fw-bold text-center mb-1">Entrar como Locador</h3>
-        <p class="text-muted text-center small mb-4">Acesse o painel de gerenciamento</p>
+        <p class="text-center small mb-4">Acesse o painel de gerenciamento</p>
 
         <?php if (!empty($loginError)): ?>
             <div class="alert alert-danger alertMessage"><?= htmlspecialchars($loginError) ?></div>
