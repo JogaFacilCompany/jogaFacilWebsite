@@ -1,102 +1,140 @@
 // assets/js/arenaDetailLogic.js – camelCase enforced
 
 (() => {
-    // ---- Slot Data ---------------------------------------------------
-    const slotsData = {
-        manha: [
-            { id: 's1', startTime: '08:00', price: 150, isAvailable: true },
-            { id: 's2', startTime: '09:00', price: 150, isAvailable: false },
-            { id: 's3', startTime: '10:00', price: 150, isAvailable: true },
-            { id: 's4', startTime: '11:00', price: 150, isAvailable: true },
-        ],
-        tarde: [
-            { id: 's5', startTime: '13:00', price: 180, isAvailable: true },
-            { id: 's6', startTime: '14:00', price: 180, isAvailable: true },
-            { id: 's7', startTime: '15:00', price: 180, isAvailable: false },
-            { id: 's8', startTime: '16:00', price: 180, isAvailable: true },
-            { id: 's9', startTime: '17:00', price: 180, isAvailable: true },
-        ],
-        noite: [
-            { id: 's10', startTime: '19:00', price: 200, isAvailable: true },
-            { id: 's11', startTime: '20:00', price: 200, isAvailable: true },
-            { id: 's12', startTime: '21:00', price: 200, isAvailable: false },
-            { id: 's13', startTime: '22:00', price: 200, isAvailable: true },
-        ],
-    };
+    const config = window.arenaConfig;
+    if (!config) return;
 
-    // ---- State -------------------------------------------------------
-    let activePeriod    = 'manha';
-    let selectedSlotId  = null;
-    let isLobbyMode     = false;
-
-    // ---- Elements ----------------------------------------------------
+    // ---- Elements --------------------------------------------------------
+    const datePicker     = document.getElementById('datePicker');
     const slotsGrid      = document.getElementById('slotsGrid');
+    const slotsLoading   = document.getElementById('slotsLoading');
+    const slotsEmpty     = document.getElementById('slotsEmpty');
     const confirmBtn     = document.getElementById('confirmBtn');
-    const lobbyToggle    = document.getElementById('lobbyToggle');
-    const lobbyRadioInner = document.getElementById('lobbyRadioInner');
-    const periodTabs     = document.querySelectorAll('.periodTab');
+    const reservaForm    = document.getElementById('reservaForm');
+    const formDataReserva = document.getElementById('formDataReserva');
+    const formHoraInicio = document.getElementById('formHoraInicio');
+    const formHoraFim    = document.getElementById('formHoraFim');
 
-    // ---- Render slots ------------------------------------------------
-    const renderSlots = () => {
+    // ---- State -----------------------------------------------------------
+    let selectedSlot = null;
+
+    // ---- Fetch slots from API --------------------------------------------
+    const fetchSlots = async (selectedDate) => {
         slotsGrid.innerHTML = '';
-        slotsData[activePeriod].forEach(slot => {
-            const slotBtn = document.createElement('button');
-            slotBtn.className = 'slotBtn';
-            slotBtn.disabled  = !slot.isAvailable;
-            slotBtn.innerHTML = `<div>${slot.startTime}</div><div class="slotPrice">R$ ${slot.price}</div>`;
+        slotsEmpty.style.display = 'none';
+        slotsLoading.style.display = 'block';
+        resetConfirmButton();
 
-            if (!slot.isAvailable) {
-                slotBtn.style.opacity   = '0.4';
-                slotBtn.style.cursor    = 'not-allowed';
-            } else if (selectedSlotId === slot.id) {
-                slotBtn.classList.add('selected');
+        try {
+            const response = await fetch(
+                `${config.apiUrl}?quadraId=${config.quadraId}&data=${selectedDate}`
+            );
+            const data = await response.json();
+
+            slotsLoading.style.display = 'none';
+
+            if (!data.sucesso && data.mensagem) {
+                slotsEmpty.textContent = data.mensagem;
+                slotsEmpty.style.display = 'block';
+                return;
             }
 
-            slotBtn.addEventListener('click', () => {
-                if (!slot.isAvailable) return;
-                selectedSlotId = slot.id;
-                updateConfirmButton(slot);
-                renderSlots();
-            });
+            if (!data.slots || data.slots.length === 0) {
+                slotsEmpty.textContent = 'Nenhum horário disponível para esta data.';
+                slotsEmpty.style.display = 'block';
+                return;
+            }
+
+            renderSlots(data.slots);
+        } catch (error) {
+            slotsLoading.style.display = 'none';
+            slotsEmpty.textContent = 'Erro ao buscar horários. Tente novamente.';
+            slotsEmpty.style.display = 'block';
+        }
+    };
+
+    // ---- Render slots ----------------------------------------------------
+    const renderSlots = (slots) => {
+        slotsGrid.innerHTML = '';
+
+        slots.forEach(slot => {
+            const slotBtn = document.createElement('button');
+            slotBtn.className = 'slotBtn';
+            slotBtn.type = 'button';
+
+            const horaInicioFormatted = slot.horaInicio.substring(0, 5);
+            const horaFimFormatted   = slot.horaFim.substring(0, 5);
+            const precoFormatted     = parseFloat(slot.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            slotBtn.innerHTML = `<div>${horaInicioFormatted}–${horaFimFormatted}</div><div class="slotPrice">${precoFormatted}</div>`;
+
+            if (!slot.disponivel) {
+                slotBtn.classList.add('slotUnavailable');
+                slotBtn.disabled = true;
+                slotBtn.setAttribute('aria-label', `Horário ${horaInicioFormatted} indisponível`);
+            } else {
+                slotBtn.setAttribute('aria-label', `Reservar horário ${horaInicioFormatted} por ${precoFormatted}`);
+
+                if (selectedSlot && selectedSlot.horaInicio === slot.horaInicio) {
+                    slotBtn.classList.add('selected');
+                }
+
+                slotBtn.addEventListener('click', () => {
+                    if (!config.canBook) return;
+                    selectedSlot = slot;
+                    updateConfirmButton(slot);
+                    renderSlots(slots);
+                });
+            }
 
             slotsGrid.appendChild(slotBtn);
         });
     };
 
-    // ---- Update confirm button ---------------------------------------
-    const updateConfirmButton = (selectedSlot) => {
-        confirmBtn.disabled          = false;
-        confirmBtn.className         = 'bookingConfirmBtn enabled';
-        confirmBtn.textContent       = `Confirmar Reserva – ${selectedSlot.startTime}`;
-        confirmBtn.onclick           = () => {
-            alert(`Reserva confirmada!\nHorário: ${selectedSlot.startTime}\nPreço: R$ ${selectedSlot.price}\nModo Lobby: ${isLobbyMode ? 'Ativado' : 'Desativado'}`);
-        };
+    // ---- Confirm button --------------------------------------------------
+    const updateConfirmButton = (slot) => {
+        if (!confirmBtn) return;
+
+        const horaFormatted = slot.horaInicio.substring(0, 5);
+        const precoFormatted = parseFloat(slot.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        confirmBtn.disabled = false;
+        confirmBtn.className = 'bookingConfirmBtn enabled';
+        confirmBtn.textContent = `Confirmar – ${horaFormatted} (${precoFormatted})`;
     };
 
-    // ---- Period tabs -------------------------------------------------
-    periodTabs.forEach(tabEl => {
-        tabEl.addEventListener('click', () => {
-            activePeriod   = tabEl.getAttribute('data-period');
-            selectedSlotId = null;
-            confirmBtn.disabled    = true;
-            confirmBtn.className   = 'bookingConfirmBtn disabled';
-            confirmBtn.textContent = 'Selecione um horário';
-            periodTabs.forEach(t => t.classList.remove('active'));
-            tabEl.classList.add('active');
-            renderSlots();
-        });
-    });
+    const resetConfirmButton = () => {
+        selectedSlot = null;
+        if (!confirmBtn) return;
+        confirmBtn.disabled = true;
+        confirmBtn.className = 'bookingConfirmBtn disabled';
+        confirmBtn.textContent = 'Selecione um horário';
+    };
 
-    // ---- Lobby toggle ------------------------------------------------
-    if (lobbyToggle) {
-        lobbyToggle.addEventListener('click', () => {
-            isLobbyMode = !isLobbyMode;
-            lobbyToggle.classList.toggle('active', isLobbyMode);
+    // ---- Confirm click → submit form ------------------------------------
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            if (!selectedSlot || !datePicker.value) return;
+
+            formDataReserva.value = datePicker.value;
+            formHoraInicio.value  = selectedSlot.horaInicio;
+            formHoraFim.value     = selectedSlot.horaFim;
+            reservaForm.submit();
         });
     }
 
-    // ---- Initial render ----------------------------------------------
-    if (slotsGrid) {
-        renderSlots();
+    // ---- Date picker change ----------------------------------------------
+    if (datePicker) {
+        datePicker.addEventListener('change', () => {
+            const selectedDate = datePicker.value;
+            if (selectedDate) {
+                fetchSlots(selectedDate);
+            }
+        });
+
+        // Auto-select today and fetch slots
+        const today = new Date().toISOString().split('T')[0];
+        datePicker.value = today;
+        fetchSlots(today);
     }
 })();

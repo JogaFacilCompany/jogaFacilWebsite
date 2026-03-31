@@ -19,9 +19,33 @@ function enforceSessionTimeout(): void {
     $_SESSION['ultimaAtividade'] = time();
 }
 
+function requireAuth(): void {
+    enforceSessionTimeout();
+    if (!isset($_SESSION['usuarioLogado'])) {
+        header('Location: ../pages/login-locatario.php');
+        exit;
+    }
+}
+
 function requireLocadorAuth(): void {
     enforceSessionTimeout();
     if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::LOCADOR) {
+        header('Location: ../pages/login-locador.php');
+        exit;
+    }
+}
+
+function requireLocatarioAuth(): void {
+    enforceSessionTimeout();
+    if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::LOCATARIO) {
+        header('Location: ../pages/login-locatario.php');
+        exit;
+    }
+}
+
+function requireGerenteAuth(): void {
+    enforceSessionTimeout();
+    if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::GERENTE) {
         header('Location: ../pages/login-locador.php');
         exit;
     }

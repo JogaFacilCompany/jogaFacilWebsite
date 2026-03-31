@@ -792,3 +792,82 @@ body {
     color:            var(--textMuted);
     cursor:           not-allowed;
 }
+
+/* ================================================================
+   SLOT UNAVAILABLE STATE
+   ================================================================ */
+.slotBtn.slotUnavailable {
+    opacity:    0.35;
+    cursor:     not-allowed;
+    text-decoration: line-through;
+}
+
+/* ================================================================
+   ARENA CARD – IMAGE PLACEHOLDER (no image)
+   ================================================================ */
+.arenaCardImgPlaceholder {
+    display:          flex;
+    align-items:      center;
+    justify-content:  center;
+    background-color: var(--bgSection);
+    color:            var(--textMuted);
+    font-size:        3rem;
+}
+
+.arenaDetailHeroPlaceholder {
+    display:          flex;
+    align-items:      center;
+    justify-content:  center;
+    background-color: var(--bgSection);
+    color:            var(--textMuted);
+    font-size:        5rem;
+}
+
+/* ================================================================
+   PRICE CHIP (home page cards)
+   ================================================================ */
+.arenaCardPrice {
+    margin-top: 8px;
+}
+
+.priceChip {
+    background-color: rgba(255, 223, 0, 0.15);
+    color:            var(--amareloOuro);
+    font-size:        0.8rem;
+    font-weight:      700;
+    padding:          4px 10px;
+    border-radius:    6px;
+}
+
+/* ================================================================
+   HORARIO ROW (cadastro-quadra form)
+   ================================================================ */
+.horarioRow .formInput {
+    font-size: 0.88rem;
+    padding:   6px 10px;
+}
+
+/* ================================================================
+   UTILITY CLASSES (shared across pages)
+   ================================================================ */
+.textMuted {
+    color: var(--textMuted);
+}
+
+.textSecondary {
+    color: var(--textSecondary);
+}
+
+.textSmall {
+    font-size: 0.8rem;
+}
+
+.emptyStateIcon {
+    font-size: 3rem;
+    color: var(--textMuted);
+}
+
+.emptyStateText {
+    color: var(--textSecondary);
+    margin-top: 0.75rem;
+}

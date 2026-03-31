@@ -2,6 +2,9 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+require_once __DIR__ . '/crud/readQuadras.php';
+
+$quadrasAtivas = readAllQuadrasAtivas();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -45,13 +48,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <button type="button" id="searchButton" class="btn heroSearchBtn rounded-pill px-4 ms-2">Pesquisar</button>
             </div>
 
-            <!-- Category Filter Pills -->
-            <div class="categoryFilters d-flex justify-content-center gap-4 mt-5 mb-1">
-                <button class="categoryBtn btn active" data-category="todos">Todos</button>
-                <button class="categoryBtn btn" data-category="futebol">Futebol</button>
-                <button class="categoryBtn btn" data-category="volei">Vôlei</button>
-                <button class="categoryBtn btn" data-category="tenis">Tênis</button>
-            </div>
+            <!-- Category Filter Pills (disabled until data model supports categories) -->
         </div>
     </section>
 
@@ -60,157 +57,43 @@ if (session_status() === PHP_SESSION_NONE) {
     ============================================================ -->
     <main class="container contentSection">
 
-        <!-- Em Alta / Recomendados -->
-        <h2 class="sectionTitle fw-bold mb-4">Em Alta / Recomendados</h2>
+        <h2 class="sectionTitle fw-bold mb-4">Quadras Disponíveis</h2>
 
         <div class="row g-4" id="arenasContainer">
-
-            <!-- Arena Card 1 -->
-            <div class="col-md-4" data-sport="futebol">
-                <a href="./pages/arena-detalhe.php" class="arenaCard h-100">
-                    <div class="arenaCardImgWrapper">
-                        <img class="arenaCardImg" src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=800" alt="Arena Gol de Placa">
-                        <span class="arenaCardBadge">Recomendado</span>
-                        <div class="arenaCardRating">
-                            <i class="bi bi-star-fill starIcon"></i> 4.8
-                        </div>
+            <?php if (empty($quadrasAtivas)): ?>
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <i class="bi bi-geo-alt emptyStateIcon"></i>
+                        <p class="emptyStateText">Nenhuma quadra disponível no momento. Volte em breve!</p>
                     </div>
-                    <div class="arenaCardBody">
-                        <div class="arenaCardName">Arena Gol de Placa</div>
-                        <div class="arenaCardAddress">
-                            <i class="bi bi-geo-alt-fill" style="color:#4ade80; font-size:0.8rem;"></i>
-                            Rua do Ouro, 123 – Centro
-                        </div>
-                        <div class="arenaCardSports">
-                            <span class="sportChip">Futebol</span>
-                        </div>
+                </div>
+            <?php else: ?>
+                <?php foreach ($quadrasAtivas as $quadra): ?>
+                    <div class="col-md-4">
+                        <a href="./pages/arena-detalhe.php?id=<?= $quadra['id'] ?>" class="arenaCard h-100">
+                            <div class="arenaCardImgWrapper">
+                                <?php if (!empty($quadra['imagemUrl'])): ?>
+                                    <img class="arenaCardImg" src="<?= htmlspecialchars($quadra['imagemUrl']) ?>" alt="<?= htmlspecialchars($quadra['nome']) ?>">
+                                <?php else: ?>
+                                    <div class="arenaCardImg arenaCardImgPlaceholder">
+                                        <i class="bi bi-dribbble"></i>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="arenaCardBody">
+                                <div class="arenaCardName"><?= htmlspecialchars($quadra['nome']) ?></div>
+                                <div class="arenaCardAddress">
+                                    <i class="bi bi-geo-alt-fill" style="color:#4ade80; font-size:0.8rem;"></i>
+                                    <?= htmlspecialchars($quadra['endereco']) ?>
+                                </div>
+                                <div class="arenaCardPrice">
+                                    <span class="priceChip">R$ <?= number_format($quadra['precoHora'], 2, ',', '.') ?>/h</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-
-            <!-- Arena Card 2 -->
-            <div class="col-md-4" data-sport="volei">
-                <a href="./pages/arena-detalhe.php" class="arenaCard h-100">
-                    <div class="arenaCardImgWrapper">
-                        <img class="arenaCardImg" src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?q=80&w=800" alt="Quadra Sol e Mar">
-                        <span class="arenaCardBadge">Recomendado</span>
-                        <div class="arenaCardRating">
-                            <i class="bi bi-star-fill starIcon"></i> 4.9
-                        </div>
-                    </div>
-                    <div class="arenaCardBody">
-                        <div class="arenaCardName">Quadra Sol e Mar</div>
-                        <div class="arenaCardAddress">
-                            <i class="bi bi-geo-alt-fill" style="color:#4ade80; font-size:0.8rem;"></i>
-                            Av. Beira Mar, 500 – Balneário
-                        </div>
-                        <div class="arenaCardSports">
-                            <span class="sportChip">Vôlei</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Arena Card 3 -->
-            <div class="col-md-4" data-sport="tenis">
-                <a href="./pages/arena-detalhe.php" class="arenaCard h-100">
-                    <div class="arenaCardImgWrapper">
-                        <img class="arenaCardImg" src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=800" alt="Tênis Club Premium">
-                        <span class="arenaCardBadge">Recomendado</span>
-                        <div class="arenaCardRating">
-                            <i class="bi bi-star-fill starIcon"></i> 4.7
-                        </div>
-                    </div>
-                    <div class="arenaCardBody">
-                        <div class="arenaCardName">Tênis Club Premium</div>
-                        <div class="arenaCardAddress">
-                            <i class="bi bi-geo-alt-fill" style="color:#4ade80; font-size:0.8rem;"></i>
-                            Rua das Raquetes, 77 – Jardins
-                        </div>
-                        <div class="arenaCardSports">
-                            <span class="sportChip">Tênis</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-        </div>
-
-        <!-- Próximo a Você -->
-        <h2 class="sectionTitle fw-bold mb-4 mt-5">Próximo a Você</h2>
-
-        <div class="row g-4" id="nearYouContainer">
-
-            <!-- Near Card 1 -->
-            <div class="col-md-4" data-sport="futebol">
-                <a href="./pages/arena-detalhe.php" class="arenaCard h-100">
-                    <div class="arenaCardImgWrapper">
-                        <img class="arenaCardImg" src="https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?q=80&w=800" alt="Estádio do Bairro">
-                        <span class="arenaCardBadge arenaCardBadgeNear">Perto de Você</span>
-                        <div class="arenaCardRating">
-                            <i class="bi bi-star-fill starIcon"></i> 4.5
-                        </div>
-                    </div>
-                    <div class="arenaCardBody">
-                        <div class="arenaCardName">Estádio do Bairro</div>
-                        <div class="arenaCardAddress">
-                            <i class="bi bi-geo-alt-fill" style="color:#4ade80; font-size:0.8rem;"></i>
-                            Rua XV, 200 – Vila Nova
-                        </div>
-                        <div class="arenaCardSports">
-                            <span class="sportChip">Futebol</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Near Card 2 -->
-            <div class="col-md-4" data-sport="volei">
-                <a href="./pages/arena-detalhe.php" class="arenaCard h-100">
-                    <div class="arenaCardImgWrapper">
-                        <img class="arenaCardImg" src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800" alt="Arena Fit Center">
-                        <span class="arenaCardBadge arenaCardBadgeNear">Perto de Você</span>
-                        <div class="arenaCardRating">
-                            <i class="bi bi-star-fill starIcon"></i> 4.3
-                        </div>
-                    </div>
-                    <div class="arenaCardBody">
-                        <div class="arenaCardName">Arena Fit Center</div>
-                        <div class="arenaCardAddress">
-                            <i class="bi bi-geo-alt-fill" style="color:#4ade80; font-size:0.8rem;"></i>
-                            Av. Central, 89 – Centro
-                        </div>
-                        <div class="arenaCardSports">
-                            <span class="sportChip">Vôlei</span>
-                            <span class="sportChip">Futebol</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Near Card 3 -->
-            <div class="col-md-4" data-sport="tenis">
-                <a href="./pages/arena-detalhe.php" class="arenaCard h-100">
-                    <div class="arenaCardImgWrapper">
-                        <img class="arenaCardImg" src="https://images.unsplash.com/photo-1511886929837-354d827aae26?q=80&w=800" alt="Ace Sports Arena">
-                        <span class="arenaCardBadge arenaCardBadgeNear">Perto de Você</span>
-                        <div class="arenaCardRating">
-                            <i class="bi bi-star-fill starIcon"></i> 4.6
-                        </div>
-                    </div>
-                    <div class="arenaCardBody">
-                        <div class="arenaCardName">Ace Sports Arena</div>
-                        <div class="arenaCardAddress">
-                            <i class="bi bi-geo-alt-fill" style="color:#4ade80; font-size:0.8rem;"></i>
-                            Rua dos Esportes, 31 – Pinheiros
-                        </div>
-                        <div class="arenaCardSports">
-                            <span class="sportChip">Tênis</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </main>
 

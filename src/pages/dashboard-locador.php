@@ -26,6 +26,8 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <main class="flex-grow-1 container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="dashboardTitle fw-bold">Painel do Locador</h2>
+        <div class="d-flex gap-2">
+            <a href="../pages/cadastro-quadra.php" class="btn btn-success fw-bold px-4 rounded-pill">+ Cadastrar Quadra</a>
             <?php if (isset($_SESSION['usuarioTipo']) && $_SESSION['usuarioTipo'] !== 'locatario'): ?>
                 <a href="../pages/cadastrar-gerente.php" class="btn btn-warning fw-bold px-4 rounded-pill">+ Cadastrar Gerente</a>
             <?php endif; ?>
