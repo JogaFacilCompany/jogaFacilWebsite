@@ -1,5 +1,5 @@
 <?php
-// pages/dashboard-locador.php
+// pages/dashboardLocador.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/../config/auth.php';
 requireLocadorAuth();
@@ -27,9 +27,9 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="dashboardTitle fw-bold">Painel do Locador</h2>
         <div class="d-flex gap-2">
-            <a href="../pages/cadastro-quadra.php" class="btn btn-success fw-bold px-4 rounded-pill">+ Cadastrar Quadra</a>
+            <a href="../pages/cadastroQuadra.php" class="btn btn-success fw-bold px-4 rounded-pill">+ Cadastrar Quadra</a>
             <?php if (isset($_SESSION['usuarioTipo']) && $_SESSION['usuarioTipo'] !== 'locatario'): ?>
-                <a href="../pages/cadastrar-gerente.php" class="btn btn-warning fw-bold px-4 rounded-pill">+ Cadastrar Gerente</a>
+                <a href="../pages/cadastrarGerente.php" class="btn btn-warning fw-bold px-4 rounded-pill">+ Cadastrar Gerente</a>
             <?php endif; ?>
         </div>
     </div>

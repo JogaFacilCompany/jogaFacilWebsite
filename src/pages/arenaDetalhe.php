@@ -1,5 +1,5 @@
 <?php
-// pages/arena-detalhe.php – Dynamic court detail page
+// pages/arenaDetalhe.php – Dynamic court detail page
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/../crud/readQuadras.php';
 require_once __DIR__ . '/../config/csrf.php';
@@ -166,7 +166,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
                             Apenas locatários podem reservar horários.
                         </div>
                     <?php else: ?>
-                        <a href="login-locatario.php" class="bookingConfirmBtn enabled d-block text-center text-decoration-none">
+                        <a href="loginLocatario.php" class="bookingConfirmBtn enabled d-block text-center text-decoration-none">
                             Faça login para reservar
                         </a>
                     <?php endif; ?>

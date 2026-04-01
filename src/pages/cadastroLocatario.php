@@ -1,8 +1,6 @@
 <?php
-// pages/cadastrar-gerente.php
+// pages/cadastroLocatario.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
-require_once __DIR__ . '/../config/auth.php';
-requireLocadorAuth();
 require_once __DIR__ . '/../config/csrf.php';
 
 $flashMessage = $_SESSION['flashMessage'] ?? null;
@@ -14,7 +12,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Gerente – Joga Fácil</title>
+    <title>Cadastro de Locatário – Joga Fácil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/customStyles.css" rel="stylesheet">
 </head>
@@ -23,20 +21,25 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 480px; width: 100%;">
-        <h3 class="formTitle fw-bold text-center mb-1">Cadastrar Gerente</h3>
-        <p class="text-muted text-center small mb-4">O gerente receberá acesso administrativo às suas quadras</p>
+        <h3 class="formTitle fw-bold text-center mb-1">Cadastro de Locatário</h3>
+        <p class="text-muted text-center small mb-4">Crie sua conta para reservar quadras</p>
 
         <?php if ($flashMessage): ?>
             <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>
         <?php endif; ?>
 
-        <form action="../crud/createUsuario.php" method="POST" id="cadastroGerenteForm" novalidate>
-            <input type="hidden" name="tipo" value="gerente">
+        <form action="../crud/createUsuario.php" method="POST" id="cadastroLocatarioForm" novalidate>
+            <input type="hidden" name="tipo" value="locatario">
             <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
 
             <div class="mb-3">
-                <label for="inputNome" class="form-label fw-medium">Nome do Gerente</label>
-                <input type="text" class="form-control formInput" id="inputNome" name="nome" placeholder="Nome do gerente" required>
+                <label for="inputNome" class="form-label fw-medium">Nome Completo</label>
+                <input type="text" class="form-control formInput" id="inputNome" name="nome" placeholder="Seu nome" required>
+            </div>
+            <div class="mb-3">
+                <label for="inputCpf" class="form-label fw-medium">CPF</label>
+                <input type="text" class="form-control formInput" id="inputCpf" name="cpf" placeholder="000.000.000-00" maxlength="14" required>
+                <div class="invalid-feedback errorMessage">CPF inválido.</div>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label fw-medium">E-mail</label>
@@ -47,11 +50,9 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
                 <input type="password" class="form-control formInput" id="inputSenha" name="senha" placeholder="Mínimo 6 caracteres" minlength="6" required>
             </div>
 
-            <button type="submit" class="btn btn-warning w-100 submitBtn fw-bold text-dark mt-2">Cadastrar Gerente</button>
+            <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Cadastrar como Locatário</button>
         </form>
-        <p class="text-center mt-3 small">
-            <a href="../pages/dashboard-locador.php" class="text-muted">← Voltar ao Painel</a>
-        </p>
+        <p class="text-center mt-3 small">Já tem conta? <a href="../pages/loginLocatario.php" class="authLink text-success fw-medium">Entrar</a></p>
     </div>
 </main>
 

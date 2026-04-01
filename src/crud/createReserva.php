@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
 
     $redirectUrl = $quadraId > 0
-        ? "../pages/arena-detalhe.php?id={$quadraId}"
+        ? "../pages/arenaDetalhe.php?id={$quadraId}"
         : '../index.php';
     header('Location: ' . $redirectUrl);
     exit;

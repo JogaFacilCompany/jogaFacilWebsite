@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
         $_SESSION['flashMessage'] = 'Requisição inválida. Tente novamente.';
         $_SESSION['flashType']    = 'danger';
-        header('Location: ../pages/dashboard-gerente.php');
+        header('Location: ../pages/dashboardGerente.php');
         exit;
     }
 
@@ -63,6 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $_SESSION['flashMessage'] = $responseData['mensagem'];
     $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
-    header('Location: ../pages/dashboard-gerente.php');
+    header('Location: ../pages/dashboardGerente.php');
     exit;
 }

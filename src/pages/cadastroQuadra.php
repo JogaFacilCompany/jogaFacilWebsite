@@ -1,5 +1,5 @@
 <?php
-// pages/cadastro-quadra.php – Court registration form (locador only)
+// pages/cadastroQuadra.php – Court registration form (locador only)
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/../config/auth.php';
 requireLocadorAuth();
@@ -93,7 +93,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
                     <hr style="border-color: var(--bgCardBorder);">
 
                     <div class="d-flex justify-content-between">
-                        <a href="dashboard-locador.php" class="btn btn-outline-secondary rounded-pill px-4">Cancelar</a>
+                        <a href="dashboardLocador.php" class="btn btn-outline-secondary rounded-pill px-4">Cancelar</a>
                         <button type="submit" class="btn btn-success fw-bold rounded-pill px-5">Cadastrar Quadra</button>
                     </div>
                 </form>

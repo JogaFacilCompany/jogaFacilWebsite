@@ -11,14 +11,14 @@ $baseUrl = (strpos($_SERVER['SCRIPT_NAME'], '/pages/') !== false || strpos($_SER
             <?php if (isset($_SESSION['usuarioLogado'])): ?>
                 <span class="text-white fw-medium">Olá, <?= htmlspecialchars($_SESSION['usuarioNome']) ?></span>
                 <?php if ($_SESSION['usuarioTipo'] === 'locador'): ?>
-                    <a href="<?= $baseUrl ?>pages/dashboard-locador.php" class="text-white text-decoration-none fw-medium">Painel</a>
+                    <a href="<?= $baseUrl ?>pages/dashboardLocador.php" class="text-white text-decoration-none fw-medium">Painel</a>
                 <?php elseif ($_SESSION['usuarioTipo'] === 'gerente'): ?>
-                    <a href="<?= $baseUrl ?>pages/dashboard-gerente.php" class="text-white text-decoration-none fw-medium">Reservas</a>
+                    <a href="<?= $baseUrl ?>pages/dashboardGerente.php" class="text-white text-decoration-none fw-medium">Reservas</a>
                 <?php endif; ?>
                 <a href="<?= $baseUrl ?>pages/logout.php" class="btn btn-outline-light rounded-pill px-3">Sair</a>
             <?php else: ?>
-                <a href="<?= $baseUrl ?>pages/login-locatario.php" class="text-white text-decoration-none fw-medium">Entrar</a>
-                <a href="<?= $baseUrl ?>pages/cadastro-locador.php" class="btn btn-warning fw-bold text-dark rounded-pill px-4 shadow-sm customYellowBtn">Cadastre sua Arena</a>
+                <a href="<?= $baseUrl ?>pages/loginLocatario.php" class="text-white text-decoration-none fw-medium">Entrar</a>
+                <a href="<?= $baseUrl ?>pages/cadastroLocador.php" class="btn btn-warning fw-bold text-dark rounded-pill px-4 shadow-sm customYellowBtn">Cadastre sua Arena</a>
             <?php endif; ?>
         </nav>
     </div>

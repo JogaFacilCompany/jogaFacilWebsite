@@ -84,29 +84,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
         $_SESSION['flashMessage'] = 'Requisição inválida. Tente novamente.';
         $_SESSION['flashType']    = 'danger';
-        $referer = $_SERVER['HTTP_REFERER'] ?? '../pages/dashboard-locador.php';
-        header('Location: ' . $referer);
+        header('Location: ../pages/dashboardLocador.php');
         exit;
     }
 
+    $fromDash     = ($_POST['source'] ?? '') === 'dashboard';
     $responseData = createUsuario($_POST);
+
     $_SESSION['flashMessage'] = $responseData['mensagem'];
     $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
 
-    $fromDash = ($_POST['source'] ?? '') === 'dashboard';
-
-    if ($responseData['sucesso']) {
-        if ($fromDash) {
-            header('Location: ../pages/dashboard-locador.php');
-        } else {
-            $redirectPage = ($_POST['tipo'] === UserTypes::LOCADOR || $_POST['tipo'] === UserTypes::GERENTE)
-                ? 'login-locador.php'
-                : 'login-locatario.php';
-            header('Location: ../pages/' . $redirectPage);
-        }
+    if ($fromDash) {
+        header('Location: ../pages/dashboardLocador.php');
+    } elseif ($responseData['sucesso']) {
+        $redirectPage = ($_POST['tipo'] === UserTypes::LOCADOR || $_POST['tipo'] === UserTypes::GERENTE)
+            ? 'loginLocador.php'
+            : 'loginLocatario.php';
+        header('Location: ../pages/' . $redirectPage);
     } else {
-        $referer = $_SERVER['HTTP_REFERER'] ?? '../pages/dashboard-locador.php';
-        header('Location: ' . $referer);
+        $redirectPage = ($_POST['tipo'] === UserTypes::LOCADOR || $_POST['tipo'] === UserTypes::GERENTE)
+            ? 'cadastroLocador.php'
+            : 'cadastroLocatario.php';
+        header('Location: ../pages/' . $redirectPage);
     }
     exit;
 }

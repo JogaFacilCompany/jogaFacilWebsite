@@ -1,5 +1,5 @@
 <?php
-// pages/login-locatario.php
+// pages/loginLocatario.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (isset($_SESSION['usuarioLogado'])) {
     header('Location: ../index.php');
@@ -52,8 +52,8 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             </div>
             <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Entrar</button>
         </form>
-        <p class="text-center mt-3 small">Não tem conta? <a href="../pages/cadastro-locatario.php" class="authLink text-success fw-medium">Cadastre-se</a></p>
-        <p class="text-center mt-1 small"><a href="../pages/login-locador.php" class="text-muted">Entrar como locador</a></p>
+        <p class="text-center mt-3 small">Não tem conta? <a href="../pages/cadastroLocatario.php" class="authLink text-success fw-medium">Cadastre-se</a></p>
+        <p class="text-center mt-1 small"><a href="../pages/loginLocador.php" class="text-muted">Entrar como locador</a></p>
     </div>
 </main>
 

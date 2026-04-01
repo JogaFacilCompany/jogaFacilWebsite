@@ -20,34 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Category Filter ---
-    const categoryButtons = document.querySelectorAll('.categoryBtn');
-    if (categoryButtons.length > 0) {
-        categoryButtons.forEach(activeButton => {
-            activeButton.addEventListener('click', (eventObject) => {
-                categoryButtons.forEach(buttonElement => {
-                    buttonElement.classList.remove('active');
-                });
-                const clickedElement = eventObject.currentTarget;
-                clickedElement.classList.add('active');
-
-                const selectedCategory = clickedElement.getAttribute('data-category');
-                console.log(`Category selected: ${selectedCategory}`);
-                filterArenasByCategory(selectedCategory);
-            });
-        });
-    }
-
-    // Filter arena cards by sport category
-    const filterArenasByCategory = (categoryName) => {
-        const allCards = document.querySelectorAll('#arenasContainer [data-sport], #nearYouContainer [data-sport]');
-        allCards.forEach(cardWrapper => {
-            const sport = cardWrapper.getAttribute('data-sport');
-            const shouldShow = (categoryName === 'todos') || (sport === categoryName);
-            cardWrapper.style.display = shouldShow ? 'block' : 'none';
-        });
-    };
-
     // --- CPF Mask ---
     const cpfInput = document.getElementById('inputCpf');
     if (cpfInput) {

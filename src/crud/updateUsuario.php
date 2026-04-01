@@ -44,16 +44,14 @@ function updateUsuario(int $userId, array $inputData): array {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
+    require_once __DIR__ . '/../config/auth.php';
+
+    requireLocadorAuth();
 
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
         $_SESSION['flashMessage'] = 'Requisição inválida. Tente novamente.';
         $_SESSION['flashType']    = 'danger';
-        header('Location: ../pages/dashboard-locador.php');
-        exit;
-    }
-
-    if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::LOCADOR) {
-        header('Location: ../pages/login-locador.php');
+        header('Location: ../pages/dashboardLocador.php');
         exit;
     }
 
@@ -62,13 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($targetUserId === (int)$_SESSION['usuarioLogado']) {
         $_SESSION['flashMessage'] = 'Use as configurações de perfil para editar sua própria conta.';
         $_SESSION['flashType']    = 'warning';
-        header('Location: ../pages/dashboard-locador.php');
+        header('Location: ../pages/dashboardLocador.php');
         exit;
     }
 
     $responseData = updateUsuario($targetUserId, $_POST);
     $_SESSION['flashMessage'] = $responseData['mensagem'];
     $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
-    header('Location: ../pages/dashboard-locador.php');
+    header('Location: ../pages/dashboardLocador.php');
     exit;
 }

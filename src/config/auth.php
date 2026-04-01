@@ -13,7 +13,7 @@ function enforceSessionTimeout(): void {
         session_start();
         $_SESSION['flashMessage'] = 'Sua sessão expirou. Faça login novamente.';
         $_SESSION['flashType']    = 'warning';
-        header('Location: ../pages/login-locador.php');
+        header('Location: ../pages/loginLocador.php');
         exit;
     }
     $_SESSION['ultimaAtividade'] = time();
@@ -22,7 +22,7 @@ function enforceSessionTimeout(): void {
 function requireAuth(): void {
     enforceSessionTimeout();
     if (!isset($_SESSION['usuarioLogado'])) {
-        header('Location: ../pages/login-locatario.php');
+        header('Location: ../pages/loginLocatario.php');
         exit;
     }
 }
@@ -30,7 +30,7 @@ function requireAuth(): void {
 function requireLocadorAuth(): void {
     enforceSessionTimeout();
     if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::LOCADOR) {
-        header('Location: ../pages/login-locador.php');
+        header('Location: ../pages/loginLocador.php');
         exit;
     }
 }
@@ -38,7 +38,7 @@ function requireLocadorAuth(): void {
 function requireLocatarioAuth(): void {
     enforceSessionTimeout();
     if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::LOCATARIO) {
-        header('Location: ../pages/login-locatario.php');
+        header('Location: ../pages/loginLocatario.php');
         exit;
     }
 }
@@ -46,7 +46,7 @@ function requireLocatarioAuth(): void {
 function requireGerenteAuth(): void {
     enforceSessionTimeout();
     if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== UserTypes::GERENTE) {
-        header('Location: ../pages/login-locador.php');
+        header('Location: ../pages/loginLocador.php');
         exit;
     }
 }

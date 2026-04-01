@@ -70,7 +70,7 @@ $quadrasAtivas = readAllQuadrasAtivas();
             <?php else: ?>
                 <?php foreach ($quadrasAtivas as $quadra): ?>
                     <div class="col-md-4">
-                        <a href="./pages/arena-detalhe.php?id=<?= $quadra['id'] ?>" class="arenaCard h-100">
+                        <a href="./pages/arenaDetalhe.php?id=<?= $quadra['id'] ?>" class="arenaCard h-100">
                             <div class="arenaCardImgWrapper">
                                 <?php if (!empty($quadra['imagemUrl'])): ?>
                                     <img class="arenaCardImg" src="<?= htmlspecialchars($quadra['imagemUrl']) ?>" alt="<?= htmlspecialchars($quadra['nome']) ?>">
