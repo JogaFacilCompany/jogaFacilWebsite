@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['usuarioLogado'] = $foundUser['id'];
             $_SESSION['usuarioNome']   = $foundUser['nome'];
             $_SESSION['usuarioTipo']   = $foundUser['tipo'];
-            header('Location: ../pages/dashboard-locador.php');
+            header('Location: ../pages/dashboard-admin.php');
             exit;
         } else {
             // Note: If no 'admin' role exists in DB ENUM yet, this will obviously reject everyone not explicitly set to admin.
