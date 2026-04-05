@@ -71,7 +71,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Entrar</button>
         </form>
         <p class="text-center mt-3 small">Não tem conta? <a href="../pages/cadastro-locador.php" class="authLink text-success fw-medium">Cadastre-se</a></p>
-        <p class="text-center mt-1 small"><a href="../pages/login-locatario.php" class="text-muted">Entrar como locatário</a></p>
+        <p class="text-center mt-1 small"><a href="../pages/login-locatario.php" class="">Entrar como locatário</a></p>
     </div>
 </main>
 

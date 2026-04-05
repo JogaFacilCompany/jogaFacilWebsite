@@ -31,3 +31,13 @@ function getAllPendingQuadras(): array {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+/**
+ * Busca todas as quadras ativas para a página inicial.
+ */
+function getAllApprovedQuadras(): array {
+    $pdo = getDbConnection();
+    $stmt = $pdo->prepare("SELECT * FROM quadras WHERE status = 'ativo' ORDER BY created_at DESC");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

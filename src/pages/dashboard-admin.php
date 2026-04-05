@@ -95,7 +95,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
                 </thead>
                 <tbody>
                     <?php if (empty($todoUsuarios)): ?>
-                        <tr><td colspan="7" class="text-center text-muted">Nenhum usuário cadastrado</td></tr>
+                        <tr><td colspan="7" class="text-center ">Nenhum usuário cadastrado</td></tr>
                     <?php else: ?>
                         <?php foreach ($todoUsuarios as $rowUsuario): ?>
                         <tr>

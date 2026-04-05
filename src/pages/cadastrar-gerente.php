@@ -26,7 +26,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 480px; width: 100%;">
         <h3 class="formTitle fw-bold text-center mb-1">Cadastrar Gerente</h3>
-        <p class="text-muted text-center small mb-4">O gerente receberá acesso administrativo às suas quadras</p>
+        <p class=" text-center small mb-4">O gerente receberá acesso administrativo às suas quadras</p>
 
         <?php if ($flashMessage): ?>
             <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>
@@ -52,7 +52,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             <button type="submit" class="btn btn-warning w-100 submitBtn fw-bold text-dark mt-2">Cadastrar Gerente</button>
         </form>
         <p class="text-center mt-3 small">
-            <a href="../pages/dashboard-locador.php" class="text-muted">← Voltar ao Painel</a>
+            <a href="../pages/dashboard-locador.php" class="">← Voltar ao Painel</a>
         </p>
     </div>
 </main>

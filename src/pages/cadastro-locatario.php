@@ -22,7 +22,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 480px; width: 100%;">
         <h3 class="formTitle fw-bold text-center mb-1">Cadastro de Locatário</h3>
-        <p class="text-muted text-center small mb-4">Crie sua conta para reservar quadras</p>
+        <p class=" text-center small mb-4">Crie sua conta para reservar quadras</p>
 
         <?php if ($flashMessage): ?>
             <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>

@@ -230,7 +230,7 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                             <?php 
                             $facilidades = json_decode($quadra['facilidades'], true) ?: [];
                             if (empty($facilidades)): ?>
-                                <li class="facilidadesItem text-muted">Nenhuma facilidade cadastrada</li>
+                                <li class="facilidadesItem ">Nenhuma facilidade cadastrada</li>
                             <?php else:
                                 foreach ($facilidades as $fac): ?>
                                     <li class="facilidadesItem"><?= htmlspecialchars($fac) ?></li>
@@ -264,7 +264,7 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                             <button class="periodTab" onclick="selecionarAba('Noite')">Noite</button>
                         </div>
                         <div class="slotsGrid" id="slotsContainer"></div>
-                        <p class="text-muted small mt-2 mb-3">Clique em um horário para bloqueá-lo ou liberá-lo.</p>
+                        <p class=" small mt-2 mb-3">Clique em um horário para bloqueá-lo ou liberá-lo.</p>
                         
                         <button class="bookingConfirmBtn" id="btnSalvarEstado">Selecione um horário</button>
 
@@ -347,7 +347,7 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                     <div class="modal-body py-4 text-center">
                         <i class="bi bi-exclamation-triangle text-danger display-4 mb-3 d-block"></i>
                         <p class="mb-0">Tem certeza que deseja excluir a arena <strong><?= htmlspecialchars($quadra['nome']) ?></strong>?</p>
-                        <p class="text-muted small">Esta ação é irreversível e apagará todos os dados vinculados.</p>
+                        <p class=" small">Esta ação é irreversível e apagará todos os dados vinculados.</p>
                     </div>
                     <div class="modal-footer border-0 pt-0">
                         <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
