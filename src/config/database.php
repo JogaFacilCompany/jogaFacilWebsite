@@ -1,24 +1,6 @@
 <?php
 // config/database.php – Backend Specialist | camelCase enforced
 
-function loadEnv(string $envPath): void {
-    if (!file_exists($envPath)) return;
-    $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (str_starts_with(trim($line), '#')) continue;
-        $parts = explode('=', $line, 2);
-        if (count($parts) !== 2) continue;
-        $key   = trim($parts[0]);
-        $value = trim($parts[1]);
-        if (!array_key_exists($key, $_ENV)) {
-            $_ENV[$key] = $value;
-            putenv("{$key}={$value}");
-        }
-    }
-}
-
-loadEnv('/var/www/.env');
-
 function getDbConnection(): PDO {
     $dbHost = getenv('DB_HOST') ?: '127.0.0.1';
     $dbName = getenv('DB_NAME') ?: '';

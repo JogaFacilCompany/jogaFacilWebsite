@@ -57,7 +57,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
                 </thead>
                 <tbody>
                     <?php if (empty($arenasPendentes)): ?>
-                        <tr><td colspan="5" class="text-center text-muted py-4">Nenhuma solicitação pendente</td></tr>
+                        <tr><td colspan="5" class="text-center py-4">Nenhuma solicitação pendente</td></tr>
                     <?php else: ?>
                         <?php foreach ($arenasPendentes as $pend): ?>
                         <tr>

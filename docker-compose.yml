@@ -5,9 +5,10 @@ services:
     container_name: my_apache_php
     ports:
       - "8080:80" # Maps port 8080 on your machine to port 80 in the container
+    env_file:
+      - ./.env
     volumes:
       - ./src:/var/www/html # Syncs your local 'src' folder to the container's web root
-      - ./.env:/var/www/.env # Syncs environment file to exactly where backend expects it
     depends_on:
       - db
 

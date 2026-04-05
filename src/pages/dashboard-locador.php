@@ -116,7 +116,7 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                 <?php if (empty($quadras)): ?>
                     <div class="col-12 text-center py-5">
                         <div class="p-5 rounded-4 shadow-sm" style="background: rgba(255,255,255,0.03); border: 1px dashed #374151;">
-                            <i class="bi bi-calendar-x text-muted display-1"></i>
+                            <i class="bi bi-calendar-x display-1"></i>
                             <h4 class="mt-3 text-white">Você ainda não tem quadras.</h4>
                             <p class="text-secondary">Cadastre sua primeira arena para começar a disponibilizar horários!</p>
                             <button class="btn btn-success fw-bold px-5 py-2 mt-2 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalNovoArena">Cadastrar Primeira Arena</button>
