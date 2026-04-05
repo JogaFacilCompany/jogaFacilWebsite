@@ -1,25 +1,7 @@
 <?php
 // crud/createUsuario.php – Backend Specialist | camelCase enforced
 require_once __DIR__ . '/../config/database.php';
-
-function isValidCpf(string $cpfInput): bool {
-    $cpfDigits = preg_replace('/[^0-9]/', '', $cpfInput);
-
-    if (strlen($cpfDigits) !== 11 || preg_match('/^(\d)\1{10}$/', $cpfDigits)) {
-        return false;
-    }
-
-    for ($i = 9; $i < 11; $i++) {
-        $expectedDigit = 0;
-        for ($j = 0; $j < $i; $j++) {
-            $expectedDigit += (int)$cpfDigits[$j] * (($i + 1) - $j);
-        }
-        $expectedDigit = (($expectedDigit % 11) < 2) ? 0 : 11 - ($expectedDigit % 11);
-        if ((int)$cpfDigits[$i] !== $expectedDigit) return false;
-    }
-
-    return true;
-}
+require_once __DIR__ . '/../utils/validators.php';
 
 function createUsuario(array $inputData): array {
     $pdo      = getDbConnection();

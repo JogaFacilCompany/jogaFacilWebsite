@@ -1,6 +1,7 @@
 <?php
 // crud/updateQuadra.php
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../utils/validators.php';
 
 function updateQuadra(array $data): array {
     $pdo = getDbConnection();
@@ -10,17 +11,31 @@ function updateQuadra(array $data): array {
     $nome      = trim($data['nome'] ?? '');
     $endereco  = trim($data['endereco'] ?? '');
     $telefone  = trim($data['telefone'] ?? '');
+    $cnpj      = preg_replace('/[^0-9]/', '', $data['cnpj'] ?? '');
     $descricao = trim($data['descricao'] ?? '');
     $modalidades = trim($data['modalidades'] ?? 'Futebol');
     $funcionamento = trim($data['funcionamento'] ?? '08:00 - 22:00');
     $cancelamento = (int)($data['cancelamento_horas'] ?? 24);
+
+    // Validações
+    if (empty($nome) || empty($endereco) || empty($telefone) || empty($cnpj)) {
+        return ['sucesso' => false, 'mensagem' => 'Todos os campos obrigatórios (*) devem ser preenchidos.'];
+    }
+
+    if (!isValidCnpj($cnpj)) {
+        return ['sucesso' => false, 'mensagem' => 'O CNPJ informado é inválido. Verifique os números.'];
+    }
+
+    if (!isValidOperatingHours($funcionamento)) {
+        return ['sucesso' => false, 'mensagem' => 'O formato do horário de funcionamento deve ser HH:MM - HH:MM.'];
+    }
     
     // Facilidades
     $facilidades = isset($data['facilidades']) ? json_encode($data['facilidades'], JSON_UNESCAPED_UNICODE) : '[]';
 
     $stmt = $pdo->prepare("
         UPDATE quadras 
-        SET nome = :nome, endereco = :endereco, telefone = :telefone, 
+        SET nome = :nome, endereco = :endereco, telefone = :telefone, cnpj = :cnpj,
             descricao = :descricao, modalidades = :modalidades, 
             funcionamento = :funcionamento, cancelamento_horas = :cancelamento,
             facilidades = :facilidades
@@ -30,6 +45,7 @@ function updateQuadra(array $data): array {
         'nome' => $nome,
         'endereco' => $endereco,
         'telefone' => $telefone,
+        'cnpj' => $cnpj,
         'descricao' => $descricao,
         'modalidades' => $modalidades,
         'funcionamento' => $funcionamento,
