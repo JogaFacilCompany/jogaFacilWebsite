@@ -133,7 +133,13 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                                 <h5 class="card-title fw-bold text-white mb-2"><?= htmlspecialchars($q['nome']) ?></h5>
                                 <p class="card-text text-secondary small mb-3"><i class="bi bi-geo-alt"></i> <?= htmlspecialchars($q['endereco']) ?></p>
                                 <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <span class="badge bg-success opacity-75"><?= htmlspecialchars($q['modalidades']) ?></span>
+                                    <?php
+                                        $statusClass = 'bg-warning';
+                                        $statusLabel = 'Aguardando';
+                                        if ($q['status'] === 'ativo') { $statusClass = 'bg-success'; $statusLabel = 'Ativo'; }
+                                        if ($q['status'] === 'rejeitado') { $statusClass = 'bg-danger'; $statusLabel = 'Rejeitado'; }
+                                    ?>
+                                    <span class="badge <?= $statusClass ?> opacity-75 shadow-sm"><?= $statusLabel ?></span>
                                     <span class="text-warning fw-bold small">Gerenciar <i class="bi bi-arrow-right"></i></span>
                                 </div>
                             </div>

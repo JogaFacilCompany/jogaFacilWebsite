@@ -21,3 +21,13 @@ function getQuadraByIdAndLocador(int $arenaId, int $locadorId): ?array {
     $stmt->execute(['arenaId' => $arenaId, 'locadorId' => $locadorId]);
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 }
+
+/**
+ * Busca todas as quadras pendentes de aprovação.
+ */
+function getAllPendingQuadras(): array {
+    $pdo = getDbConnection();
+    $stmt = $pdo->prepare("SELECT q.*, u.nome as locador_nome FROM quadras q JOIN usuarios u ON q.locador_id = u.id WHERE q.status = 'pendente' ORDER BY q.created_at ASC");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

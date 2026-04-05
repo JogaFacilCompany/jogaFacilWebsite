@@ -26,7 +26,7 @@ function createUsuario(array $inputData): array {
     $userType = $inputData['tipo']   ?? '';
     $fromDash = ($inputData['source'] ?? '') === 'dashboard';
 
-    $allowedTypes = ['locador', 'locatario', 'gerente'];
+    $allowedTypes = ['locador', 'locatario', 'gerente', 'admin'];
     if (!in_array($userType, $allowedTypes)) {
         return ['sucesso' => false, 'mensagem' => 'Tipo de usuário inválido.'];
     }

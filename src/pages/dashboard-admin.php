@@ -6,10 +6,12 @@ if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'admin') 
     exit;
 }
 require_once __DIR__ . '/../crud/readUsuarios.php';
+require_once __DIR__ . '/../crud/readQuadras.php';
 require_once __DIR__ . '/../config/csrf.php';
 
 $csrfToken    = generateCsrfToken();
 $todoUsuarios  = readAllUsuarios();
+$arenasPendentes = getAllPendingQuadras();
 $flashMessage  = $_SESSION['flashMessage'] ?? null;
 $flashType     = $_SESSION['flashType']    ?? 'info';
 unset($_SESSION['flashMessage'], $_SESSION['flashType']);
@@ -32,8 +34,47 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
     </div>
 
     <?php if ($flashMessage): ?>
-        <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>
+        <div class="alert alert-<?= $flashType ?> alertMessage shadow-sm"><?= htmlspecialchars($flashMessage) ?></div>
     <?php endif; ?>
+
+    <!-- Seção de Moderação de Arenas -->
+    <div class="card border-0 shadow-sm p-4 mb-5 dashboardCard" style="border-left: 4px solid var(--amareloOuro) !important;">
+        <h5 class="fw-bold mb-3 d-flex align-items-center">
+            <i class="bi bi-clock-history me-2 text-warning"></i> 
+            Solicitações de Novas Arenas 
+            <span class="badge bg-warning ms-2"><?= count($arenasPendentes) ?></span>
+        </h5>
+        <div class="table-responsive">
+            <table class="table dashboardTable table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Arena</th>
+                        <th>Locador</th>
+                        <th>Endereço</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($arenasPendentes)): ?>
+                        <tr><td colspan="5" class="text-center text-muted py-4">Nenhuma solicitação pendente</td></tr>
+                    <?php else: ?>
+                        <?php foreach ($arenasPendentes as $pend): ?>
+                        <tr>
+                            <td><strong><?= htmlspecialchars($pend['nome']) ?></strong></td>
+                            <td><?= htmlspecialchars($pend['locador_nome']) ?></td>
+                            <td class="text-secondary small"><?= htmlspecialchars($pend['endereco']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($pend['created_at'])) ?></td>
+                            <td>
+                                <a href="admin-preview-arena.php?id=<?= $pend['id'] ?>" class="btn btn-sm btn-primary px-3 rounded-pill">Visualizar e Avaliar</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
     <!-- CRUD Table -->

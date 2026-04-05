@@ -15,17 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputEmail = trim($_POST['email'] ?? '');
         $inputSenha = $_POST['senha'] ?? '';
         $foundUser  = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
-
-        if ($foundUser && $foundUser['tipo'] === 'admin') {
+        
+        if (!$foundUser) {
+            $loginError = 'E-mail ou senha incorretos.';
+        } elseif ($foundUser['tipo'] !== 'admin') {
+            $loginError = 'Acesso Negado. Esta conta não possui privilégios de Administrador.';
+        } else {
             session_regenerate_id(true);
             $_SESSION['usuarioLogado'] = $foundUser['id'];
             $_SESSION['usuarioNome']   = $foundUser['nome'];
             $_SESSION['usuarioTipo']   = $foundUser['tipo'];
             header('Location: ../pages/dashboard-admin.php');
             exit;
-        } else {
-            // Note: If no 'admin' role exists in DB ENUM yet, this will obviously reject everyone not explicitly set to admin.
-            $loginError = 'Acesso Negado. Você não possui privilégios de Administrador.';
         }
     }
 }
