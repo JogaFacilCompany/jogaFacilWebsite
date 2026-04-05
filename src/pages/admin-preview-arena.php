@@ -87,6 +87,15 @@ $csrfToken = generateCsrfToken();
                         <label class="text-secondary small d-block">Telefone da Arena:</label>
                         <span><?= htmlspecialchars($quadra['telefone']) ?></span>
                     </div>
+                    <div class="mb-3">
+                        <label class="text-secondary small d-block">CNPJ:</label>
+                        <span class="text-info fw-bold"><?php 
+                            $cnpj = preg_replace('/\D/', '', $quadra['cnpj']);
+                            echo strlen($cnpj) === 14 
+                                ? substr($cnpj, 0, 2) . '.' . substr($cnpj, 2, 3) . '.' . substr($cnpj, 5, 3) . '/' . substr($cnpj, 8, 4) . '-' . substr($cnpj, 12, 2)
+                                : htmlspecialchars($quadra['cnpj']);
+                        ?></span>
+                    </div>
                     <hr class="border-secondary my-4">
                     <h5 class="fw-bold mb-3">Horário de Funcionamento</h5>
                     <span class="badge bg-secondary p-2 px-3 fs-6"><?= htmlspecialchars($quadra['funcionamento']) ?></span>

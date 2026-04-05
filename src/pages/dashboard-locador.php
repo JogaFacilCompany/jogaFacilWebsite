@@ -292,15 +292,19 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                     <div class="modal-body p-4">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-medium">Nome da Arena</label>
+                                <label class="form-label fw-medium">Nome da Arena *</label>
                                 <input type="text" class="form-control formInput" name="nome" value="<?= htmlspecialchars($quadra['nome']) ?>" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-medium">Telefone</label>
+                                <label class="form-label fw-medium">Telefone *</label>
                                 <input type="text" class="form-control formInput" name="telefone" value="<?= htmlspecialchars($quadra['telefone']) ?>" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-medium">Horário de Funcionamento</label>
+                                <label class="form-label fw-medium">CNPJ *</label>
+                                <input type="text" class="form-control formInput cnpj-mask" name="cnpj" value="<?= htmlspecialchars($quadra['cnpj'] ?? '') ?>" placeholder="00.000.000/0000-00" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Horário de Funcionamento *</label>
                                 <input type="text" class="form-control formInput" name="funcionamento" value="<?= htmlspecialchars($quadra['funcionamento'] ?? '08:00 - 22:00') ?>" placeholder="Ex: 08:00 - 22:00">
                             </div>
                             <div class="col-12">
@@ -378,11 +382,15 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                             <input type="text" class="form-control formInput" name="funcionamento" placeholder="Ex: 08:00 - 22:00" value="08:00 - 22:00">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-medium">Telefone</label>
+                            <label class="form-label fw-medium">Telefone *</label>
                             <input type="text" class="form-control formInput" name="telefone" placeholder="(00) 00000-0000" required>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">CNPJ *</label>
+                            <input type="text" class="form-control formInput cnpj-mask" name="cnpj" placeholder="00.000.000/0000-00" required>
+                        </div>
                         <div class="col-12">
-                            <label class="form-label fw-medium">Endereço Completo</label>
+                            <label class="form-label fw-medium">Endereço Completo *</label>
                             <input type="text" class="form-control formInput" name="endereco" required>
                         </div>
                         <div class="col-md-6">
@@ -441,7 +449,17 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
         btn.classList.toggle('enabled', !!slotSelecionado);
     }
 
-    document.addEventListener('DOMContentLoaded', renderSlots);
+    document.addEventListener('DOMContentLoaded', () => {
+        renderSlots();
+        
+        // Máscara Simples para CNPJ
+        document.querySelectorAll('.cnpj-mask').forEach(input => {
+            input.addEventListener('input', (e) => {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2})/);
+                e.target.value = !x[2] ? x[1] : x[1] + '.' + x[2] + '.' + x[3] + '/' + x[4] + (x[5] ? '-' + x[5] : '');
+            });
+        });
+    });
 </script>
 <?php endif; ?>
 <script src="../assets/js/appLogic.js"></script>

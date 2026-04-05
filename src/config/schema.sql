@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS quadras (
     endereco    VARCHAR(255) NOT NULL,
     imagem      VARCHAR(255) DEFAULT NULL,
     locador_id  INT NOT NULL,
+    cnpj        VARCHAR(14) DEFAULT NULL,
     status      ENUM('pendente', 'ativo', 'inativo', 'manutencao', 'rejeitado') NOT NULL DEFAULT 'pendente',
     descricao   TEXT DEFAULT NULL,
     facilidades TEXT DEFAULT NULL,
