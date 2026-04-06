@@ -87,7 +87,7 @@ $activeArenas = getAllApprovedQuadras();
                         $isNear = ($index % 2 !== 0); 
                     ?>
                     <div class="col-md-4 arena-item" data-sport="<?= htmlspecialchars($primarySport) ?>">
-                        <a href="./pages/arena-detalhe.php?id=<?= $arena['id'] ?>" class="arenaCard h-100">
+                        <a href="./pages/arenaDetalhe.php?id=<?= $arena['id'] ?>" class="arenaCard h-100">
                             <div class="arenaCardImgWrapper">
                                 <img class="arenaCardImg" src="<?= htmlspecialchars($bgImage) ?>" alt="<?= htmlspecialchars($arena['nome']) ?>">
                                 <?php if ($isNear): ?>

@@ -1,5 +1,5 @@
 <?php
-// pages/login-gerente.php
+// pages/loginLocatario.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (isset($_SESSION['usuarioLogado'])) {
     header('Location: ../index.php');
@@ -16,15 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputSenha = $_POST['senha'] ?? '';
         $foundUser  = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
 
-        if ($foundUser && $foundUser['tipo'] === 'gerente') {
+        if ($foundUser && $foundUser['tipo'] === 'locatario') {
             session_regenerate_id(true);
             $_SESSION['usuarioLogado'] = $foundUser['id'];
             $_SESSION['usuarioNome']   = $foundUser['nome'];
             $_SESSION['usuarioTipo']   = $foundUser['tipo'];
-            header('Location: ../pages/dashboard-locador.php');
+            header('Location: ../index.php');
             exit;
         } else {
-            $loginError = 'Credenciais inválidas. Verifique e-mail e senha de gerente.';
+            $loginError = 'Credenciais inválidas ou usuário não é locatário.';
         }
     }
 }
@@ -38,7 +38,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login do Gerente – Joga Fácil</title>
+    <title>Login do Locatário – Joga Fácil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/customStyles.css" rel="stylesheet">
 </head>
@@ -47,8 +47,8 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 440px; width: 100%;">
-        <h3 class="formTitle fw-bold text-center mb-1">Entrar como Gerente</h3>
-        <p class="text-white-50 text-center small mb-4">Acesse o sistema para controle de quadras</p>
+        <h3 class="formTitle fw-bold text-center mb-1">Entrar como Locatário</h3>
+        <p class="text-white-50 text-center small mb-4">Acesse sua conta para reservar quadras</p>
 
         <?php if (!empty($loginError)): ?>
             <div class="alert alert-danger alertMessage"><?= htmlspecialchars($loginError) ?></div>
@@ -57,11 +57,11 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>
         <?php endif; ?>
 
-        <form action="" method="POST" id="loginGerenteForm" novalidate>
+        <form action="" method="POST" id="loginLocatarioForm" novalidate>
             <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
             <div class="mb-3">
                 <label for="inputEmail" class="form-label fw-medium">E-mail</label>
-                <input type="email" class="form-control formInput" id="inputEmail" name="email" placeholder="gerente@exemplo.com" required>
+                <input type="email" class="form-control formInput" id="inputEmail" name="email" placeholder="email@exemplo.com" required>
             </div>
             <div class="mb-3">
                 <label for="inputSenha" class="form-label fw-medium">Senha</label>
@@ -69,7 +69,8 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             </div>
             <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Entrar</button>
         </form>
-        <p class="text-center mt-4 small"><a href="../pages/escolher-login.php" class="text-white-50 text-decoration-none">Voltar para opções de login</a></p>
+        <p class="text-center mt-4 small">Não tem conta? <a href="../pages/escolherCadastro.php" class="authLink text-success fw-medium">Cadastre-se</a></p>
+        <p class="text-center mt-1 small"><a href="../pages/escolherLogin.php" class="text-white-50 text-decoration-none">Voltar para opções de login</a></p>
     </div>
 </main>
 

@@ -65,12 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
         $_SESSION['flashMessage'] = 'Requisição inválida.';
         $_SESSION['flashType']    = 'danger';
-        header('Location: ../pages/dashboard-locador.php');
+        header('Location: ../pages/dashboardLocador.php');
         exit;
     }
 
     if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'locador') {
-        header('Location: ../pages/login-locador.php');
+        header('Location: ../pages/loginLocador.php');
         exit;
     }
 
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Se editou uma arena, redireciona para a mesma página detalhada se houver ID
     $arenaId = (int)($_POST['id'] ?? 0);
-    $redirect = $arenaId ? "../pages/dashboard-locador.php?arena_id=" . $arenaId : "../pages/dashboard-locador.php";
+    $redirect = $arenaId ? "../pages/dashboardLocador.php?arena_id=" . $arenaId : "../pages/dashboardLocador.php";
     header('Location: ' . $redirect);
     exit;
 }

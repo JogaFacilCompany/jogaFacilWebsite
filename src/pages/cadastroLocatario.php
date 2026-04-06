@@ -1,5 +1,5 @@
 <?php
-// pages/cadastro-locatario.php
+// pages/cadastroLocatario.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/../config/csrf.php';
 
@@ -52,7 +52,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 
             <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Cadastrar como Locatário</button>
         </form>
-        <p class="text-center mt-3 small">Já tem conta? <a href="../pages/login-locatario.php" class="authLink text-success fw-medium">Entrar</a></p>
+        <p class="text-center mt-3 small">Já tem conta? <a href="../pages/loginLocatario.php" class="authLink text-success fw-medium">Entrar</a></p>
     </div>
 </main>
 

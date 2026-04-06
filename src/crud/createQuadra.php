@@ -59,12 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
         $_SESSION['flashMessage'] = 'Requisição inválida.';
         $_SESSION['flashType']    = 'danger';
-        header('Location: ../pages/dashboard-locador.php');
+        header('Location: ../pages/dashboardLocador.php');
         exit;
     }
 
     if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'locador') {
-        header('Location: ../pages/login-locador.php');
+        header('Location: ../pages/loginLocador.php');
         exit;
     }
 
@@ -73,6 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['flashMessage'] = $responseData['mensagem'];
     $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
 
-    header('Location: ../pages/dashboard-locador.php');
+    header('Location: ../pages/dashboardLocador.php');
     exit;
 }

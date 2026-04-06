@@ -26,9 +26,9 @@ function redirectByUserType() {
     }
 
     if ($_SESSION['usuarioTipo'] === 'admin') {
-        header('Location: ../pages/dashboard-admin.php');
+        header('Location: ../pages/dashboardAdmin.php');
     } else if ($_SESSION['usuarioTipo'] === 'locador') {
-        header('Location: ../pages/dashboard-locador.php');
+        header('Location: ../pages/dashboardLocador.php');
     } else {
         header('Location: ../index.php');
     }

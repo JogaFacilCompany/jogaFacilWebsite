@@ -1,8 +1,8 @@
 <?php
-// pages/dashboard-locador.php
+// pages/dashboardLocador.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'locador') {
-    header('Location: ../pages/login-locador.php');
+    header('Location: ../pages/loginLocador.php');
     exit;
 }
 
@@ -17,7 +17,7 @@ if ($arenaId) {
     $quadra = getQuadraByIdAndLocador($arenaId, $locadorId);
     // Se não encontrou ou não pertence ao locador, redireciona para a lista
     if (!$quadra) {
-        header('Location: dashboard-locador.php');
+        header('Location: dashboardLocador.php');
         exit;
     }
 } else {
@@ -170,7 +170,7 @@ $horariosSelecionaveis = $arenaId ? gerarHorariosRelativos($quadra['funcionament
                 <div class="arenaDetailHeroMeta">
                     <nav aria-label="breadcrumb" class="mb-2">
                         <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="dashboard-locador.php" class="text-warning text-decoration-none"><i class="bi bi-arrow-left"></i> Meus Painéis</a></li>
+                            <li class="breadcrumb-item"><a href="dashboardLocador.php" class="text-warning text-decoration-none"><i class="bi bi-arrow-left"></i> Meus Painéis</a></li>
                             <li class="breadcrumb-item active text-white" aria-current="page">Gerenciando</li>
                         </ol>
                     </nav>

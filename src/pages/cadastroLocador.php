@@ -1,5 +1,5 @@
 <?php
-// pages/cadastro-locador.php
+// pages/cadastroLocador.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/../crud/createUsuario.php';
 require_once __DIR__ . '/../config/csrf.php';
@@ -51,7 +51,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 
             <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Cadastrar como Locador</button>
         </form>
-        <p class="text-center mt-3 small">Já tem uma conta? <a href="../pages/escolher-login.php" class="authLink text-success fw-medium">Entrar</a></p>
+        <p class="text-center mt-3 small">Já tem uma conta? <a href="../pages/escolherLogin.php" class="authLink text-success fw-medium">Entrar</a></p>
     </div>
 </main>
 

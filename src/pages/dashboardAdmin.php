@@ -2,7 +2,7 @@
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'admin') {
-    header('Location: ../pages/login-admin.php');
+    header('Location: ../pages/loginAdmin.php');
     exit;
 }
 require_once __DIR__ . '/../crud/readUsuarios.php';
@@ -66,7 +66,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
                             <td class="text-secondary small"><?= htmlspecialchars($pend['endereco']) ?></td>
                             <td><?= date('d/m/Y', strtotime($pend['created_at'])) ?></td>
                             <td>
-                                <a href="admin-preview-arena.php?id=<?= $pend['id'] ?>" class="btn btn-sm btn-primary px-3 rounded-pill">Visualizar e Avaliar</a>
+                                <a href="adminPreviewArena.php?id=<?= $pend['id'] ?>" class="btn btn-sm btn-primary px-3 rounded-pill">Visualizar e Avaliar</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

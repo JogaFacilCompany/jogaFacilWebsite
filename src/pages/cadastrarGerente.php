@@ -1,8 +1,8 @@
 <?php
-// pages/cadastrar-gerente.php
+// pages/cadastrarGerente.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'locador') {
-    header('Location: ../pages/login-locador.php');
+    header('Location: ../pages/loginLocador.php');
     exit;
 }
 require_once __DIR__ . '/../config/csrf.php';
@@ -52,7 +52,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             <button type="submit" class="btn btn-warning w-100 submitBtn fw-bold text-dark mt-2">Cadastrar Gerente</button>
         </form>
         <p class="text-center mt-3 small">
-            <a href="../pages/dashboard-locador.php" class="">← Voltar ao Painel</a>
+            <a href="../pages/dashboardLocador.php" class="">← Voltar ao Painel</a>
         </p>
     </div>
 </main>

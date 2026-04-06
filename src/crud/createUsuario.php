@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
         $_SESSION['flashMessage'] = 'Requisição inválida. Tente novamente.';
         $_SESSION['flashType']    = 'danger';
-        $referer = $_SERVER['HTTP_REFERER'] ?? '../pages/dashboard-locador.php';
+        $referer = $_SERVER['HTTP_REFERER'] ?? '../pages/dashboardLocador.php';
         header('Location: ' . $referer);
         exit;
     }
@@ -79,15 +79,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($responseData['sucesso']) {
         if ($fromDash) {
-            header('Location: ../pages/dashboard-locador.php');
+            header('Location: ../pages/dashboardLocador.php');
         } else {
             $redirectPage = ($_POST['tipo'] === 'locador' || $_POST['tipo'] === 'gerente')
-                ? 'login-locador.php'
-                : 'login-locatario.php';
+                ? 'loginLocador.php'
+                : 'loginLocatario.php';
             header('Location: ../pages/' . $redirectPage);
         }
     } else {
-        $referer = $_SERVER['HTTP_REFERER'] ?? '../pages/dashboard-locador.php';
+        $referer = $_SERVER['HTTP_REFERER'] ?? '../pages/dashboardLocador.php';
         header('Location: ' . $referer);
     }
     exit;

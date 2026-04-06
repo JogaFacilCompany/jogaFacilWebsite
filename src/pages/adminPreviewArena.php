@@ -1,8 +1,8 @@
 <?php
-// pages/admin-preview-arena.php
+// pages/adminPreviewArena.php
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioTipo'] !== 'admin') {
-    header('Location: ../pages/login-admin.php');
+    header('Location: ../pages/loginAdmin.php');
     exit;
 }
 
@@ -49,7 +49,7 @@ $csrfToken = generateCsrfToken();
     <div class="adminPreviewHeader shadow-sm">
         <div class="container d-flex justify-content-between align-items-center">
             <div>
-                <a href="dashboard-admin.php" class="btn btn-outline-light btn-sm me-3"><i class="bi bi-arrow-left"></i> Voltar</a>
+                <a href="dashboardAdmin.php" class="btn btn-outline-light btn-sm me-3"><i class="bi bi-arrow-left"></i> Voltar</a>
                 <span class="badge bg-warning">MODERAÇÃO: <?= htmlspecialchars($quadra['nome']) ?></span>
             </div>
             <div class="d-flex gap-2">
