@@ -1,5 +1,5 @@
 <?php
-// crud/updateUsuario.php – Backend Specialist | camelCase enforced
+// crud/updateUsuario.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 
 function updateUsuario(int $userId, array $inputData): array {
@@ -43,10 +43,10 @@ function updateUsuario(int $userId, array $inputData): array {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
+    require_once __DIR__ . '/../utils/flashMessage.php';
 
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $_SESSION['flashMessage'] = 'Requisição inválida. Tente novamente.';
-        $_SESSION['flashType']    = 'danger';
+        setFlash('Requisição inválida. Tente novamente.', 'danger');
         header('Location: ../pages/dashboardLocador.php');
         exit;
     }
@@ -58,8 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $targetUserId = (int)($_POST['id'] ?? 0);
     $responseData = updateUsuario($targetUserId, $_POST);
-    $_SESSION['flashMessage'] = $responseData['mensagem'];
-    $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
+    setFlashFromResponse($responseData);
     header('Location: ../pages/dashboardLocador.php');
     exit;
 }

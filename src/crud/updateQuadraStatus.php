@@ -1,20 +1,20 @@
 <?php
-// crud/updateQuadraStatus.php
+// crud/updateQuadraStatus.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 
 function updateArenaStatus(int $arenaId, string $status): array {
     $pdo = getDbConnection();
-    
+
     $allowedStatus = ['ativo', 'rejeitado', 'pendente'];
     if (!in_array($status, $allowedStatus)) {
         return ['sucesso' => false, 'mensagem' => 'Status inválido.'];
     }
 
-    $stmt = $pdo->prepare("UPDATE quadras SET status = :status WHERE id = :arenaId");
+    $stmt    = $pdo->prepare("UPDATE quadras SET status = :status WHERE id = :arenaId");
     $success = $stmt->execute(['status' => $status, 'arenaId' => $arenaId]);
-    
+
     $labels = ['ativo' => 'aprovada', 'rejeitado' => 'rejeitada', 'pendente' => 'em análise'];
-    $label = $labels[$status] ?? $status;
+    $label  = $labels[$status] ?? $status;
 
     return ['sucesso' => $success, 'mensagem' => $success ? "Arena {$label} com sucesso!" : 'Erro ao atualizar status.'];
 }
@@ -23,10 +23,10 @@ function updateArenaStatus(int $arenaId, string $status): array {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
+    require_once __DIR__ . '/../utils/flashMessage.php';
 
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $_SESSION['flashMessage'] = 'Requisição inválida.';
-        $_SESSION['flashType']    = 'danger';
+        setFlash('Requisição inválida.', 'danger');
         header('Location: ../pages/dashboardAdmin.php');
         exit;
     }
@@ -40,8 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status  = $_POST['status'] ?? '';
 
     $responseData = updateArenaStatus($arenaId, $status);
-    $_SESSION['flashMessage'] = $responseData['mensagem'];
-    $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
+    setFlashFromResponse($responseData);
 
     header('Location: ../pages/dashboardAdmin.php');
     exit;

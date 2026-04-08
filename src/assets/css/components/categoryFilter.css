@@ -1,0 +1,34 @@
+/* components/categoryFilter.css – Category filter pills | camelCase enforced */
+
+.categoryFilters {
+    margin-top: 16px;
+    position: relative;
+    z-index: 2;
+}
+
+.categoryBtn {
+    border-radius: 50px !important;
+    border: 1px solid var(--bgCardBorder) !important;
+    font-weight: 500;
+    transition: var(--transition);
+    padding: 8px 20px;
+    cursor: pointer;
+}
+
+.categoryBtn.active {
+    background-color: var(--amareloOuro) !important;
+    border-color: var(--amareloOuro) !important;
+    color: #111 !important;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(255, 223, 0, 0.35);
+}
+
+.categoryBtn:not(.active) {
+    background-color: var(--bgCard) !important;
+    color: var(--textSecondary) !important;
+}
+
+.categoryBtn:not(.active):hover {
+    background-color: var(--bgCardBorder) !important;
+    color: var(--textPrimary) !important;
+}

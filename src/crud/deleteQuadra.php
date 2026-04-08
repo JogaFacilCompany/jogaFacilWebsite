@@ -1,9 +1,9 @@
 <?php
-// crud/deleteQuadra.php
+// crud/deleteQuadra.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 
 function deleteQuadra(int $arenaId, int $locadorId): array {
-    $pdo = getDbConnection();
+    $pdo  = getDbConnection();
     $stmt = $pdo->prepare("DELETE FROM quadras WHERE id = :arenaId AND locador_id = :locadorId");
     $success = $stmt->execute(['arenaId' => $arenaId, 'locadorId' => $locadorId]);
     return ['sucesso' => $success, 'mensagem' => $success ? 'Arena excluída com sucesso!' : 'Erro ao excluir arena.'];
@@ -13,11 +13,10 @@ function deleteQuadra(int $arenaId, int $locadorId): array {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['id'])) {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
+    require_once __DIR__ . '/../utils/flashMessage.php';
 
-    // Se for POST, valida CSRF
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $_SESSION['flashMessage'] = 'Requisição inválida.';
-        $_SESSION['flashType']    = 'danger';
+        setFlash('Requisição inválida.', 'danger');
         header('Location: ../pages/dashboardLocador.php');
         exit;
     }
@@ -30,9 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['id'])) {
     $arenaId     = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
     $locadorId   = $_SESSION['usuarioLogado'];
     $responseData = deleteQuadra($arenaId, $locadorId);
-    
-    $_SESSION['flashMessage'] = $responseData['mensagem'];
-    $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
+    setFlashFromResponse($responseData);
 
     header('Location: ../pages/dashboardLocador.php');
     exit;

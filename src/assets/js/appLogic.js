@@ -106,4 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- CNPJ Mask ---
+    const cnpjInputs = document.querySelectorAll('.cnpj-mask');
+    cnpjInputs.forEach(inputElement => {
+        inputElement.addEventListener('input', (eventObject) => {
+            let matchGroups = eventObject.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2})/);
+            eventObject.target.value = !matchGroups[2]
+                ? matchGroups[1]
+                : matchGroups[1] + '.' + matchGroups[2] + '.' + matchGroups[3] + '/' + matchGroups[4] + (matchGroups[5] ? '-' + matchGroups[5] : '');
+        });
+    });
+
 });

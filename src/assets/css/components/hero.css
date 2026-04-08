@@ -1,0 +1,40 @@
+/* components/hero.css – Hero section | camelCase enforced */
+
+.heroSection {
+    background-color: var(--verdeBandeira) !important;
+    background-image: none !important;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 40px;
+}
+
+.heroBgOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('https://images.unsplash.com/photo-1518605368461-1ee7e1635338?q=80&w=2000');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+.heroInner {
+    position: relative;
+    z-index: 1;
+}
+
+.heroTitle {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.heroSubtitle {
+    color: #d1fae5;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}

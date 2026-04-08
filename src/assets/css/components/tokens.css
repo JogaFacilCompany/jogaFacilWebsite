@@ -1,0 +1,24 @@
+/* components/tokens.css – Design tokens | camelCase enforced */
+
+:root {
+    --verdeBandeira: #009c3b;
+    --verdeEscuro: #006425;
+    --amareloOuro: #FFDF00;
+    --amareloClaro: #FFEE66;
+
+    --bgMain: #111827;
+    --bgCard: #1f2937;
+    --bgCardBorder: #374151;
+    --bgSection: #0f172a;
+
+    --textPrimary: #f9fafb;
+    --textSecondary: #9ca3af;
+    --textMuted: #6b7280;
+
+    --radiusSm: 8px;
+    --radiusMd: 12px;
+    --radiusLg: 16px;
+    --radiusXl: 24px;
+    --shadowCard: 0 4px 20px rgba(0, 0, 0, 0.35);
+    --transition: all 0.25s ease;
+}

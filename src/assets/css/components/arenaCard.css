@@ -1,0 +1,118 @@
+/* components/arenaCard.css – Arena card component | camelCase enforced */
+
+.arenaCard {
+    background-color: var(--bgCard) !important;
+    border: 1px solid var(--bgCardBorder) !important;
+    border-radius: var(--radiusLg) !important;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+
+.arenaCard:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
+    text-decoration: none;
+    color: inherit;
+}
+
+.arenaCardImgWrapper {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.arenaCardImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.arenaCard:hover .arenaCardImg {
+    transform: scale(1.05);
+}
+
+.arenaCardBadge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: var(--amareloOuro);
+    color: var(--verdeEscuro);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.arenaCardBadgeNear {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.arenaCardRating {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(4px);
+    color: var(--textPrimary);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.arenaCardRating .starIcon {
+    color: var(--amareloOuro);
+    font-size: 0.9rem;
+}
+
+.arenaCardBody {
+    padding: 16px;
+}
+
+.arenaCardName {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.arenaCardAddress {
+    font-size: 0.85rem;
+    color: var(--textSecondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.arenaCardSports {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.sportChip {
+    background-color: rgba(0, 156, 59, 0.15);
+    color: #4ade80;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 6px;
+}

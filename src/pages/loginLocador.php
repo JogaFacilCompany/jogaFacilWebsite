@@ -1,12 +1,15 @@
 <?php
-// pages/loginLocador.php
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
+// pages/loginLocador.php – camelCase enforced
+require_once __DIR__ . '/../middleware/authGuard.php';
+require_once __DIR__ . '/../utils/flashMessage.php';
+require_once __DIR__ . '/../crud/readUsuarios.php';
+require_once __DIR__ . '/../config/csrf.php';
+
+initSession();
 if (isset($_SESSION['usuarioLogado']) && $_SESSION['usuarioTipo'] === 'locador') {
     header('Location: ../pages/dashboardLocador.php');
     exit;
 }
-require_once __DIR__ . '/../crud/readUsuarios.php';
-require_once __DIR__ . '/../config/csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
@@ -14,8 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $inputEmail = trim($_POST['email'] ?? '');
         $inputSenha = $_POST['senha'] ?? '';
-
-        $foundUser = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
+        $foundUser  = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
 
         if ($foundUser && $foundUser['tipo'] === 'locador') {
             session_regenerate_id(true);
@@ -29,19 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-$flashMessage = $_SESSION['flashMessage'] ?? null;
-$flashType    = $_SESSION['flashType']    ?? 'info';
-unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login do Locador – Joga Fácil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/css/customStyles.css" rel="stylesheet">
+    <?php $pageTitle = 'Login do Locador – Joga Fácil'; include __DIR__ . '/../includes/headTag.php'; ?>
 </head>
 <body class="authPageBody d-flex flex-column min-vh-100">
 <?php include __DIR__ . '/../includes/header.php'; ?>
@@ -54,9 +48,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
         <?php if (!empty($loginError)): ?>
             <div class="alert alert-danger alertMessage"><?= htmlspecialchars($loginError) ?></div>
         <?php endif; ?>
-        <?php if ($flashMessage): ?>
-            <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>
-        <?php endif; ?>
+        <?php renderFlash(); ?>
 
         <form action="" method="POST" id="loginLocadorForm" novalidate>
             <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
@@ -71,7 +63,7 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
             <button type="submit" class="btn btn-success w-100 submitBtn fw-bold mt-2">Entrar</button>
         </form>
         <p class="text-center mt-3 small">Não tem conta? <a href="../pages/cadastroLocador.php" class="authLink text-success fw-medium">Cadastre-se</a></p>
-        <p class="text-center mt-1 small"><a href="../pages/loginLocatario.php" class="">Entrar como locatário</a></p>
+        <p class="text-center mt-1 small"><a href="../pages/loginLocatario.php">Entrar como locatário</a></p>
     </div>
 </main>
 

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     tipo       ENUM('locador','locatario','gerente','admin') NOT NULL DEFAULT 'locatario',
     cpf        VARCHAR(14)   DEFAULT NULL UNIQUE,
     status     ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo',
-    criadoEm   TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
+    created_at   TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS quadras (

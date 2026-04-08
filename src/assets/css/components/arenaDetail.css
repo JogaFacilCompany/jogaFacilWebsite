@@ -1,0 +1,126 @@
+/* components/arenaDetail.css – Arena detail page | camelCase enforced */
+
+.arenaDetailHero {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    overflow: hidden;
+}
+
+.arenaDetailHeroImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.arenaDetailHeroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 60%);
+}
+
+.arenaDetailHeroMeta {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    color: #fff;
+}
+
+.arenaDetailHeroName {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.arenaDetailHeroAddr {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.arenaDetailRating {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background-color: var(--amareloOuro);
+    color: var(--verdeEscuro);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 8px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detailInfoCard {
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+}
+
+.detailInfoCardTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detailInfoCardTitle .cardTitleIcon {
+    color: var(--verdeBandeira);
+    font-size: 1rem;
+}
+
+.detailInfoRow {
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+    color: var(--textSecondary);
+}
+
+.detailInfoRow strong {
+    color: var(--textPrimary);
+}
+
+.detailCancelText {
+    color: #f87171;
+    font-size: 0.88rem;
+}
+
+.facilidadesList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.facilidadesItem {
+    font-size: 0.9rem;
+    color: var(--textSecondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.facilidadesItem::before {
+    content: '●';
+    color: var(--verdeBandeira);
+    font-size: 0.6rem;
+}
+
+.detailPhone {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+    margin-top: 4px;
+}

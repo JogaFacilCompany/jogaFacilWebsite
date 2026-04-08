@@ -1,0 +1,203 @@
+/* components/bookingWidget.css – Booking widget and slots | camelCase enforced */
+
+.bookingWidget {
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 20px 24px;
+    position: sticky;
+    top: 24px;
+}
+
+.bookingWidgetTitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+    margin-bottom: 16px;
+}
+
+/* Period tabs */
+.periodTabsWrapper {
+    background-color: var(--bgSection);
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.periodTab {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    background: transparent;
+    color: var(--textMuted);
+}
+
+.periodTab.active {
+    background-color: var(--bgCard);
+    color: var(--verdeBandeira);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.periodTab:not(.active):hover {
+    color: var(--textSecondary);
+}
+
+/* Slot grid */
+.slotsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.slotBtn {
+    padding: 10px 6px;
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusSm);
+    background: var(--bgMain);
+    color: var(--textPrimary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.slotBtn:hover {
+    border-color: var(--amareloOuro);
+    box-shadow: 0 2px 8px rgba(255, 223, 0, 0.15);
+}
+
+.slotBtn.selected {
+    background-color: var(--verdeBandeira);
+    border-color: var(--verdeBandeira);
+    color: #fff;
+    transform: scale(1.04);
+    box-shadow: 0 4px 14px rgba(0, 156, 59, 0.35);
+}
+
+.slotPrice {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+/* Lobby toggle card */
+.lobbyCard {
+    border: 2px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 14px 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 20px;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+
+.lobbyCard:hover {
+    border-color: rgba(0, 156, 59, 0.4);
+}
+
+.lobbyCard.active {
+    border-color: var(--verdeBandeira);
+    background-color: rgba(0, 156, 59, 0.07);
+}
+
+.lobbyIconWrapper {
+    background-color: #374151;
+    color: var(--textMuted);
+    border-radius: 50%;
+    padding: 8px;
+    flex-shrink: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.lobbyCard.active .lobbyIconWrapper {
+    background-color: var(--verdeBandeira);
+    color: #fff;
+}
+
+.lobbyTitle {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+    margin-bottom: 4px;
+}
+
+.lobbyDesc {
+    font-size: 0.8rem;
+    color: var(--textMuted);
+    line-height: 1.45;
+}
+
+.lobbyRadio {
+    margin-left: auto;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--bgCardBorder);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    margin-top: 2px;
+}
+
+.lobbyRadioInner {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--verdeBandeira);
+    display: none;
+}
+
+.lobbyCard.active .lobbyRadioInner {
+    display: block;
+}
+
+/* Booking CTA button */
+.bookingConfirmBtn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radiusMd);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.bookingConfirmBtn.enabled {
+    background-color: var(--verdeBandeira);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0, 156, 59, 0.35);
+}
+
+.bookingConfirmBtn.enabled:hover {
+    background-color: var(--verdeEscuro);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 156, 59, 0.4);
+}
+
+.bookingConfirmBtn.disabled {
+    background-color: var(--bgCardBorder);
+    color: var(--textMuted);
+    cursor: not-allowed;
+}

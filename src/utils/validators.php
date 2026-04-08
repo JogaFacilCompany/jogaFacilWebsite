@@ -54,3 +54,46 @@ function isValidCnpj(string $cnpjInput): bool {
 function isValidOperatingHours(string $hours): bool {
     return preg_match('/^([01][0-9]|2[0-3]):[0-5][0-9] - ([01][0-9]|2[0-3]):[0-5][0-9]$/', $hours);
 }
+
+/**
+ * Valida e sanitiza os dados de uma quadra (usado por create e update).
+ * Retorna ['valido' => bool, 'mensagem' => string, 'campos' => array].
+ */
+function validateQuadraData(array $data): array {
+    $nome          = trim($data['nome'] ?? '');
+    $endereco      = trim($data['endereco'] ?? '');
+    $telefone      = trim($data['telefone'] ?? '');
+    $cnpj          = preg_replace('/[^0-9]/', '', $data['cnpj'] ?? '');
+    $descricao     = trim($data['descricao'] ?? '');
+    $modalidades   = trim($data['modalidades'] ?? 'Futebol');
+    $funcionamento = trim($data['funcionamento'] ?? '08:00 - 22:00');
+    $cancelamento  = (int)($data['cancelamento_horas'] ?? 24);
+    $facilidades   = isset($data['facilidades']) ? json_encode($data['facilidades'], JSON_UNESCAPED_UNICODE) : '[]';
+
+    if (empty($nome) || empty($endereco) || empty($telefone) || empty($cnpj)) {
+        return ['valido' => false, 'mensagem' => 'Todos os campos obrigatórios (*) devem ser preenchidos.'];
+    }
+
+    if (!isValidCnpj($cnpj)) {
+        return ['valido' => false, 'mensagem' => 'O CNPJ informado é inválido. Verifique os números.'];
+    }
+
+    if (!isValidOperatingHours($funcionamento)) {
+        return ['valido' => false, 'mensagem' => 'O formato do horário de funcionamento deve ser HH:MM - HH:MM.'];
+    }
+
+    return [
+        'valido' => true,
+        'campos' => [
+            'nome'          => $nome,
+            'endereco'      => $endereco,
+            'telefone'      => $telefone,
+            'cnpj'          => $cnpj,
+            'descricao'     => $descricao,
+            'modalidades'   => $modalidades,
+            'funcionamento' => $funcionamento,
+            'cancelamento'  => $cancelamento,
+            'facilidades'   => $facilidades,
+        ]
+    ];
+}

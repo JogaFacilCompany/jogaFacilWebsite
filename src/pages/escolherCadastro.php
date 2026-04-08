@@ -1,48 +1,12 @@
 <?php
-// pages/escolherCadastro.php
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
+// pages/escolherCadastro.php – camelCase enforced
+require_once __DIR__ . '/../middleware/authGuard.php';
+initSession();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escolher Cadastro – Joga Fácil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="../assets/css/customStyles.css" rel="stylesheet">
-    <style>
-        .choiceCard {
-            background-color: var(--bgSection);
-            border: 1px solid var(--bgCardBorder);
-            border-radius: var(--radiusMd);
-            padding: 20px;
-            color: var(--textPrimary) !important;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            transition: var(--transition);
-        }
-        .choiceCard:hover {
-            transform: translateY(-3px);
-            border-color: var(--verdeBandeira);
-            box-shadow: 0 8px 24px rgba(0, 156, 59, 0.15);
-            background-color: rgba(0, 156, 59, 0.05);
-        }
-        .choiceIcon {
-            font-size: 2rem;
-            color: var(--amareloOuro);
-            background-color: rgba(255, 223, 0, 0.1);
-            padding: 10px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-        }
-    </style>
+    <?php $pageTitle = 'Escolher Cadastro – Joga Fácil'; include __DIR__ . '/../includes/headTag.php'; ?>
 </head>
 <body class="authPageBody d-flex flex-column min-vh-100">
 <?php include __DIR__ . '/../includes/header.php'; ?>
@@ -62,8 +26,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                     <small class="text-white-50">Cadastrar e anunciar minhas quadras</small>
                 </div>
             </a>
-            
-            <!-- Link to the empty page for locatario for now -->
+
             <a href="cadastroLocatario.php" class="choiceCard">
                 <div class="choiceIcon" style="color: #4ade80; background-color: rgba(74, 222, 128, 0.1);">
                     <i class="bi bi-person-plus"></i>
@@ -74,7 +37,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                 </div>
             </a>
         </div>
-        
+
         <p class="text-center mt-4 small">Já tem uma conta? <a href="../pages/escolherLogin.php" class="authLink text-success fw-medium">Entrar</a></p>
     </div>
 </main>

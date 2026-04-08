@@ -1,0 +1,45 @@
+/* components/searchBar.css – Search bar | camelCase enforced */
+
+.searchContainer {
+    background-color: #1f2937 !important;
+    border: 1px solid var(--bgCardBorder) !important;
+    border-radius: 50px !important;
+    transition: box-shadow 0.3s ease;
+}
+
+.searchContainer:focus-within {
+    box-shadow: 0 0 0 4px rgba(0, 156, 59, 0.3) !important;
+}
+
+.searchContainer .searchIcon {
+    color: var(--textMuted) !important;
+}
+
+#searchInput {
+    background: transparent !important;
+    color: var(--textPrimary) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#searchInput::placeholder {
+    color: var(--textMuted);
+}
+
+#searchInput:focus {
+    box-shadow: none !important;
+    outline: none;
+}
+
+.heroSearchBtn {
+    background-color: var(--verdeBandeira) !important;
+    border-color: var(--verdeBandeira) !important;
+    border-radius: 50px !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.heroSearchBtn:hover {
+    background-color: var(--verdeEscuro) !important;
+}

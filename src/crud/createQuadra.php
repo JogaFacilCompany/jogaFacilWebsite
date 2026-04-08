@@ -1,53 +1,35 @@
 <?php
-// crud/createQuadra.php
+// crud/createQuadra.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/validators.php';
 
 function createQuadra(array $data): array {
-    $pdo = getDbConnection();
-    
+    $validation = validateQuadraData($data);
+    if (!$validation['valido']) {
+        return ['sucesso' => false, 'mensagem' => $validation['mensagem']];
+    }
+
+    $campos    = $validation['campos'];
     $locadorId = $data['locador_id'];
-    $nome      = trim($data['nome'] ?? '');
-    $endereco  = trim($data['endereco'] ?? '');
-    $telefone  = trim($data['telefone'] ?? '');
-    $cnpj      = preg_replace('/[^0-9]/', '', $data['cnpj'] ?? '');
-    $descricao = trim($data['descricao'] ?? '');
-    $modalidades = trim($data['modalidades'] ?? 'Futebol');
-    $funcionamento = trim($data['funcionamento'] ?? '08:00 - 22:00');
-    $cancelamento = (int)($data['cancelamento_horas'] ?? 24);
-
-    // Validações
-    if (empty($nome) || empty($endereco) || empty($telefone) || empty($cnpj)) {
-        return ['sucesso' => false, 'mensagem' => 'Todos os campos obrigatórios (*) devem ser preenchidos.'];
-    }
-
-    if (!isValidCnpj($cnpj)) {
-        return ['sucesso' => false, 'mensagem' => 'O CNPJ informado é inválido. Verifique os números.'];
-    }
-
-    if (!isValidOperatingHours($funcionamento)) {
-        return ['sucesso' => false, 'mensagem' => 'O formato do horário de funcionamento deve ser HH:MM - HH:MM.'];
-    }
-    
-    // Facilidades
-    $facilidades = isset($data['facilidades']) ? json_encode($data['facilidades'], JSON_UNESCAPED_UNICODE) : '[]';
+    $pdo       = getDbConnection();
 
     $stmt = $pdo->prepare("
         INSERT INTO quadras (nome, endereco, telefone, cnpj, descricao, modalidades, funcionamento, cancelamento_horas, facilidades, locador_id)
         VALUES (:nome, :endereco, :telefone, :cnpj, :descricao, :modalidades, :funcionamento, :cancelamento, :facilidades, :locadorId)
     ");
     $success = $stmt->execute([
-        'nome' => $nome,
-        'endereco' => $endereco,
-        'telefone' => $telefone,
-        'cnpj' => $cnpj,
-        'descricao' => $descricao,
-        'modalidades' => $modalidades,
-        'funcionamento' => $funcionamento,
-        'cancelamento' => $cancelamento,
-        'facilidades' => $facilidades,
-        'locadorId' => $locadorId
+        'nome'          => $campos['nome'],
+        'endereco'      => $campos['endereco'],
+        'telefone'      => $campos['telefone'],
+        'cnpj'          => $campos['cnpj'],
+        'descricao'     => $campos['descricao'],
+        'modalidades'   => $campos['modalidades'],
+        'funcionamento' => $campos['funcionamento'],
+        'cancelamento'  => $campos['cancelamento'],
+        'facilidades'   => $campos['facilidades'],
+        'locadorId'     => $locadorId,
     ]);
+
     return ['sucesso' => $success, 'mensagem' => $success ? 'Nova arena cadastrada com sucesso!' : 'Erro ao cadastrar arena.'];
 }
 
@@ -55,10 +37,10 @@ function createQuadra(array $data): array {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
+    require_once __DIR__ . '/../utils/flashMessage.php';
 
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $_SESSION['flashMessage'] = 'Requisição inválida.';
-        $_SESSION['flashType']    = 'danger';
+        setFlash('Requisição inválida.', 'danger');
         header('Location: ../pages/dashboardLocador.php');
         exit;
     }
@@ -70,8 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $_POST['locador_id'] = $_SESSION['usuarioLogado'];
     $responseData = createQuadra($_POST);
-    $_SESSION['flashMessage'] = $responseData['mensagem'];
-    $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
+    setFlashFromResponse($responseData);
 
     header('Location: ../pages/dashboardLocador.php');
     exit;

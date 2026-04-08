@@ -1,5 +1,5 @@
 <?php
-// crud/deleteUsuario.php – Backend Specialist | camelCase enforced
+// crud/deleteUsuario.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 
 function deleteUsuario(int $userId): array {
@@ -7,7 +7,7 @@ function deleteUsuario(int $userId): array {
         return ['sucesso' => false, 'mensagem' => 'ID inválido.'];
     }
 
-    $pdo = getDbConnection();
+    $pdo        = getDbConnection();
     $deleteStmt = $pdo->prepare("DELETE FROM usuarios WHERE id = ?");
     $deleteStmt->execute([$userId]);
 
@@ -19,7 +19,7 @@ function deleteUsuario(int $userId): array {
     return ['sucesso' => true, 'mensagem' => 'Usuário removido com sucesso.'];
 }
 
-function redirectByUserType() {
+function redirectByUserType(): void {
     if (!isset($_SESSION['usuarioTipo'])) {
         header('Location: ../index.php');
         exit;
@@ -27,7 +27,7 @@ function redirectByUserType() {
 
     if ($_SESSION['usuarioTipo'] === 'admin') {
         header('Location: ../pages/dashboardAdmin.php');
-    } else if ($_SESSION['usuarioTipo'] === 'locador') {
+    } elseif ($_SESSION['usuarioTipo'] === 'locador') {
         header('Location: ../pages/dashboardLocador.php');
     } else {
         header('Location: ../index.php');
@@ -39,9 +39,7 @@ function redirectByUserType() {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
-
-    // DEBUG: Verifique o que está na sessão
-    error_log('SESSION DEBUG: ' . print_r($_SESSION, true));
+    require_once __DIR__ . '/../utils/flashMessage.php';
 
     if (!isset($_SESSION['usuarioLogado']) || ($_SESSION['usuarioTipo'] !== 'locador' && $_SESSION['usuarioTipo'] !== 'admin')) {
         header('Location: ../index.php');
@@ -49,36 +47,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $_SESSION['flashMessage'] = 'Requisição inválida. Tente novamente.';
-        $_SESSION['flashType']    = 'danger';
+        setFlash('Requisição inválida. Tente novamente.', 'danger');
         redirectByUserType();
     }
 
     $targetUserId = (int)($_POST['id'] ?? 0);
-    //bloqueia auto exclusao de admins
-    if (
-        $_SESSION['usuarioTipo'] === 'admin' &&
-        $targetUserId === $_SESSION['usuarioLogado']
-    ) {
-        $_SESSION['flashMessage'] = 'Administradores não podem ser removidos.';
-        $_SESSION['flashType']    = 'danger';
+
+    // Bloqueia auto-exclusao de admins
+    if ($_SESSION['usuarioTipo'] === 'admin' && $targetUserId === $_SESSION['usuarioLogado']) {
+        setFlash('Administradores não podem ser removidos.', 'danger');
         redirectByUserType();
     }
 
-    //bloqueia exclusao de admin
-    $pdo = getDbConnection();
+    // Bloqueia exclusao de admin por outros
+    $pdo  = getDbConnection();
     $stmt = $pdo->prepare("SELECT tipo FROM usuarios WHERE id = ?");
     $stmt->execute([$targetUserId]);
-    $user = $stmt->fetch();
+    $targetUser = $stmt->fetch();
 
-    if ($user && $user['tipo'] === 'admin') {
-        $_SESSION['flashMessage'] = 'Administradores não podem ser removidos.';
-        $_SESSION['flashType']    = 'danger';
+    if ($targetUser && $targetUser['tipo'] === 'admin') {
+        setFlash('Administradores não podem ser removidos.', 'danger');
         redirectByUserType();
     }
+
     $responseData = deleteUsuario($targetUserId);
-    $_SESSION['flashMessage'] = $responseData['mensagem'];
-    $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
+    setFlashFromResponse($responseData);
     redirectByUserType();
 }
-

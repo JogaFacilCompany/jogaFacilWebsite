@@ -1,38 +1,23 @@
 <?php
-// pages/arenaDetalhe.php
+// pages/arenaDetalhe.php – camelCase enforced
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Arena Gol de Placa – Detalhes, horários e reserva de quadra esportiva.">
-    <title>Arena Gol de Placa – Joga Fácil</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Custom Styles -->
-    <link href="../assets/css/customStyles.css" rel="stylesheet">
+    <?php
+    $pageTitle       = 'Arena Gol de Placa – Joga Fácil';
+    $pageDescription = 'Arena Gol de Placa – Detalhes, horários e reserva de quadra esportiva.';
+    include __DIR__ . '/../includes/headTag.php';
+    ?>
 </head>
 <body>
 
-    <?php include '../includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
 
-    <!-- ============================================================
-         ARENA HERO BANNER
-    ============================================================ -->
+    <!-- ARENA HERO BANNER -->
     <div class="arenaDetailHero">
-        <img
-            class="arenaDetailHeroImg"
-            src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=1600"
-            alt="Arena Gol de Placa"
-        >
+        <img class="arenaDetailHeroImg" src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=1600" alt="Arena Gol de Placa">
         <div class="arenaDetailHeroOverlay"></div>
         <div class="arenaDetailHeroMeta">
             <h1 class="arenaDetailHeroName">Arena Gol de Placa</h1>
@@ -46,18 +31,13 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
         </div>
     </div>
 
-    <!-- ============================================================
-         MAIN CONTENT
-    ============================================================ -->
+    <!-- MAIN CONTENT -->
     <main class="container py-5">
         <div class="row g-4">
 
-            <!-- ========================================
-                 LEFT COLUMN – Arena Info
-            ======================================== -->
+            <!-- Left column – Arena info -->
             <div class="col-lg-7">
 
-                <!-- Sobre a Arena -->
                 <div class="detailInfoCard">
                     <div class="detailInfoCardTitle">
                         <i class="bi bi-info-circle-fill cardTitleIcon"></i>
@@ -71,7 +51,6 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                     <div class="detailCancelText">Cancelamento grátis até 24h antes.</div>
                 </div>
 
-                <!-- Facilidades -->
                 <div class="detailInfoCard">
                     <div class="detailInfoCardTitle">
                         <i class="bi bi-check-circle-fill cardTitleIcon"></i>
@@ -85,7 +64,6 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                     </ul>
                 </div>
 
-                <!-- Contato -->
                 <div class="detailInfoCard">
                     <div class="detailInfoCardTitle">
                         <i class="bi bi-telephone-fill cardTitleIcon"></i>
@@ -96,28 +74,20 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
             </div>
 
-            <!-- ========================================
-                 RIGHT COLUMN – Booking Widget (sticky)
-            ======================================== -->
+            <!-- Right column – Booking widget -->
             <div class="col-lg-5">
                 <div class="bookingWidget">
 
-                    <!-- Title -->
                     <div class="bookingWidgetTitle">Escolha um Horário</div>
 
-                    <!-- Period tabs: Manhã / Tarde / Noite -->
                     <div class="periodTabsWrapper">
                         <button class="periodTab active" id="tabManha" data-period="manha">Manhã</button>
                         <button class="periodTab" id="tabTarde" data-period="tarde">Tarde</button>
                         <button class="periodTab" id="tabNoite" data-period="noite">Noite</button>
                     </div>
 
-                    <!-- Slots grid (filled by JS) -->
-                    <div class="slotsGrid" id="slotsGrid">
-                        <!-- populated by arenaDetailLogic below -->
-                    </div>
+                    <div class="slotsGrid" id="slotsGrid"></div>
 
-                    <!-- Lobby Mode Select -->
                     <button class="lobbyCard" id="lobbyToggle">
                         <div class="lobbyIconWrapper" id="lobbyIconWrapper">
                             <i class="bi bi-people-fill"></i>
@@ -133,7 +103,6 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                         </div>
                     </button>
 
-                    <!-- CTA Button -->
                     <button class="bookingConfirmBtn disabled" id="confirmBtn" disabled>
                         Selecione um horário
                     </button>
@@ -144,15 +113,10 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
         </div>
     </main>
 
-    <?php include '../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom Logic -->
     <script src="../assets/js/appLogic.js"></script>
-
-    <!-- Arena Detail Logic -->
     <script src="../assets/js/arenaDetailLogic.js"></script>
-
 </body>
 </html>

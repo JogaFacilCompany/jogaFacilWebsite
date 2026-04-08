@@ -1,20 +1,15 @@
 <?php
-// pages/cadastroLocatario.php
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
+// pages/cadastroLocatario.php – camelCase enforced
+require_once __DIR__ . '/../middleware/authGuard.php';
+require_once __DIR__ . '/../utils/flashMessage.php';
 require_once __DIR__ . '/../config/csrf.php';
 
-$flashMessage = $_SESSION['flashMessage'] ?? null;
-$flashType    = $_SESSION['flashType']    ?? 'info';
-unset($_SESSION['flashMessage'], $_SESSION['flashType']);
+initSession();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Locatário – Joga Fácil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/css/customStyles.css" rel="stylesheet">
+    <?php $pageTitle = 'Cadastro de Locatário – Joga Fácil'; include __DIR__ . '/../includes/headTag.php'; ?>
 </head>
 <body class="authPageBody d-flex flex-column min-vh-100">
 <?php include __DIR__ . '/../includes/header.php'; ?>
@@ -22,11 +17,9 @@ unset($_SESSION['flashMessage'], $_SESSION['flashType']);
 <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <div class="loginFormCard card shadow-sm border-0 p-4" style="max-width: 480px; width: 100%;">
         <h3 class="formTitle fw-bold text-center mb-1">Cadastro de Locatário</h3>
-        <p class=" text-center small mb-4">Crie sua conta para reservar quadras</p>
+        <p class="text-center small mb-4">Crie sua conta para reservar quadras</p>
 
-        <?php if ($flashMessage): ?>
-            <div class="alert alert-<?= $flashType ?> alertMessage"><?= htmlspecialchars($flashMessage) ?></div>
-        <?php endif; ?>
+        <?php renderFlash(); ?>
 
         <form action="../crud/createUsuario.php" method="POST" id="cadastroLocatarioForm" novalidate>
             <input type="hidden" name="tipo" value="locatario">

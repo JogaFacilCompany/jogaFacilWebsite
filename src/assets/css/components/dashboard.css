@@ -1,0 +1,78 @@
+/* components/dashboard.css – Dashboard panels | camelCase enforced */
+
+.dashboardCard {
+    background-color: var(--bgCard) !important;
+    border: 1px solid var(--bgCardBorder) !important;
+    border-radius: var(--radiusMd) !important;
+    color: var(--textPrimary) !important;
+}
+
+.dashboardTitle {
+    font-size: 1.6rem;
+    color: var(--textPrimary);
+}
+
+.dashboardTable th {
+    font-weight: 600;
+    color: var(--textSecondary);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: var(--bgSection) !important;
+}
+
+.dashboardTable td {
+    color: var(--textPrimary);
+    background-color: var(--bgCard) !important;
+    border-color: var(--bgCardBorder) !important;
+}
+
+.dashboardTable tbody tr:hover td {
+    background-color: rgba(55, 65, 81, 0.6) !important;
+}
+
+.editarBtn {
+    border-radius: 6px;
+    font-size: 0.82rem;
+}
+
+/* Arena selection cards (locador dashboard list view) */
+.arenaSelectionCard {
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent !important;
+    background-color: var(--bgCard) !important;
+}
+
+.arenaSelectionCard:hover {
+    transform: translateY(-8px);
+    border-color: var(--verdeBandeira) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.addArenaCard {
+    border: 2px dashed var(--bgCardBorder) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: var(--textSecondary);
+    transition: all 0.3s ease;
+}
+
+.addArenaCard:hover {
+    border-color: var(--amareloOuro) !important;
+    color: var(--amareloOuro);
+    background: rgba(255, 223, 0, 0.05) !important;
+}
+
+/* Admin preview moderation bar */
+.adminPreviewHeader {
+    background-color: #1e293b;
+    color: white;
+    padding: 1rem 0;
+    border-bottom: 1px solid #334155;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}

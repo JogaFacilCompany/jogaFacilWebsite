@@ -1,5 +1,5 @@
 <?php
-// crud/createUsuario.php – Backend Specialist | camelCase enforced
+// crud/createUsuario.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/validators.php';
 
@@ -25,7 +25,6 @@ function createUsuario(array $inputData): array {
         return ['sucesso' => false, 'mensagem' => 'E-mail inválido.'];
     }
 
-    // CPF only required on the public signup page (not from dashboard admin panel)
     $inputCpf = null;
     if ($userType === 'locatario' && !$fromDash) {
         $rawCpf = $inputData['cpf'] ?? '';
@@ -62,18 +61,17 @@ function createUsuario(array $inputData): array {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
+    require_once __DIR__ . '/../utils/flashMessage.php';
 
     if (!validateCsrfToken($_POST['csrfToken'] ?? '')) {
-        $_SESSION['flashMessage'] = 'Requisição inválida. Tente novamente.';
-        $_SESSION['flashType']    = 'danger';
+        setFlash('Requisição inválida. Tente novamente.', 'danger');
         $referer = $_SERVER['HTTP_REFERER'] ?? '../pages/dashboardLocador.php';
         header('Location: ' . $referer);
         exit;
     }
 
     $responseData = createUsuario($_POST);
-    $_SESSION['flashMessage'] = $responseData['mensagem'];
-    $_SESSION['flashType']    = $responseData['sucesso'] ? 'success' : 'danger';
+    setFlashFromResponse($responseData);
 
     $fromDash = ($_POST['source'] ?? '') === 'dashboard';
 

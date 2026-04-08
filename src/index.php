@@ -1,37 +1,24 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// index.php – camelCase enforced
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/crud/readQuadras.php';
 $activeArenas = getAllApprovedQuadras();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Encontre, reserve e jogue nas melhores quadras esportivas da sua região.">
-    <title>Joga Fácil – Marketplace de Quadras Esportivas</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Custom Styles -->
-    <link href="./assets/css/customStyles.css" rel="stylesheet">
+    <?php
+    $pageTitle       = 'Joga Fácil – Marketplace de Quadras Esportivas';
+    $pageDescription = 'Encontre, reserve e jogue nas melhores quadras esportivas da sua região.';
+    include __DIR__ . '/includes/headTag.php';
+    ?>
 </head>
 <body>
 
     <?php include 'includes/header.php'; ?>
 
-    <!-- ============================================================
-         HERO SECTION
-    ============================================================ -->
+    <!-- HERO SECTION -->
     <section class="heroSection text-center text-white py-5">
-        <!-- Background overlay texture -->
         <div class="heroBgOverlay"></div>
 
         <div class="container py-5 heroInner">
@@ -57,34 +44,24 @@ $activeArenas = getAllApprovedQuadras();
         </div>
     </section>
 
-    <!-- ============================================================
-         MAIN CONTENT
-    ============================================================ -->
+    <!-- MAIN CONTENT -->
     <main class="container contentSection">
 
-        <!-- Em Alta / Recomendados -->
         <h2 class="sectionTitle fw-bold mb-4">Em Alta / Recomendados</h2>
 
         <div class="row g-4" id="arenasContainer">
             <?php if (empty($activeArenas)): ?>
                 <div class="col-12">
-                    <p class="text-center ">Nenhuma quadra encontrada no momento.</p>
+                    <p class="text-center">Nenhuma quadra encontrada no momento.</p>
                 </div>
             <?php else: ?>
                 <?php foreach ($activeArenas as $index => $arena): ?>
                     <?php
-                        // Normalize sport for sorting/filtering. Default to 'futebol' if none provided
-                        $primarySport = !empty($arena['modalidades']) ? strtolower(explode(',', $arena['modalidades'])[0]) : 'futebol';
+                        $primarySport      = !empty($arena['modalidades']) ? strtolower(explode(',', $arena['modalidades'])[0]) : 'futebol';
                         $primarySportBadge = !empty($arena['modalidades']) ? explode(',', $arena['modalidades'])[0] : 'Futebol';
-                        
-                        // Fake rating for now, or random between 4.0 and 5.0
-                        $rating = number_format(rand(40, 50) / 10, 1);
-                        
-                        // Fallback image if none
-                        $bgImage = $arena['imagem'] ?: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=800';
-                        
-                        // Alternate badges
-                        $isNear = ($index % 2 !== 0); 
+                        $rating            = number_format(rand(40, 50) / 10, 1);
+                        $bgImage           = $arena['imagem'] ?: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=800';
+                        $isNear            = ($index % 2 !== 0);
                     ?>
                     <div class="col-md-4 arena-item" data-sport="<?= htmlspecialchars($primarySport) ?>">
                         <a href="./pages/arenaDetalhe.php?id=<?= $arena['id'] ?>" class="arenaCard h-100">
@@ -118,9 +95,7 @@ $activeArenas = getAllApprovedQuadras();
 
     <?php include 'includes/footer.php'; ?>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom Logic -->
     <script src="./assets/js/appLogic.js"></script>
 </body>
 </html>

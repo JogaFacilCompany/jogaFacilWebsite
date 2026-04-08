@@ -1,0 +1,58 @@
+/* components/auth.css – Auth pages (login / cadastro) | camelCase enforced */
+
+.authPageBody {
+    background-color: var(--bgMain);
+    color: var(--textPrimary);
+}
+
+.loginFormCard {
+    border-radius: var(--radiusLg);
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    box-shadow: var(--shadowCard);
+    color: var(--textPrimary) !important;
+}
+
+.formInput {
+    background-color: var(--bgMain) !important;
+    border-color: var(--bgCardBorder) !important;
+    color: var(--textPrimary) !important;
+    border-radius: var(--radiusSm) !important;
+    transition: border-color 0.2s;
+}
+
+.formInput::placeholder {
+    color: var(--textMuted) !important;
+}
+
+.formInput:focus {
+    border-color: var(--verdeBandeira) !important;
+    box-shadow: 0 0 0 3px rgba(0, 156, 59, 0.2) !important;
+    outline: none;
+}
+
+.submitBtn {
+    background-color: var(--verdeBandeira) !important;
+    border-color: var(--verdeBandeira) !important;
+    color: #fff !important;
+    border-radius: var(--radiusSm) !important;
+    padding: 10px 0;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.submitBtn:hover {
+    background-color: var(--verdeEscuro) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 156, 59, 0.3);
+}
+
+.authLink {
+    color: #4ade80;
+    text-decoration: none;
+}
+
+.authLink:hover {
+    color: var(--amareloOuro);
+    text-decoration: underline;
+}
