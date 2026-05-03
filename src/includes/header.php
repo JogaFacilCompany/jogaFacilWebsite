@@ -10,6 +10,7 @@ $baseUrl = (strpos($_SERVER['SCRIPT_NAME'], '/pages/') !== false || strpos($_SER
         <nav class="authNav d-flex align-items-center gap-3">
             <?php if (isset($_SESSION['usuarioLogado'])): ?>
                 <span class="text-white fw-medium">Olá, <?= htmlspecialchars($_SESSION['usuarioNome']) ?></span>
+                <a href="<?= $baseUrl ?>pages/perfil.php" class="text-white text-decoration-none fw-medium">Meu Perfil</a>
                 <?php if ($_SESSION['usuarioTipo'] === 'locador'): ?>
                     <a href="<?= $baseUrl ?>pages/dashboardLocador.php" class="text-white text-decoration-none fw-medium">Painel</a>
                 <?php elseif ($_SESSION['usuarioTipo'] === 'admin'): ?>

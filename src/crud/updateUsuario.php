@@ -22,6 +22,15 @@ function updateUsuario(int $userId, array $inputData): array {
         $bindValues[]   = $newEmail;
     }
 
+    if (!empty($inputData['cpf'])) {
+        require_once __DIR__ . '/../utils/validators.php';
+        if (!isValidCpf($inputData['cpf'])) {
+            return ['sucesso' => false, 'mensagem' => 'O CPF informado é inválido.'];
+        }
+        $updateFields[] = 'cpf = ?';
+        $bindValues[]   = preg_replace('/[^0-9]/', '', $inputData['cpf']);
+    }
+
     if (!empty($inputData['senha'])) {
         $updateFields[] = 'senha = ?';
         $bindValues[]   = password_hash($inputData['senha'], PASSWORD_BCRYPT);
@@ -39,8 +48,8 @@ function updateUsuario(int $userId, array $inputData): array {
     return ['sucesso' => true, 'mensagem' => 'Usuário atualizado com sucesso!'];
 }
 
-// Handle POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Handle POST request only if accessed directly
+if (basename($_SERVER['SCRIPT_NAME']) === 'updateUsuario.php' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
     require_once __DIR__ . '/../utils/flashMessage.php';
