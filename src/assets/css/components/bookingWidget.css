@@ -75,6 +75,18 @@
     box-shadow: 0 2px 8px rgba(255, 223, 0, 0.15);
 }
 
+.slotBtn:disabled,
+.slotBtn.unavailable {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.slotBtn:disabled:hover,
+.slotBtn.unavailable:hover {
+    border-color: var(--bgCardBorder);
+    box-shadow: none;
+}
+
 .slotBtn.selected {
     background-color: var(--verdeBandeira);
     border-color: var(--verdeBandeira);
@@ -88,6 +100,13 @@
     font-weight: 400;
     opacity: 0.8;
     margin-top: 2px;
+}
+
+.slotStatus {
+    font-size: 0.65rem;
+    font-weight: 600;
+    margin-top: 2px;
+    color: var(--textMuted);
 }
 
 /* Lobby toggle card */

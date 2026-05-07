@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS horarios (
     hora_inicio TIME NOT NULL,
     hora_fim    TIME NOT NULL,
     preco       DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    UNIQUE KEY unique_horario_quadra_data_inicio (quadra_id, data, hora_inicio),
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -51,6 +52,15 @@ CREATE TABLE IF NOT EXISTS reservas (
     FOREIGN KEY (horario_id) REFERENCES horarios(id) ON DELETE CASCADE,
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS gerente_quadras (
+    gerente_id INT NOT NULL,
+    quadra_id  INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (gerente_id, quadra_id),
+    FOREIGN KEY (gerente_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Inserindo usuários de teste (senha para ambos é: password)

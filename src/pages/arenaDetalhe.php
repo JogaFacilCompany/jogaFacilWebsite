@@ -1,13 +1,30 @@
 <?php
 // pages/arenaDetalhe.php – camelCase enforced
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
+require_once __DIR__ . '/../crud/readQuadras.php';
+require_once __DIR__ . '/../crud/readHorarios.php';
+require_once __DIR__ . '/../utils/flashMessage.php';
+require_once __DIR__ . '/../config/csrf.php';
+
+$arenaId = (int)($_GET['id'] ?? 0);
+$quadra = $arenaId > 0 ? getActiveQuadraById($arenaId) : null;
+
+if (!$quadra) {
+    header('Location: ../index.php');
+    exit;
+}
+
+$bookingDate = date('Y-m-d');
+$slotsData = getBookingSlotsByQuadraDate((int)$quadra['id'], $bookingDate, $quadra['funcionamento'] ?? '08:00 - 23:00');
+$facilidades = json_decode($quadra['facilidades'] ?? '', true) ?: [];
+$defaultImage = 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=1600';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <?php
-    $pageTitle       = 'Arena Gol de Placa – Joga Fácil';
-    $pageDescription = 'Arena Gol de Placa – Detalhes, horários e reserva de quadra esportiva.';
+    $pageTitle       = $quadra['nome'] . ' – Joga Fácil';
+    $pageDescription = $quadra['nome'] . ' – Detalhes, horários e reserva de quadra esportiva.';
     include __DIR__ . '/../includes/headTag.php';
     ?>
 </head>
@@ -17,13 +34,13 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
     <!-- ARENA HERO BANNER -->
     <div class="arenaDetailHero">
-        <img class="arenaDetailHeroImg" src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=1600" alt="Arena Gol de Placa">
+        <img class="arenaDetailHeroImg" src="<?= htmlspecialchars($quadra['imagem'] ?: $defaultImage) ?>" alt="<?= htmlspecialchars($quadra['nome']) ?>">
         <div class="arenaDetailHeroOverlay"></div>
         <div class="arenaDetailHeroMeta">
-            <h1 class="arenaDetailHeroName">Arena Gol de Placa</h1>
+            <h1 class="arenaDetailHeroName"><?= htmlspecialchars($quadra['nome']) ?></h1>
             <div class="arenaDetailHeroAddr">
                 <i class="bi bi-geo-alt-fill"></i>
-                Rua do Ouro, 123 – Centro
+                <?= htmlspecialchars($quadra['endereco']) ?>
             </div>
         </div>
         <div class="arenaDetailRating">
@@ -33,6 +50,8 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
     <!-- MAIN CONTENT -->
     <main class="container py-5">
+        <?php renderFlash(); ?>
+
         <div class="row g-4">
 
             <!-- Left column – Arena info -->
@@ -43,12 +62,17 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                         <i class="bi bi-info-circle-fill cardTitleIcon"></i>
                         Sobre a Arena
                     </div>
-                    <div class="detailInfoRow"><strong>Modalidades:</strong> Futebol</div>
-                    <div class="detailInfoRow"><strong>Horário de Funcionamento:</strong> 08:00 – 23:00</div>
+                    <div class="detailInfoRow"><strong>Modalidades:</strong> <?= htmlspecialchars($quadra['modalidades'] ?? 'Não informado') ?></div>
+                    <div class="detailInfoRow"><strong>Horário de Funcionamento:</strong> <?= htmlspecialchars($quadra['funcionamento'] ?? 'Não informado') ?></div>
+                    <?php if (!empty($quadra['descricao'])): ?>
+                        <div class="detailInfoRow mt-3 text-secondary" style="font-size: 0.88rem; font-style: italic;">
+                            "<?= nl2br(htmlspecialchars($quadra['descricao'])) ?>"
+                        </div>
+                    <?php endif; ?>
                     <div class="detailInfoRow">
                         <strong class="detailCancelText">Política de Cancelamento:</strong>
                     </div>
-                    <div class="detailCancelText">Cancelamento grátis até 24h antes.</div>
+                    <div class="detailCancelText">Cancelamento grátis até <?= htmlspecialchars($quadra['cancelamento_horas']) ?>h antes.</div>
                 </div>
 
                 <div class="detailInfoCard">
@@ -57,10 +81,13 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                         Facilidades
                     </div>
                     <ul class="facilidadesList">
-                        <li class="facilidadesItem">Cantina</li>
-                        <li class="facilidadesItem">Aluguel de Bola</li>
-                        <li class="facilidadesItem">Vestiários</li>
-                        <li class="facilidadesItem">Bebedouro</li>
+                        <?php if (empty($facilidades)): ?>
+                            <li class="facilidadesItem">Nenhuma facilidade cadastrada</li>
+                        <?php else: ?>
+                            <?php foreach ($facilidades as $facilidadeItem): ?>
+                                <li class="facilidadesItem"><?= htmlspecialchars($facilidadeItem) ?></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </ul>
                 </div>
 
@@ -69,7 +96,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                         <i class="bi bi-telephone-fill cardTitleIcon"></i>
                         Contato
                     </div>
-                    <div class="detailPhone">(11) 99999-9999</div>
+                    <div class="detailPhone"><?= htmlspecialchars($quadra['telefone'] ?? 'Não informado') ?></div>
                 </div>
 
             </div>
@@ -86,26 +113,33 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                         <button class="periodTab" id="tabNoite" data-period="noite">Noite</button>
                     </div>
 
-                    <div class="slotsGrid" id="slotsGrid"></div>
+                    <form action="../crud/createReserva.php" method="POST" id="bookingForm">
+                        <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
+                        <input type="hidden" name="arena_id" value="<?= (int)$quadra['id'] ?>">
+                        <input type="hidden" name="horario_id" id="selectedHorarioId">
+                        <input type="hidden" name="modo_lobby" id="selectedModoLobby" value="0">
 
-                    <button class="lobbyCard" id="lobbyToggle">
-                        <div class="lobbyIconWrapper" id="lobbyIconWrapper">
-                            <i class="bi bi-people-fill"></i>
-                        </div>
-                        <div>
-                            <div class="lobbyTitle">Abrir Partida (Modo Lobby)</div>
-                            <div class="lobbyDesc">
-                                Permita que outras pessoas entrem na sua reserva. Ideal para rachões e fechar times. O valor da quadra será dividido entre os participantes.
+                        <div class="slotsGrid" id="slotsGrid" data-slots='<?= htmlspecialchars(json_encode($slotsData), ENT_QUOTES, 'UTF-8') ?>'></div>
+
+                        <button class="lobbyCard" id="lobbyToggle" type="button">
+                            <div class="lobbyIconWrapper" id="lobbyIconWrapper">
+                                <i class="bi bi-people-fill"></i>
                             </div>
-                        </div>
-                        <div class="lobbyRadio" id="lobbyRadio">
-                            <div class="lobbyRadioInner" id="lobbyRadioInner"></div>
-                        </div>
-                    </button>
+                            <div>
+                                <div class="lobbyTitle">Abrir Partida (Modo Lobby)</div>
+                                <div class="lobbyDesc">
+                                    Permita que outras pessoas entrem na sua reserva. Ideal para rachões e fechar times. O valor da quadra será dividido entre os participantes.
+                                </div>
+                            </div>
+                            <div class="lobbyRadio" id="lobbyRadio">
+                                <div class="lobbyRadioInner" id="lobbyRadioInner"></div>
+                            </div>
+                        </button>
 
-                    <button class="bookingConfirmBtn disabled" id="confirmBtn" disabled>
-                        Selecione um horário
-                    </button>
+                        <button class="bookingConfirmBtn disabled" id="confirmBtn" type="submit" disabled>
+                            Selecione um horário
+                        </button>
+                    </form>
 
                 </div>
             </div>

@@ -6,26 +6,32 @@ require_once __DIR__ . '/../utils/timeSlotGenerator.php';
 require_once __DIR__ . '/../crud/readQuadras.php';
 require_once __DIR__ . '/../config/csrf.php';
 
-requireAuth('locador', '../pages/loginLocador.php');
+requireAnyAuth(['locador', 'gerente'], '../pages/escolherLogin.php');
 
-$locadorId = $_SESSION['usuarioLogado'];
+$usuarioId = (int)$_SESSION['usuarioLogado'];
+$usuarioTipo = $_SESSION['usuarioTipo'];
+$isGerente = $usuarioTipo === 'gerente';
 $arenaId   = isset($_GET['arena_id']) ? (int)$_GET['arena_id'] : null;
 
 if ($arenaId) {
-    $quadra = getQuadraByIdAndLocador($arenaId, $locadorId);
+    $quadra = $isGerente
+        ? getQuadraByIdAndGerente($arenaId, $usuarioId)
+        : getQuadraByIdAndLocador($arenaId, $usuarioId);
     if (!$quadra) {
         header('Location: dashboardLocador.php');
         exit;
     }
     $selectableTimeSlots = generateRelativeTimeSlots($quadra['funcionamento']);
 } else {
-    $quadras = getQuadrasByLocador($locadorId);
+    $quadras = $isGerente
+        ? getQuadrasByGerente($usuarioId)
+        : getQuadrasByLocador($usuarioId);
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <?php $pageTitle = 'Painel do Locador – Joga Fácil'; include __DIR__ . '/../includes/headTag.php'; ?>
+    <?php $pageTitle = ($isGerente ? 'Painel do Gerente' : 'Painel do Locador') . ' – Joga Fácil'; include __DIR__ . '/../includes/headTag.php'; ?>
 </head>
 <body class="d-flex flex-column min-vh-100" style="background-color: var(--bgMain);">
 <?php include __DIR__ . '/../includes/header.php'; ?>
@@ -37,7 +43,9 @@ if ($arenaId) {
         <?php include __DIR__ . '/partials/locadorArenaDetail.php'; ?>
     <?php endif; ?>
 
-    <?php include __DIR__ . '/partials/modalCreateArena.php'; ?>
+    <?php if (!$isGerente): ?>
+        <?php include __DIR__ . '/partials/modalCreateArena.php'; ?>
+    <?php endif; ?>
 </main>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>

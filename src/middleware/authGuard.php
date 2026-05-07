@@ -13,6 +13,14 @@ function requireAuth(string $userType, string $loginPage): void {
     }
 }
 
+function requireAnyAuth(array $userTypes, string $loginPage): void {
+    initSession();
+    if (!isset($_SESSION['usuarioLogado']) || !in_array($_SESSION['usuarioTipo'], $userTypes, true)) {
+        header('Location: ' . $loginPage);
+        exit;
+    }
+}
+
 function requireGuest(string $redirectPage): void {
     initSession();
     if (isset($_SESSION['usuarioLogado'])) {

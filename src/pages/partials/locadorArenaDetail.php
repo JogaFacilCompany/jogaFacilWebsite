@@ -17,7 +17,9 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
             <h1 class="arenaDetailHeroName"><?= htmlspecialchars($quadra['nome']) ?></h1>
             <p class="arenaDetailHeroAddr">
                 <i class="bi bi-geo-alt-fill text-warning"></i> <?= htmlspecialchars($quadra['endereco']) ?>
-                <button class="btn btn-sm btn-outline-light ms-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditarArena" style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Editar Perfil</button>
+                <?php if (empty($isGerente)): ?>
+                    <button class="btn btn-sm btn-outline-light ms-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditarArena" style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Editar Perfil</button>
+                <?php endif; ?>
             </p>
         </div>
         <div class="arenaDetailRating shadow-sm">
@@ -100,15 +102,19 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
                 <p class="small mt-2 mb-3">Clique em um horário para bloqueá-lo ou liberá-lo.</p>
                 <button class="bookingConfirmBtn" id="btnSalvarEstado">Selecione um horário</button>
 
-                <div class="mt-4 pt-3 border-top border-secondary opacity-75">
-                    <button class="btn btn-sm btn-outline-danger w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalExcluirArena">
-                        <i class="bi bi-trash3"></i> Excluir Arena Permanentemente
-                    </button>
-                </div>
+                <?php if (empty($isGerente)): ?>
+                    <div class="mt-4 pt-3 border-top border-secondary opacity-75">
+                        <button class="btn btn-sm btn-outline-danger w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalExcluirArena">
+                            <i class="bi bi-trash3"></i> Excluir Arena Permanentemente
+                        </button>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </section>
 
-<?php include __DIR__ . '/modalEditArena.php'; ?>
-<?php include __DIR__ . '/modalDeleteArena.php'; ?>
+<?php if (empty($isGerente)): ?>
+    <?php include __DIR__ . '/modalEditArena.php'; ?>
+    <?php include __DIR__ . '/modalDeleteArena.php'; ?>
+<?php endif; ?>

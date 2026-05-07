@@ -3,10 +3,17 @@
 ?>
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-white">Minhas Quadras</h2>
-        <button class="btn customYellowBtn px-4 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalNovoArena">
-            <i class="bi bi-plus-circle me-2"></i> Adicionar Nova Quadra
-        </button>
+        <h2 class="fw-bold text-white"><?= !empty($isGerente) ? 'Quadras Gerenciadas' : 'Minhas Quadras' ?></h2>
+        <?php if (empty($isGerente)): ?>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-light px-4 rounded-pill" href="../pages/cadastrarGerente.php">
+                    <i class="bi bi-person-plus me-2"></i> Cadastrar Gerente
+                </a>
+                <button class="btn customYellowBtn px-4 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalNovoArena">
+                    <i class="bi bi-plus-circle me-2"></i> Adicionar Nova Quadra
+                </button>
+            </div>
+        <?php endif; ?>
     </div>
 
     <?php renderFlash(); ?>
@@ -16,9 +23,11 @@
             <div class="col-12 text-center py-5">
                 <div class="p-5 rounded-4 shadow-sm" style="background: rgba(255,255,255,0.03); border: 1px dashed #374151;">
                     <i class="bi bi-calendar-x display-1"></i>
-                    <h4 class="mt-3 text-white">Você ainda não tem quadras.</h4>
-                    <p class="text-secondary">Cadastre sua primeira arena para começar a disponibilizar horários!</p>
-                    <button class="btn btn-success fw-bold px-5 py-2 mt-2 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalNovoArena">Cadastrar Primeira Arena</button>
+                    <h4 class="mt-3 text-white"><?= !empty($isGerente) ? 'Nenhuma quadra vinculada.' : 'Você ainda não tem quadras.' ?></h4>
+                    <p class="text-secondary"><?= !empty($isGerente) ? 'Peça para o locador liberar seu acesso a uma quadra.' : 'Cadastre sua primeira arena para começar a disponibilizar horários!' ?></p>
+                    <?php if (empty($isGerente)): ?>
+                        <button class="btn btn-success fw-bold px-5 py-2 mt-2 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalNovoArena">Cadastrar Primeira Arena</button>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php else: ?>
@@ -46,14 +55,16 @@
             </div>
             <?php endforeach; ?>
 
-            <div class="col-lg-4 col-md-6">
-                <div class="card addArenaCard h-100" data-bs-toggle="modal" data-bs-target="#modalNovoArena" style="cursor: pointer;">
-                    <div class="text-center">
-                        <i class="bi bi-plus-lg display-4 d-block mb-2"></i>
-                        <span class="fw-bold">Nova Arena</span>
+            <?php if (empty($isGerente)): ?>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card addArenaCard h-100" data-bs-toggle="modal" data-bs-target="#modalNovoArena" style="cursor: pointer;">
+                        <div class="text-center">
+                            <i class="bi bi-plus-lg display-4 d-block mb-2"></i>
+                            <span class="fw-bold">Nova Arena</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>
