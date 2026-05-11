@@ -64,11 +64,12 @@ CREATE TABLE IF NOT EXISTS gerente_quadras (
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Inserindo usuários de teste (senha para ambos é: password)
+-- Inserindo usuários de teste (senha para todos é: password)
 INSERT INTO usuarios (nome, email, senha, tipo, cpf) VALUES
-('Locador Admin', 'locador@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'locador', '11111111111'),
+('Gerente Teste', 'gerente@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'gerente', '44444444444'),
+('Locador Teste', 'locador@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'locador', '11111111111'),
 ('Locatario Teste', 'locatario@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'locatario', '22222222222'),
-('Gerente Admin', 'admin@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', '33333333333');
+('Admin', 'admin@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', '33333333333');
 
 -- Mockups para interface
 INSERT INTO quadras (nome, endereco, imagem, locador_id, status, descricao, facilidades, telefone) VALUES
