@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS gerente_quadras (
     gerente_id INT NOT NULL,
     quadra_id  INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cpf        VARCHAR(14)   DEFAULT NULL UNIQUE,
     PRIMARY KEY (gerente_id, quadra_id),
     FOREIGN KEY (gerente_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
