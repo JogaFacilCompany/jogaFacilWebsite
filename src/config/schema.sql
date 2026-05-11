@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS gerente_quadras (
     gerente_id INT NOT NULL,
     quadra_id  INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    cpf        VARCHAR(14)   DEFAULT NULL UNIQUE,
     PRIMARY KEY (gerente_id, quadra_id),
     FOREIGN KEY (gerente_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
@@ -66,7 +65,6 @@ CREATE TABLE IF NOT EXISTS gerente_quadras (
 
 -- Inserindo usuários de teste (senha para todos é: password)
 INSERT INTO usuarios (nome, email, senha, tipo, cpf) VALUES
-('Gerente Teste', 'gerente@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'gerente', '44444444444'),
 ('Locador Teste', 'locador@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'locador', '11111111111'),
 ('Locatario Teste', 'locatario@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'locatario', '22222222222'),
 ('Admin', 'admin@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', '33333333333');

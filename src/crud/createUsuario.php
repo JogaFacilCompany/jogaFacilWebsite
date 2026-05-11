@@ -23,8 +23,8 @@ function createUsuario(array $inputData): array {
     $loggedUserId   = (int)($inputData['loggedUserId'] ?? 0);
     $loggedUserType = $inputData['loggedUserType'] ?? '';
 
-    $allowedTypes = ['locador', 'locatario', 'gerente', 'admin'];
-    if (!in_array($userType, $allowedTypes)) {
+    $allowedTypes = ['locador', 'locatario', 'gerente'];
+    if (!in_array($userType, $allowedTypes, true)) {
         return ['sucesso' => false, 'mensagem' => 'Tipo de usuário inválido.'];
     }
 
@@ -128,7 +128,7 @@ function createUsuario(array $inputData): array {
 }
 
 // Handle POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
     require_once __DIR__ . '/../utils/flashMessage.php';

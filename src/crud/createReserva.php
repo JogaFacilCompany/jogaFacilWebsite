@@ -4,10 +4,11 @@ require_once __DIR__ . '/../config/database.php';
 
 function createReserva(array $data): array {
     $usuarioId = (int)($data['usuario_id'] ?? 0);
+    $arenaId = (int)($data['arena_id'] ?? 0);
     $horarioId = (int)($data['horario_id'] ?? 0);
     $modoLobby = !empty($data['modo_lobby']) ? 1 : 0;
 
-    if ($usuarioId <= 0 || $horarioId <= 0) {
+    if ($usuarioId <= 0 || $arenaId <= 0 || $horarioId <= 0) {
         return ['sucesso' => false, 'mensagem' => 'Dados de reserva inválidos.'];
     }
 
@@ -20,10 +21,10 @@ function createReserva(array $data): array {
             "SELECT h.id, h.quadra_id, q.status AS quadra_status
              FROM horarios h
              INNER JOIN quadras q ON q.id = h.quadra_id
-             WHERE h.id = ?
+             WHERE h.id = ? AND h.quadra_id = ?
              FOR UPDATE"
         );
-        $horarioStmt->execute([$horarioId]);
+        $horarioStmt->execute([$horarioId, $arenaId]);
         $horario = $horarioStmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$horario || $horario['quadra_status'] !== 'ativo') {
@@ -57,7 +58,7 @@ function createReserva(array $data): array {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     require_once __DIR__ . '/../config/csrf.php';
     require_once __DIR__ . '/../utils/flashMessage.php';

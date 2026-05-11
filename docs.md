@@ -225,7 +225,6 @@ Campos principais:
 - `gerente_id`: usuario do tipo gerente.
 - `quadra_id`: quadra vinculada.
 - `created_at`: data do vinculo.
-- `cpf`: campo presente no schema atual, embora o CPF principal do gerente esteja em `usuarios`.
 
 A chave primaria composta e `(gerente_id, quadra_id)`.
 
@@ -527,7 +526,7 @@ Nao pode:
 7. Opcionalmente ativa o modo lobby.
 8. O formulario envia POST para `crud/createReserva.php`.
 9. O endpoint exige usuario logado do tipo `locatario`.
-10. `createReserva()` abre transacao, trava o horario com `FOR UPDATE`, confere duplicidade e cria reserva `confirmada`.
+10. `createReserva()` abre transacao, trava o horario com `FOR UPDATE`, confirma que o horario pertence a arena aberta, confere duplicidade e cria reserva `confirmada`.
 11. O usuario volta para a pagina da arena com mensagem de sucesso ou erro.
 
 ## Regras de negocio
@@ -701,8 +700,9 @@ Centraliza mensagens de sucesso, erro e alerta usando sessao.
 
 Arquivo: `src/crud/createUsuario.php`
 
-- `createUsuario($inputData)`: cria usuarios dos tipos `locador`, `locatario`, `gerente` e `admin`.
+- `createUsuario($inputData)`: cria usuarios dos tipos `locador`, `locatario` e `gerente`.
 - Para gerente, valida locador logado e cria vinculos em `gerente_quadras`.
+- O endpoint generico nao cria usuarios `admin`.
 - Em POST, valida CSRF, define dados do usuario logado e redireciona conforme resultado.
 
 Arquivo: `src/crud/readUsuarios.php`
@@ -747,6 +747,7 @@ Arquivo: `src/crud/updateQuadra.php`
 Arquivo: `src/crud/deleteQuadra.php`
 
 - `deleteQuadra($arenaId, $locadorId)`: remove arena do locador.
+- O endpoint aceita apenas POST protegido por CSRF.
 
 Arquivo: `src/crud/updateQuadraStatus.php`
 
@@ -766,6 +767,7 @@ Arquivo: `src/crud/createReserva.php`
 
 - `createReserva($data)`: cria reserva confirmada com transacao.
 - Usa `FOR UPDATE` para travar o horario durante a verificacao.
+- Confirma que o horario enviado pertence a arena enviada no formulario.
 - Impede reserva duplicada em horario com status `pendente` ou `confirmada`.
 
 ## Testes manuais recomendados
@@ -891,8 +893,6 @@ Use estes arquivos apenas em ambiente local/desenvolvimento. Em producao, remova
 - `src/checkDb.php`, `src/testDb.php` e `src/testCreate.php` sao utilitarios de desenvolvimento e nao devem ficar publicos em producao.
 - A busca da home ainda nao consulta o banco; ela apenas registra a busca no console.
 - O widget de horarios do painel do locador e visual e ainda nao persiste bloqueios manuais.
-- `deleteQuadra.php` aceita exclusao por GET quando existe `id`, embora o modal use POST com CSRF. O ideal e manter apenas POST protegido.
-- `gerente_quadras` tem uma coluna `cpf` no schema atual, mas os fluxos de cadastro usam CPF em `usuarios`.
 - `testDb.php` referencia `DB_PASS`, enquanto a configuracao real usa `DB_PASSWORD`.
 - As imagens das arenas usam URLs externas. Se a rede estiver indisponivel, as imagens externas podem nao carregar.
 
