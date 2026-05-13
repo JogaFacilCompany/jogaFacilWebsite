@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['usuarioLogado'] = $foundUser['id'];
             $_SESSION['usuarioNome']   = $foundUser['nome'];
             $_SESSION['usuarioTipo']   = $foundUser['tipo'];
+            $_SESSION['usuarioFoto']   = $foundUser['foto_perfil'] ?? null;
             header('Location: ../pages/dashboardAdmin.php');
             exit;
         }

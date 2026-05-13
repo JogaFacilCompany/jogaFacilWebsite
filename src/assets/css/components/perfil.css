@@ -1,0 +1,156 @@
+/* components/perfil.css – Profile avatar & crop modal styles */
+
+/* ── Avatar on profile page ── */
+.perfil-avatar-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.25rem;
+}
+
+.perfil-avatar-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--clr-primary, #198754);
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #e9ecef;
+}
+
+.perfil-avatar-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.35);
+}
+
+/* Default avatar SVG container */
+.perfil-avatar-default {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid var(--clr-primary, #198754);
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.25);
+    background: linear-gradient(135deg, #dee2e6, #adb5bd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.perfil-avatar-default:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.35);
+}
+
+.perfil-avatar-default svg {
+    width: 90px;
+    height: 90px;
+    opacity: 0.5;
+}
+
+/* Photo action buttons */
+.perfil-foto-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.3s ease;
+}
+
+.perfil-foto-actions .btn {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+}
+
+/* ── Crop modal ── */
+.crop-modal-body {
+    padding: 1rem;
+}
+
+.crop-preview-container {
+    max-height: 400px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crop-preview-container img {
+    display: block;
+    max-width: 100%;
+}
+
+.crop-file-input-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.crop-file-input-wrapper .form-control {
+    border-radius: 8px;
+}
+
+.crop-result-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 3px solid var(--clr-primary, #198754);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+/* ── Mini avatar in header ── */
+.header-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.header-avatar:hover {
+    border-color: #fff;
+    transform: scale(1.1);
+}
+
+.header-avatar-default {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #dee2e6, #adb5bd);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    overflow: hidden;
+}
+
+.header-avatar-default:hover {
+    border-color: #fff;
+    transform: scale(1.1);
+}
+
+.header-avatar-default svg {
+    width: 18px;
+    height: 18px;
+    opacity: 0.5;
+}
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

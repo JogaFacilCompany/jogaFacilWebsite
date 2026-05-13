@@ -4,13 +4,13 @@ require_once __DIR__ . '/../config/database.php';
 
 function readAllUsuarios(): array {
     $pdo        = getDbConnection();
-    $selectStmt = $pdo->query("SELECT id, nome, email, tipo, cpf, created_at FROM usuarios ORDER BY created_at DESC");
+    $selectStmt = $pdo->query("SELECT id, nome, email, tipo, cpf, foto_perfil, created_at FROM usuarios ORDER BY created_at DESC");
     return $selectStmt->fetchAll();
 }
 
 function readUsuarioById(int $userId): ?array {
     $pdo        = getDbConnection();
-    $selectStmt = $pdo->prepare("SELECT id, nome, email, tipo, cpf, created_at FROM usuarios WHERE id = ?");
+    $selectStmt = $pdo->prepare("SELECT id, nome, email, tipo, cpf, foto_perfil, created_at FROM usuarios WHERE id = ?");
     $selectStmt->execute([$userId]);
     $foundUser = $selectStmt->fetch();
     return $foundUser ?: null;
@@ -18,7 +18,7 @@ function readUsuarioById(int $userId): ?array {
 
 function findUsuarioByEmailAndSenha(string $inputEmail, string $inputSenha): ?array {
     $pdo        = getDbConnection();
-    $selectStmt = $pdo->prepare("SELECT id, nome, email, tipo, cpf, created_at, senha FROM usuarios WHERE email = ?");
+    $selectStmt = $pdo->prepare("SELECT id, nome, email, tipo, cpf, foto_perfil, created_at, senha FROM usuarios WHERE email = ?");
     $selectStmt->execute([$inputEmail]);
     $foundUser = $selectStmt->fetch();
 

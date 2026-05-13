@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     tipo       ENUM('locador','locatario','gerente','admin') NOT NULL DEFAULT 'locatario',
     cpf        VARCHAR(14)   DEFAULT NULL UNIQUE,
     status     ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo',
+    foto_perfil VARCHAR(255)  DEFAULT NULL,
     created_at   TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
