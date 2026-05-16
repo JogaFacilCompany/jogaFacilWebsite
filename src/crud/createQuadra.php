@@ -30,6 +30,12 @@ function createQuadra(array $data): array {
         'locadorId'     => $locadorId,
     ]);
 
+    if ($success) {
+        $arenaId = (int)$pdo->lastInsertId();
+        require_once __DIR__ . '/../utils/imageUpload.php';
+        processArenaImages($arenaId, $_FILES);
+    }
+
     return ['sucesso' => $success, 'mensagem' => $success ? 'Nova arena cadastrada com sucesso!' : 'Erro ao cadastrar arena.'];
 }
 

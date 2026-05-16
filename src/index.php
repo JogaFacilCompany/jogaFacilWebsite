@@ -60,7 +60,12 @@ $activeArenas = getAllApprovedQuadras();
                         $primarySport      = !empty($arena['modalidades']) ? strtolower(explode(',', $arena['modalidades'])[0]) : 'futebol';
                         $primarySportBadge = !empty($arena['modalidades']) ? explode(',', $arena['modalidades'])[0] : 'Futebol';
                         $rating            = number_format(rand(40, 50) / 10, 1);
-                        $bgImage           = $arena['imagem'] ?: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=800';
+                        
+                        $bgImage = 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=800';
+                        if (!empty($arena['imagem'])) {
+                            $bgImage = str_starts_with($arena['imagem'], 'http') ? $arena['imagem'] : './assets/uploads/quadras/' . htmlspecialchars($arena['imagem']);
+                        }
+                        
                         $isNear            = ($index % 2 !== 0);
                     ?>
                     <div class="col-md-4 arena-item" data-sport="<?= htmlspecialchars($primarySport) ?>">

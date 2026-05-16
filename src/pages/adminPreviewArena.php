@@ -2,6 +2,7 @@
 // pages/adminPreviewArena.php – camelCase enforced
 require_once __DIR__ . '/../middleware/authGuard.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../crud/readImagensQuadra.php';
 require_once __DIR__ . '/../config/csrf.php';
 
 requireAuth('admin', '../pages/loginAdmin.php');
@@ -19,6 +20,7 @@ if (!$quadra) {
 
 $csrfToken   = generateCsrfToken();
 $facilidades = json_decode($quadra['facilidades'], true) ?: [];
+$arenaImagens = getImagensByQuadraId($arenaId);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -87,7 +89,13 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
             <!-- Arena details -->
             <div class="col-lg-8">
                 <div class="card bg-dark text-white shadow-sm border-0 overflow-hidden">
-                    <img src="<?= htmlspecialchars($quadra['imagem'] ?: 'https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&q=80&w=1000') ?>" class="w-100 object-fit-cover" style="height: 300px;">
+                    <?php 
+                        $previewSrc = 'https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&q=80&w=1000';
+                        if (!empty($quadra['imagem'])) {
+                            $previewSrc = str_starts_with($quadra['imagem'], 'http') ? $quadra['imagem'] : '../assets/uploads/quadras/' . htmlspecialchars($quadra['imagem']);
+                        }
+                    ?>
+                    <img src="<?= $previewSrc ?>" class="w-100 object-fit-cover" style="height: 300px;">
                     <div class="p-4">
                         <h2 class="fw-bold mb-2"><?= htmlspecialchars($quadra['nome']) ?></h2>
                         <p class="text-secondary"><i class="bi bi-geo-alt"></i> <?= htmlspecialchars($quadra['endereco']) ?></p>
@@ -96,6 +104,17 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
                             <h5 class="fw-bold fs-6 text-uppercase text-warning">Descrição</h5>
                             <p class="text-light opacity-75 fs-5">"<?= nl2br(htmlspecialchars($quadra['descricao'])) ?>"</p>
                         </div>
+                        
+                        <?php if (!empty($arenaImagens)): ?>
+                        <div class="mt-4">
+                            <h5 class="fw-bold fs-6 text-uppercase text-info mb-3"><i class="bi bi-images"></i> Galeria de Imagens</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                <?php foreach ($arenaImagens as $img): ?>
+                                    <img src="../assets/uploads/quadras/<?= htmlspecialchars($img['nome_arquivo']) ?>" alt="Galeria" class="rounded shadow-sm" style="width: 150px; height: 110px; object-fit: cover; border: 1px solid var(--secondary);">
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
 
                         <div class="mt-4">
                             <h5 class="fw-bold fs-6 text-uppercase text-warning">Facilidades Informadas</h5>

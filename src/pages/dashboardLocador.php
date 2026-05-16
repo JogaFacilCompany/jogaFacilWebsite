@@ -4,6 +4,7 @@ require_once __DIR__ . '/../middleware/authGuard.php';
 require_once __DIR__ . '/../utils/flashMessage.php';
 require_once __DIR__ . '/../utils/timeSlotGenerator.php';
 require_once __DIR__ . '/../crud/readQuadras.php';
+require_once __DIR__ . '/../crud/readImagensQuadra.php';
 require_once __DIR__ . '/../config/csrf.php';
 
 requireAnyAuth(['locador', 'gerente'], '../pages/escolherLogin.php');
@@ -22,6 +23,7 @@ if ($arenaId) {
         exit;
     }
     $selectableTimeSlots = generateRelativeTimeSlots($quadra['funcionamento']);
+    $arenaImagens = getImagensByQuadraId($arenaId);
 } else {
     $quadras = $isGerente
         ? getQuadrasByGerente($usuarioId)
@@ -51,6 +53,7 @@ if ($arenaId) {
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../assets/js/appLogic.js"></script>
+<script src="../assets/js/imageUploadLogic.js"></script>
 <?php if ($arenaId): ?>
 <script src="../assets/js/dashboardLocadorLogic.js"></script>
 <?php endif; ?>

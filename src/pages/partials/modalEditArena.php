@@ -5,7 +5,7 @@ $currentFacilities = json_decode($quadra['facilidades'], true) ?: [];
 ?>
 <div class="modal fade" id="modalEditarArena" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form action="../crud/updateQuadra.php" method="POST" class="modal-content text-dark">
+        <form action="../crud/updateQuadra.php" method="POST" enctype="multipart/form-data" class="modal-content text-dark">
             <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
             <input type="hidden" name="id" value="<?= $quadra['id'] ?>">
             <div class="modal-header">
@@ -47,6 +47,30 @@ $currentFacilities = json_decode($quadra['facilidades'], true) ?: [];
                                     <label class="form-check-label" for="facDet_<?= $facilityOption ?>"><?= $facilityOption ?></label>
                                 </div>
                             <?php endforeach; ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <h6 class="fw-bold mb-3 border-bottom pb-2"><i class="bi bi-images text-success"></i> Adicionar Novas Imagens</h6>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Atualizar Imagem de Capa</label>
+                        <input type="file" class="form-control formInput" name="imagemCapa" id="editCapaInput" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <div class="form-text">Deixe em branco para manter a atual.</div>
+                        <div class="upload-preview-container">
+                            <img id="editCapaPreview" class="cover-preview" src="" alt="Preview">
+                            <span id="editCapaPlaceholder" class="text-secondary small d-block my-3"><i class="bi bi-image" style="font-size: 2rem;"></i><br>Nenhuma nova capa selecionada</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Adicionar Imagens à Galeria</label>
+                        <input type="file" class="form-control formInput" name="imagensGaleria[]" id="editGaleriaInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+                        <div class="form-text">Você pode adicionar mais imagens (limite de 6 no total).</div>
+                        <div class="upload-preview-container" style="min-height: 154px;">
+                            <div id="editGaleriaPreview" class="gallery-preview-grid"></div>
+                            <span id="editGaleriaPlaceholder" class="text-secondary small d-block my-3"><i class="bi bi-images" style="font-size: 2rem;"></i><br>Nenhuma nova imagem selecionada</span>
                         </div>
                     </div>
                 </div>
