@@ -49,9 +49,16 @@ function createUsuario(array $inputData): array {
         }
         $inputCpf = preg_replace('/[^0-9]/', '', $rawCpf);
 
-        $cpfCheckStmt = $pdo->prepare("SELECT id FROM usuarios WHERE cpf = ?");
+        $cpfCheckStmt  = $pdo->prepare("SELECT id, status, inativo_motivo FROM usuarios WHERE cpf = ?");
         $cpfCheckStmt->execute([$inputCpf]);
-        if ($cpfCheckStmt->fetch()) {
+        $cpfExistente  = $cpfCheckStmt->fetch();
+        if ($cpfExistente) {
+            if ($cpfExistente['status'] === 'inativo') {
+                $motivoCpf = !empty($cpfExistente['inativo_motivo'])
+                    ? ' Motivo da inativação: ' . $cpfExistente['inativo_motivo']
+                    : '';
+                return ['sucesso' => false, 'mensagem' => 'Este CPF pertence a uma conta inativa.' . $motivoCpf];
+            }
             return ['sucesso' => false, 'mensagem' => 'CPF já cadastrado no sistema.'];
         }
     }
@@ -84,12 +91,19 @@ function createUsuario(array $inputData): array {
         }
     }
 
-    $emailCheckStmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+    $emailCheckStmt  = $pdo->prepare("SELECT id, status, inativo_motivo FROM usuarios WHERE email = ?");
     $emailCheckStmt->execute([$inputEmail]);
-    if ($emailCheckStmt->fetch()) {
+    $emailExistente  = $emailCheckStmt->fetch();
+    if ($emailExistente) {
+        if ($emailExistente['status'] === 'inativo') {
+            $motivoEmail = !empty($emailExistente['inativo_motivo'])
+                ? ' Motivo da inativação: ' . $emailExistente['inativo_motivo']
+                : '';
+            return ['sucesso' => false, 'mensagem' => 'Este e-mail pertence a uma conta inativa.' . $motivoEmail];
+        }
         return ['sucesso' => false, 'mensagem' => 'E-mail já está em uso.'];
     }
-
+    
     $hashedPassword = password_hash($inputData['senha'], PASSWORD_BCRYPT);
     $inputName      = trim($inputData['nome']);
 

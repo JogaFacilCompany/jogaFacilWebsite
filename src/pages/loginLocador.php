@@ -17,9 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $inputEmail = trim($_POST['email'] ?? '');
         $inputSenha = $_POST['senha'] ?? '';
-        $foundUser  = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
+        $foundUser      = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
+        $foundUserEmail = findUsuarioByEmail($inputEmail);
 
-        if ($foundUser && $foundUser['tipo'] === 'locador') {
+        if ($foundUserEmail && $foundUserEmail['status'] === 'inativo') {
+            $motivoExibido = !empty($foundUserEmail['inativo_motivo'])
+                ? ' Motivo: ' . $foundUserEmail['inativo_motivo']
+                : '';
+            $loginError = 'Esta conta está inativa e não pode acessar a plataforma.' . $motivoExibido;
+        } elseif ($foundUser && $foundUser['tipo'] === 'locador') {
             session_regenerate_id(true);
             $_SESSION['usuarioLogado'] = $foundUser['id'];
             $_SESSION['usuarioNome']   = $foundUser['nome'];
