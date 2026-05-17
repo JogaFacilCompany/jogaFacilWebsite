@@ -15,7 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputSenha = $_POST['senha'] ?? '';
         $foundUser  = findUsuarioByEmailAndSenha($inputEmail, $inputSenha);
 
-        if ($foundUser && $foundUser['tipo'] === 'locatario') {
+
+        if ($foundUser && $foundUser['status'] === 'inativo') {
+            $motivoExibido = !empty($foundUser['inativo_motivo'])
+                ? ' Motivo: ' . $foundUser['inativo_motivo']
+                : '';
+            $loginError = 'Esta conta está inativa e não pode acessar a plataforma.' . $motivoExibido;
+        } elseif ($foundUser && $foundUser['tipo'] === 'locatario') {
             session_regenerate_id(true);
             $_SESSION['usuarioLogado'] = $foundUser['id'];
             $_SESSION['usuarioNome']   = $foundUser['nome'];

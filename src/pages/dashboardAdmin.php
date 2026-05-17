@@ -78,28 +78,61 @@ $pendingArenas   = getAllPendingQuadras();
                         <th>E-mail</th>
                         <th>Tipo</th>
                         <th>CPF</th>
+                        <th>Status</th>
                         <th>Criado em</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($allUsers)): ?>
-                        <tr><td colspan="7" class="text-center">Nenhum usuário cadastrado</td></tr>
+                        <tr><td colspan="8" class="text-center">Nenhum usuário cadastrado</td></tr>
                     <?php else: ?>
                         <?php foreach ($allUsers as $userRow): ?>
-                        <tr>
+                        <?php $estaInativo = $userRow['status'] === 'inativo'; ?>
+                        <tr class="<?= $estaInativo ? 'usuarioInativoRow' : '' ?>">
                             <td><?= $userRow['id'] ?></td>
                             <td><?= htmlspecialchars($userRow['nome']) ?></td>
                             <td><?= htmlspecialchars($userRow['email']) ?></td>
                             <td><span class="badge bg-success"><?= $userRow['tipo'] ?></span></td>
                             <td><?= $userRow['cpf'] ?? '—' ?></td>
+                            <td>
+                                <?php if ($estaInativo): ?>
+                                    <span class="badge statusBadgeInativo">Inativo</span>
+                                <?php else: ?>
+                                    <span class="badge statusBadgeAtivo">Ativo</span>
+                                <?php endif; ?>
+                            </td>
                             <td><?= date('d/m/Y H:i', strtotime($userRow['created_at'])) ?></td>
                             <td>
-                                <form action="../crud/deleteUsuario.php" method="POST" class="d-inline deleteForm">
-                                    <input type="hidden" name="id" value="<?= $userRow['id'] ?>">
-                                    <input type="hidden" name="csrfToken" value="<?= $csrfToken ?>">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remover</button>
-                                </form>
+                                <div class="d-flex gap-2">
+                                    <?php if ($userRow['tipo'] !== 'admin'): ?>
+                                        <?php if ($estaInativo): ?>
+                                            <form action="../crud/updateUsuarioStatus.php" method="POST" class="d-inline">
+                                                <input type="hidden" name="csrfToken"  value="<?= $csrfToken ?>">
+                                                <input type="hidden" name="id"         value="<?= $userRow['id'] ?>">
+                                                <input type="hidden" name="novoStatus" value="ativo">
+                                                <button type="submit" class="btn btn-sm btn-outline-success"
+                                                        onclick="return confirm('Reativar a conta de <?= htmlspecialchars($userRow['nome'], ENT_QUOTES) ?>?')">
+                                                    Ativar
+                                                </button>
+                                            </form>
+                                        <?php else: ?>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-warning inativarBtn"
+                                                    data-id="<?= $userRow['id'] ?>"
+                                                    data-nome="<?= htmlspecialchars($userRow['nome'], ENT_QUOTES) ?>"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalInativarUsuario">
+                                                Inativar
+                                            </button>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    <form action="../crud/deleteUsuario.php" method="POST" class="d-inline deleteForm">
+                                        <input type="hidden" name="id"        value="<?= $userRow['id'] ?>">
+                                        <input type="hidden" name="csrfToken" value="<?= $csrfToken ?>">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Remover</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -111,7 +144,75 @@ $pendingArenas   = getAllPendingQuadras();
 </main>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
+
+<!-- Modal de confirmação de inativação -->
+<div class="modal fade" id="modalInativarUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--bgCard); border: 1px solid var(--bgCardBorder); color: var(--textPrimary);">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-warning">Inativar Conta</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="../crud/updateUsuarioStatus.php" method="POST">
+                <div class="modal-body pt-3">
+                    <input type="hidden" name="csrfToken"  value="<?= $csrfToken ?>">
+                    <input type="hidden" name="novoStatus" value="inativo">
+                    <input type="hidden" name="id"         id="inativarUserId">
+
+                    <p class="mb-3">
+                        Você está prestes a inativar a conta de
+                        <strong id="inativarUserNome" class="text-warning"></strong>.
+                    </p>
+
+                    <div class="mb-2">
+                        <label for="inativarMotivo" class="form-label fw-medium">
+                            Motivo da inativação <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control"
+                                  id="inativarMotivo"
+                                  name="motivo"
+                                  rows="3"
+                                  maxlength="500"
+                                  placeholder="Descreva o motivo da inativação desta conta..."
+                                  required
+                                  style="background: var(--bgSection); border-color: var(--bgCardBorder); color: var(--textPrimary); resize: none;"></textarea>
+                        <div class="invalid-feedback">O motivo é obrigatório.</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold" id="inativarConfirmarBtn">
+                        Confirmar Inativação
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../assets/js/appLogic.js"></script>
+<script>
+
+document.querySelectorAll('.inativarBtn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.getElementById('inativarUserId').value          = btn.dataset.id;
+        document.getElementById('inativarUserNome').textContent  = btn.dataset.nome;
+        document.getElementById('inativarMotivo').value          = '';
+        document.getElementById('inativarMotivo').classList.remove('is-invalid');
+    });
+});
+
+
+document.getElementById('modalInativarUsuario')
+    .querySelector('form')
+    .addEventListener('submit', function(e) {
+        var motivo = document.getElementById('inativarMotivo');
+        if (!motivo.value.trim()) {
+            e.preventDefault();
+            motivo.classList.add('is-invalid');
+        }
+    });
+</script>
 </body>
 </html>

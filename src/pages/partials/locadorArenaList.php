@@ -35,7 +35,13 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card arenaSelectionCard h-100 shadow-sm overflow-hidden" onclick="window.location.href='?arena_id=<?= $quadraItem['id'] ?>'">
                     <div style="height: 160px; overflow: hidden;">
-                        <img src="<?= $quadraItem['imagem'] ?: 'https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&q=80&w=1000' ?>" class="card-img-top w-100 h-100 object-fit-cover">
+                        <?php 
+                            $cardImgSrc = 'https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&q=80&w=1000';
+                            if (!empty($quadraItem['imagem'])) {
+                                $cardImgSrc = str_starts_with($quadraItem['imagem'], 'http') ? $quadraItem['imagem'] : '../assets/uploads/quadras/' . htmlspecialchars($quadraItem['imagem']);
+                            }
+                        ?>
+                        <img src="<?= $cardImgSrc ?>" class="card-img-top w-100 h-100 object-fit-cover">
                     </div>
                     <div class="card-body p-4 d-flex flex-column">
                         <h5 class="card-title fw-bold text-white mb-2"><?= htmlspecialchars($quadraItem['nome']) ?></h5>
