@@ -39,130 +39,27 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
 
     <?php renderFlash(); ?>
 
-    <div class="row g-4">
-        <!-- Left column: Info -->
-        <div class="col-lg-7">
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link <?= $currentTab === 'manage' ? 'active fw-bold' : 'text-secondary' ?>" href="?arena_id=<?= $arenaId ?>&tab=manage">
+                <i class="bi bi-calendar-check"></i> Agenda & Reservas
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link <?= $currentTab === 'edit' ? 'active fw-bold' : 'text-secondary' ?>" href="?arena_id=<?= $arenaId ?>&tab=edit">
+                <i class="bi bi-gear"></i> Configurações da Arena
+            </a>
+        </li>
+    </ul>
 
-            <?php if (empty($isGerente)): ?>
-            <!-- Gerenciamento de Imagens -->
-            <div class="arena-image-manager shadow-sm">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="detailInfoCardTitle m-0">
-                        <i class="bi bi-images cardTitleIcon text-info"></i> Galeria de Imagens
-                    </h5>
-                    <span class="badge bg-secondary"><?= count($arenaImagens) ?>/6 imagens</span>
-                </div>
-                
-                <?php if (empty($arenaImagens)): ?>
-                    <div class="text-center py-4 text-secondary">
-                        <i class="bi bi-camera" style="font-size: 2rem;"></i>
-                        <p class="mt-2 mb-0">Nenhuma imagem na galeria.</p>
-                        <p class="small">Adicione imagens editando o perfil da arena.</p>
-                    </div>
-                <?php else: ?>
-                    <div class="gallery-grid">
-                        <?php foreach ($arenaImagens as $img): ?>
-                            <div class="gallery-item">
-                                <img src="../assets/uploads/quadras/<?= htmlspecialchars($img['nome_arquivo']) ?>" alt="Imagem da Galeria">
-                                <form action="../crud/deleteImagemQuadra.php" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja apagar esta imagem?');">
-                                    <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
-                                    <input type="hidden" name="imagem_id" value="<?= $img['id'] ?>">
-                                    <input type="hidden" name="arena_id" value="<?= $quadra['id'] ?>">
-                                    <button type="submit" class="gallery-item-delete" title="Remover imagem">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-                
-                <div class="mt-4 text-center">
-                    <button class="btn btn-outline-info btn-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalEditarArena">
-                        <i class="bi bi-upload"></i> Gerenciar Imagens
-                    </button>
-                </div>
-            </div>
-            <?php endif; ?>
+    <?php 
+    if ($currentTab === 'manage') {
+        include __DIR__ . '/locadorArenaManage.php';
+    } else {
+        include __DIR__ . '/locadorArenaEdit.php';
+    }
+    ?>
 
-
-            <div class="detailInfoCard shadow-sm">
-                <h5 class="detailInfoCardTitle">
-                    <i class="bi bi-info-circle-fill cardTitleIcon"></i> Sobre a Arena
-                </h5>
-
-                <div class="detailInfoRow">
-                    <strong>Modalidades:</strong> <?= htmlspecialchars($quadra['modalidades'] ?? 'Não informado') ?>
-                </div>
-                <div class="detailInfoRow">
-                    <strong>Horário de Funcionamento:</strong> <?= htmlspecialchars($quadra['funcionamento'] ?? 'Não informado') ?>
-                </div>
-                <?php if (!empty($quadra['descricao'])): ?>
-                    <div class="detailInfoRow mt-3 text-secondary" style="font-size: 0.88rem; font-style: italic;">
-                        "<?= nl2br(htmlspecialchars($quadra['descricao'])) ?>"
-                    </div>
-                <?php endif; ?>
-                <div class="detailInfoRow mt-3">
-                    <strong>Política de Cancelamento:</strong>
-                </div>
-                <div class="detailCancelText">
-                    Cancelamento grátis até <?= htmlspecialchars($quadra['cancelamento_horas']) ?>h antes.
-                </div>
-            </div>
-
-            <div class="detailInfoCard shadow-sm">
-                <h5 class="detailInfoCardTitle">
-                    <i class="bi bi-check-circle-fill cardTitleIcon text-success"></i> Facilidades
-                </h5>
-                <ul class="facilidadesList mt-3">
-                    <?php if (empty($facilidades)): ?>
-                        <li class="facilidadesItem">Nenhuma facilidade cadastrada</li>
-                    <?php else: ?>
-                        <?php foreach ($facilidades as $facilidadeItem): ?>
-                            <li class="facilidadesItem"><?= htmlspecialchars($facilidadeItem) ?></li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </ul>
-            </div>
-
-            <div class="detailInfoCard shadow-sm">
-                <h5 class="detailInfoCardTitle">
-                    <i class="bi bi-telephone-fill cardTitleIcon"></i> Contato
-                </h5>
-                <div class="detailPhone">
-                    <?= htmlspecialchars($quadra['telefone'] ?? 'Não informado') ?>
-                </div>
-            </div>
-
-
-        </div>
-
-        <!-- Right column: Booking widget -->
-        <div class="col-lg-5">
-            <div class="bookingWidget shadow">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="bookingWidgetTitle m-0">Gerenciar Horários</h4>
-                    <span class="badge bg-success rounded-pill px-3">Hoje</span>
-                </div>
-                <div class="periodTabsWrapper shadow-sm">
-                    <button class="periodTab active" onclick="selecionarAba('Manhã')">Manhã</button>
-                    <button class="periodTab" onclick="selecionarAba('Tarde')">Tarde</button>
-                    <button class="periodTab" onclick="selecionarAba('Noite')">Noite</button>
-                </div>
-                <div class="slotsGrid" id="slotsContainer" data-horarios='<?= json_encode($selectableTimeSlots) ?>'></div>
-                <p class="small mt-2 mb-3">Clique em um horário para bloqueá-lo ou liberá-lo.</p>
-                <button class="bookingConfirmBtn" id="btnSalvarEstado">Selecione um horário</button>
-
-                <?php if (empty($isGerente)): ?>
-                    <div class="mt-4 pt-3 border-top border-secondary opacity-75">
-                        <button class="btn btn-sm btn-outline-danger w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalExcluirArena">
-                            <i class="bi bi-trash3"></i> Excluir Arena Permanentemente
-                        </button>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
 </section>
 
 <?php if (empty($isGerente)): ?>
