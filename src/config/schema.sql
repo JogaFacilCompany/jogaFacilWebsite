@@ -65,6 +65,15 @@ CREATE TABLE IF NOT EXISTS gerente_quadras (
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS quadra_imagens (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    quadra_id   INT NOT NULL,
+    nome_arquivo VARCHAR(255) NOT NULL,
+    ordem       INT DEFAULT 0,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Inserindo usuários de teste (senha para todos é: password)
 INSERT INTO usuarios (nome, email, senha, tipo, cpf) VALUES
 ('Locador Teste', 'locador@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'locador', '11111111111'),
@@ -73,4 +82,4 @@ INSERT INTO usuarios (nome, email, senha, tipo, cpf) VALUES
 
 -- Mockups para interface
 INSERT INTO quadras (nome, endereco, imagem, locador_id, status, descricao, facilidades, telefone) VALUES
-('Arena Gol de Placa', 'Rua do Ouro, 123 - Centro', 'https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&q=80&w=1000', 1, 'ativo', 'Excelente quadra de society para o seu rachão', '["Cantina", "Vestiários", "Aluguel de Bola", "Bebedouro"]', '(11) 99999-9999');
+('Arena Gol de Placa', 'Rua do Ouro, 123 - Centro', NULL, 1, 'ativo', 'Excelente quadra de society para o seu rachão', '["Cantina", "Vestiários", "Aluguel de Bola", "Bebedouro"]', '(11) 99999-9999');

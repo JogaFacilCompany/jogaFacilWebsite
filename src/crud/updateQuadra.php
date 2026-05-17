@@ -36,6 +36,11 @@ function updateQuadra(array $data): array {
         'locadorId'     => $locadorId,
     ]);
 
+    if ($success) {
+        require_once __DIR__ . '/../utils/imageUpload.php';
+        processArenaImages($arenaId, $_FILES);
+    }
+
     return ['sucesso' => $success, 'mensagem' => $success ? 'Arena atualizada com sucesso!' : 'Erro ao atualizar arena.'];
 }
 

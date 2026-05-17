@@ -4,7 +4,13 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
 ?>
 <!-- Hero Banner -->
 <section class="arenaDetailHero">
-    <img src="<?= htmlspecialchars($quadra['imagem'] ?: 'https://images.unsplash.com/photo-1518605368461-1ee7e1635338?q=80&w=2000') ?>" alt="Capa da Arena" class="arenaDetailHeroImg">
+    <?php 
+        $capaSrc = 'https://images.unsplash.com/photo-1518605368461-1ee7e1635338?q=80&w=2000';
+        if (!empty($quadra['imagem'])) {
+            $capaSrc = str_starts_with($quadra['imagem'], 'http') ? $quadra['imagem'] : '../assets/uploads/quadras/' . htmlspecialchars($quadra['imagem']);
+        }
+    ?>
+    <img src="<?= $capaSrc ?>" alt="Capa da Arena" class="arenaDetailHeroImg">
     <div class="arenaDetailHeroOverlay"></div>
     <div class="container position-relative h-100">
         <div class="arenaDetailHeroMeta">
@@ -37,10 +43,54 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
         <!-- Left column: Info -->
         <div class="col-lg-7">
 
+            <?php if (empty($isGerente)): ?>
+            <!-- Gerenciamento de Imagens -->
+            <div class="arena-image-manager shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="detailInfoCardTitle m-0">
+                        <i class="bi bi-images cardTitleIcon text-info"></i> Galeria de Imagens
+                    </h5>
+                    <span class="badge bg-secondary"><?= count($arenaImagens) ?>/6 imagens</span>
+                </div>
+                
+                <?php if (empty($arenaImagens)): ?>
+                    <div class="text-center py-4 text-secondary">
+                        <i class="bi bi-camera" style="font-size: 2rem;"></i>
+                        <p class="mt-2 mb-0">Nenhuma imagem na galeria.</p>
+                        <p class="small">Adicione imagens editando o perfil da arena.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="gallery-grid">
+                        <?php foreach ($arenaImagens as $img): ?>
+                            <div class="gallery-item">
+                                <img src="../assets/uploads/quadras/<?= htmlspecialchars($img['nome_arquivo']) ?>" alt="Imagem da Galeria">
+                                <form action="../crud/deleteImagemQuadra.php" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja apagar esta imagem?');">
+                                    <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
+                                    <input type="hidden" name="imagem_id" value="<?= $img['id'] ?>">
+                                    <input type="hidden" name="arena_id" value="<?= $quadra['id'] ?>">
+                                    <button type="submit" class="gallery-item-delete" title="Remover imagem">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                
+                <div class="mt-4 text-center">
+                    <button class="btn btn-outline-info btn-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalEditarArena">
+                        <i class="bi bi-upload"></i> Gerenciar Imagens
+                    </button>
+                </div>
+            </div>
+            <?php endif; ?>
+
+
             <div class="detailInfoCard shadow-sm">
                 <h5 class="detailInfoCardTitle">
                     <i class="bi bi-info-circle-fill cardTitleIcon"></i> Sobre a Arena
                 </h5>
+
                 <div class="detailInfoRow">
                     <strong>Modalidades:</strong> <?= htmlspecialchars($quadra['modalidades'] ?? 'Não informado') ?>
                 </div>
@@ -83,6 +133,7 @@ $facilidades = json_decode($quadra['facilidades'], true) ?: [];
                     <?= htmlspecialchars($quadra['telefone'] ?? 'Não informado') ?>
                 </div>
             </div>
+
 
         </div>
 

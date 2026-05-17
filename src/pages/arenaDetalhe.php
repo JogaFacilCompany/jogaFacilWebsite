@@ -3,6 +3,7 @@
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/../crud/readQuadras.php';
 require_once __DIR__ . '/../crud/readHorarios.php';
+require_once __DIR__ . '/../crud/readImagensQuadra.php';
 require_once __DIR__ . '/../utils/flashMessage.php';
 require_once __DIR__ . '/../config/csrf.php';
 
@@ -17,7 +18,14 @@ if (!$quadra) {
 $bookingDate = date('Y-m-d');
 $slotsData = getBookingSlotsByQuadraDate((int)$quadra['id'], $bookingDate, $quadra['funcionamento'] ?? '08:00 - 23:00');
 $facilidades = json_decode($quadra['facilidades'] ?? '', true) ?: [];
+
+$arenaImagens = getImagensByQuadraId((int)$quadra['id']);
+
 $defaultImage = 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=1600';
+$capaSrc = $defaultImage;
+if (!empty($quadra['imagem'])) {
+    $capaSrc = str_starts_with($quadra['imagem'], 'http') ? $quadra['imagem'] : '../assets/uploads/quadras/' . htmlspecialchars($quadra['imagem']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -34,7 +42,7 @@ $defaultImage = 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=
 
     <!-- ARENA HERO BANNER -->
     <div class="arenaDetailHero">
-        <img class="arenaDetailHeroImg" src="<?= htmlspecialchars($quadra['imagem'] ?: $defaultImage) ?>" alt="<?= htmlspecialchars($quadra['nome']) ?>">
+        <img class="arenaDetailHeroImg" src="<?= $capaSrc ?>" alt="<?= htmlspecialchars($quadra['nome']) ?>">
         <div class="arenaDetailHeroOverlay"></div>
         <div class="arenaDetailHeroMeta">
             <h1 class="arenaDetailHeroName"><?= htmlspecialchars($quadra['nome']) ?></h1>
@@ -51,6 +59,34 @@ $defaultImage = 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=
     <!-- MAIN CONTENT -->
     <main class="container py-5">
         <?php renderFlash(); ?>
+
+        <!-- Galeria / Carrossel -->
+        <?php if (!empty($arenaImagens)): ?>
+        <section class="arena-gallery-section mb-5">
+            <div id="arenaGalleryCarousel" class="carousel slide arena-carousel" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <?php foreach ($arenaImagens as $index => $img): ?>
+                        <button type="button" data-bs-target="#arenaGalleryCarousel" data-bs-slide-to="<?= $index ?>" <?= $index === 0 ? 'class="active" aria-current="true"' : '' ?> aria-label="Slide <?= $index + 1 ?>"></button>
+                    <?php endforeach; ?>
+                </div>
+                <div class="carousel-inner">
+                    <?php foreach ($arenaImagens as $index => $img): ?>
+                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <img src="../assets/uploads/quadras/<?= htmlspecialchars($img['nome_arquivo']) ?>" class="d-block w-100 arena-carousel-img" alt="Imagem da Galeria">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#arenaGalleryCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#arenaGalleryCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        </section>
+        <?php endif; ?>
 
         <div class="row g-4">
 
