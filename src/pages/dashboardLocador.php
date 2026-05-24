@@ -5,6 +5,7 @@ require_once __DIR__ . '/../utils/flashMessage.php';
 require_once __DIR__ . '/../utils/timeSlotGenerator.php';
 require_once __DIR__ . '/../crud/readQuadras.php';
 require_once __DIR__ . '/../crud/readImagensQuadra.php';
+require_once __DIR__ . '/../crud/readReservasPendentes.php';
 require_once __DIR__ . '/../config/csrf.php';
 
 requireAnyAuth(['locador', 'gerente'], '../pages/escolherLogin.php');
@@ -13,6 +14,7 @@ $usuarioId = (int)$_SESSION['usuarioLogado'];
 $usuarioTipo = $_SESSION['usuarioTipo'];
 $isGerente = $usuarioTipo === 'gerente';
 $arenaId   = isset($_GET['arena_id']) ? (int)$_GET['arena_id'] : null;
+$currentTab = $_GET['tab'] ?? 'manage';
 
 if ($arenaId) {
     $quadra = $isGerente
@@ -24,6 +26,8 @@ if ($arenaId) {
     }
     $selectableTimeSlots = generateRelativeTimeSlots($quadra['funcionamento']);
     $arenaImagens = getImagensByQuadraId($arenaId);
+    $reservasPendentes = getReservasPendentesByQuadra($arenaId);
+    $reservasConfirmadas = getReservasConfirmadasByQuadra($arenaId);
 } else {
     $quadras = $isGerente
         ? getQuadrasByGerente($usuarioId)

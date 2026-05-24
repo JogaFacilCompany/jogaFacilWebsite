@@ -43,12 +43,12 @@ function createReserva(array $data): array {
 
         $insertStmt = $pdo->prepare(
             "INSERT INTO reservas (horario_id, quadra_id, usuario_id, status, modo_lobby)
-             VALUES (?, ?, ?, 'confirmada', ?)"
+             VALUES (?, ?, ?, 'pendente', ?)"
         );
         $insertStmt->execute([$horarioId, (int)$horario['quadra_id'], $usuarioId, $modoLobby]);
 
         $pdo->commit();
-        return ['sucesso' => true, 'mensagem' => 'Reserva confirmada com sucesso!'];
+        return ['sucesso' => true, 'mensagem' => 'Reserva solicitada com sucesso! Aguardando aprovação da quadra.'];
     } catch (Throwable $error) {
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
