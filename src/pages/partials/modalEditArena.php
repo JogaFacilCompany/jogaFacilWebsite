@@ -24,7 +24,7 @@ $currentFacilities = json_decode($quadra['facilidades'], true) ?: [];
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-medium">CNPJ *</label>
-                        <input type="text" class="form-control formInput cnpj-mask" name="cnpj" value="<?= htmlspecialchars($quadra['cnpj'] ?? '') ?>" placeholder="00.000.000/0000-00" required>
+                        <input type="text" class="form-control formInput cnpj-mask" name="cnpj" value="<?= htmlspecialchars(preg_replace('/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/', '$1.$2.$3/$4-$5', $quadra['cnpj'] ?? '')) ?>" placeholder="00.000.000/0000-00" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-medium">Horário de Funcionamento *</label>

@@ -13,6 +13,10 @@
                     <i class="bi bi-plus-circle me-2"></i> Adicionar Nova Quadra
                 </button>
             </div>
+        <?php else: ?>
+            <a class="btn btn-outline-light px-4 rounded-pill" href="../pages/reservasGerente.php">
+                <i class="bi bi-calendar-check me-2"></i> Ver Reservas
+            </a>
         <?php endif; ?>
     </div>
 

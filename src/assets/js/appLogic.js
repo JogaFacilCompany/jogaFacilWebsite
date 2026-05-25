@@ -107,14 +107,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- CNPJ Mask ---
+    const applyCnpjMask = (input) => {
+        let v = input.value.replace(/\D/g, '').substring(0, 14);
+        if (v.length > 12)     v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
+        else if (v.length > 8) v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,4})/,        '$1.$2.$3/$4');
+        else if (v.length > 5) v = v.replace(/^(\d{2})(\d{3})(\d{0,3})/,               '$1.$2.$3');
+        else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,3})/,                      '$1.$2');
+        input.value = v;
+    };
+
     const cnpjInputs = document.querySelectorAll('.cnpj-mask');
     cnpjInputs.forEach(inputElement => {
-        inputElement.addEventListener('input', (eventObject) => {
-            let matchGroups = eventObject.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2})/);
-            eventObject.target.value = !matchGroups[2]
-                ? matchGroups[1]
-                : matchGroups[1] + '.' + matchGroups[2] + '.' + matchGroups[3] + '/' + matchGroups[4] + (matchGroups[5] ? '-' + matchGroups[5] : '');
-        });
+        inputElement.addEventListener('input', (eventObject) => applyCnpjMask(eventObject.target));
+        applyCnpjMask(inputElement);
     });
 
 });
