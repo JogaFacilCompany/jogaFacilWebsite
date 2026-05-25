@@ -23,6 +23,7 @@ O projeto roda em Docker com PHP 8.2, Apache e MySQL 8.0. O codigo da aplicacao 
 - Criacao automatica de horarios do dia conforme funcionamento da quadra.
 - Reserva de horarios por locatarios autenticados.
 - Modo lobby na reserva para abrir uma partida compartilhada.
+- Lista de lobbies e entrada em lobby por locatário autenticado.
 - Perfil do usuario com edicao de nome, e-mail, CPF e senha.
 - Protecao CSRF nos formularios sensiveis.
 - Senhas armazenadas com `password_hash` e validacao com `password_verify`.
@@ -145,6 +146,14 @@ docker compose up --build
 
 Use esse comando com cuidado, pois ele remove os dados persistidos do MySQL local.
 
+### Atualizar banco sem apagar dados
+
+Se o container MySQL ja existia antes de uma alteracao em `schema.sql`, aplique as migracoes em `src/config/migrations/`:
+
+```bash
+docker compose exec -T db mysql -u app_user -papp_password jogafacil < src/config/migrations/001_lobby.sql
+```
+
 ## Banco de dados
 
 O schema inicial esta em `src/config/schema.sql`. O arquivo cria o banco `jogafacil`, as tabelas principais e dados mockados para testes.
@@ -215,6 +224,19 @@ Campos principais:
 - `status`: `pendente`, `confirmada` ou `cancelada`.
 - `modo_lobby`: indica se a reserva foi aberta como lobby.
 - `created_at`: data da reserva.
+
+### Tabela `lobby_participantes`
+
+Registra locatários que entraram em um lobby (organizador fica em `reservas.usuario_id`).
+
+Campos principais:
+
+- `id`: chave primaria.
+- `reserva_id`: lobby (reserva com `modo_lobby = 1`).
+- `usuario_id`: locatário participante.
+- `joined_at`: data da entrada.
+
+Chave unica em `(reserva_id, usuario_id)`.
 
 ### Tabela `gerente_quadras`
 
@@ -427,6 +449,8 @@ Nao pode:
 | Caminho | Arquivo | Perfis | Descricao |
 | --- | --- | --- | --- |
 | `/pages/perfil.php` | `src/pages/perfil.php` | Qualquer usuario logado | Perfil do usuario logado. |
+| `/pages/minhasReservas.php` | `src/pages/minhasReservas.php` | Locatario | Lista reservas do locatario com filtros por status. |
+| `/pages/listaLobbies.php` | `src/pages/listaLobbies.php` | Locatario | Meus lobbies, lobbies de terceiros e entrada na partida. |
 | `/pages/dashboardLocador.php` | `src/pages/dashboardLocador.php` | Locador, gerente | Lista ou detalhe de quadras. |
 | `/pages/dashboardLocador.php?arena_id={id}` | `src/pages/dashboardLocador.php` | Locador, gerente | Gerenciamento de uma quadra especifica. |
 | `/pages/cadastrarGerente.php` | `src/pages/cadastrarGerente.php` | Locador | Cadastro de gerente vinculado a quadras. |
@@ -446,6 +470,7 @@ Nao pode:
 | `/crud/deleteQuadra.php` | `src/crud/deleteQuadra.php` | POST | Exclui arena do locador logado. |
 | `/crud/updateQuadraStatus.php` | `src/crud/updateQuadraStatus.php` | POST | Aprova, rejeita ou volta arena para pendente. |
 | `/crud/createReserva.php` | `src/crud/createReserva.php` | POST | Cria reserva para locatario logado. |
+| `/crud/joinLobby.php` | `src/crud/joinLobby.php` | POST | Adiciona locatario a um lobby. |
 
 ## Fluxos principais
 
@@ -526,8 +551,16 @@ Nao pode:
 7. Opcionalmente ativa o modo lobby.
 8. O formulario envia POST para `crud/createReserva.php`.
 9. O endpoint exige usuario logado do tipo `locatario`.
-10. `createReserva()` abre transacao, trava o horario com `FOR UPDATE`, confirma que o horario pertence a arena aberta, confere duplicidade e cria reserva `confirmada`.
+10. `createReserva()` abre transacao, trava o horario com `FOR UPDATE`, confirma que o horario pertence a arena aberta, confere duplicidade e cria reserva `pendente` com `modo_lobby` quando aplicavel.
 11. O usuario volta para a pagina da arena com mensagem de sucesso ou erro.
+
+### Entrada em lobby (locatario)
+
+1. Locatario autenticado acessa `pages/listaLobbies.php` (link **Lobbies** no header).
+2. A pagina lista reservas com `modo_lobby = 1` e status ativo, excluindo lobbies do proprio usuario ou onde ja participa.
+3. Locatario clica em **Entrar no lobby**; POST para `crud/joinLobby.php` com `reserva_id`.
+4. `joinLobby()` valida o lobby e insere em `lobby_participantes` com transacao.
+5. Redirecionamento para `listaLobbies.php` com mensagem flash de sucesso ou erro.
 
 ## Regras de negocio
 
@@ -539,7 +572,10 @@ Nao pode:
 - Gerente nao cria, edita nem exclui arenas pela interface atual.
 - Locatario precisa estar autenticado como `locatario` para reservar.
 - Um horario com reserva ativa nao pode ser reservado novamente.
-- Reservas sao criadas como `confirmada`.
+- Reservas sao criadas como `pendente` (aguardando gestao da quadra).
+- Lobby: reserva com `modo_lobby = 1`; outros locatarios entram pela lista em `listaLobbies.php`; o organizador ve em **Meus lobbies**.
+- Organizador do lobby (`reservas.usuario_id`) nao pode entrar como participante.
+- Um locatario nao pode entrar duas vezes no mesmo lobby.
 - CPF e obrigatorio para locatario cadastrado pela tela publica e para gerente.
 - CPF e CNPJ sao armazenados somente com digitos.
 - E-mail deve ser unico.
@@ -765,10 +801,26 @@ Arquivo: `src/crud/readHorarios.php`
 
 Arquivo: `src/crud/createReserva.php`
 
-- `createReserva($data)`: cria reserva confirmada com transacao.
+- `createReserva($data)`: cria reserva com transacao e flag `modo_lobby`.
 - Usa `FOR UPDATE` para travar o horario durante a verificacao.
 - Confirma que o horario enviado pertence a arena enviada no formulario.
 - Impede reserva duplicada em horario com status `pendente` ou `confirmada`.
+
+Arquivo: `src/crud/readReservasLocatario.php`
+
+- `getReservasByLocatario($usuarioId)`: todas as reservas do locatario.
+- `getLobbiesOrganizadosByLocatario($usuarioId)`: partidas em modo lobby criadas pelo usuario.
+- `getLobbiesParticipandoByLocatario($usuarioId)`: lobbies em que entrou como participante.
+
+Arquivo: `src/crud/readLobbies.php`
+
+- `getLobbiesDisponiveis($usuarioId)`: lista lobbies de outros jogadores disponiveis para entrada.
+- `usuarioParticipaLobby($reservaId, $usuarioId)`: verifica participacao existente.
+
+Arquivo: `src/crud/joinLobby.php`
+
+- `joinLobby($reservaId, $usuarioId)`: adiciona participante ao lobby.
+- Endpoint POST exige CSRF e sessao `locatario`.
 
 ## Testes manuais recomendados
 
@@ -912,6 +964,7 @@ Use estes arquivos apenas em ambiente local/desenvolvimento. Em producao, remova
   - `src/crud/createQuadra.php`
   - `src/crud/updateQuadra.php`
 - Para novas regras de reserva, revisar `readHorarios.php`, `createReserva.php` e `arenaDetailLogic.js`.
+- Para lobby e participantes, revisar `readLobbies.php`, `joinLobby.php`, `listaLobbies.php` e `schema.sql` (`lobby_participantes`, colunas de lobby em `reservas`).
 
 ## Licenca
 

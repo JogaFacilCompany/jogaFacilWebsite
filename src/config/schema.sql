@@ -56,6 +56,16 @@ CREATE TABLE IF NOT EXISTS reservas (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS lobby_participantes (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    reserva_id  INT NOT NULL,
+    usuario_id  INT NOT NULL,
+    joined_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_participante_lobby (reserva_id, usuario_id),
+    FOREIGN KEY (reserva_id) REFERENCES reservas(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS gerente_quadras (
     gerente_id INT NOT NULL,
     quadra_id  INT NOT NULL,

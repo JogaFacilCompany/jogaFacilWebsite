@@ -1,0 +1,101 @@
+/* components/minhasReservas.css – Tenant reservations panel | camelCase enforced */
+
+.reservasPageTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--textPrimary);
+    margin-bottom: 0.35rem;
+}
+
+.reservasPageSubtitle {
+    color: var(--textMuted);
+    margin-bottom: 2rem;
+}
+
+.reservaCard {
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+
+.reservaCard:hover {
+    border-color: rgba(0, 156, 59, 0.3);
+}
+
+.reservaCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.reservaCardArena {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+}
+
+.reservaCardMeta {
+    font-size: 0.85rem;
+    color: var(--textMuted);
+    line-height: 1.55;
+}
+
+.reservaStatusBadge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.reservaStatusBadge.pendente {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: #ca8a04;
+}
+
+.reservaStatusBadge.confirmada {
+    background-color: rgba(0, 156, 59, 0.12);
+    color: var(--verdeBandeira);
+}
+
+.reservaStatusBadge.cancelada {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+}
+
+.reservaLobbyBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--verdeBandeira);
+    margin-top: 6px;
+}
+
+.reservaCodigoBox {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: var(--bgSection);
+    border-radius: var(--radiusSm);
+    font-size: 0.85rem;
+}
+
+.reservaCodigoBox strong {
+    letter-spacing: 0.06em;
+}
+
+.reservaEmptyState {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--textMuted);
+    border: 1px dashed var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    background-color: var(--bgSection);
+}

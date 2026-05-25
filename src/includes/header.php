@@ -25,6 +25,10 @@ $baseUrl = (strpos($_SERVER['SCRIPT_NAME'], '/pages/') !== false || strpos($_SER
                 <?php endif; ?>
                 <span class="text-white fw-medium">Olá, <?= htmlspecialchars($_SESSION['usuarioNome']) ?></span>
                 <a href="<?= $baseUrl ?>pages/perfil.php" class="text-white text-decoration-none fw-medium">Meu Perfil</a>
+                <?php if ($_SESSION['usuarioTipo'] === 'locatario'): ?>
+                    <a href="<?= $baseUrl ?>pages/minhasReservas.php" class="text-white text-decoration-none fw-medium">Minhas Reservas</a>
+                    <a href="<?= $baseUrl ?>pages/listaLobbies.php" class="text-white text-decoration-none fw-medium">Lobbies</a>
+                <?php endif; ?>
                 <?php if ($_SESSION['usuarioTipo'] === 'locador' || $_SESSION['usuarioTipo'] === 'gerente'): ?>
                     <a href="<?= $baseUrl ?>pages/dashboardLocador.php" class="text-white text-decoration-none fw-medium">Painel</a>
                 <?php elseif ($_SESSION['usuarioTipo'] === 'admin'): ?>

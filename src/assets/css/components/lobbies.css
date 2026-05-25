@@ -1,0 +1,115 @@
+/* components/lobbies.css – Lobby list and private join | camelCase enforced */
+
+.lobbiesPageTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--textPrimary);
+    margin-bottom: 0.35rem;
+}
+
+.lobbiesPageSubtitle {
+    color: var(--textMuted);
+    margin-bottom: 2rem;
+}
+
+.lobbyListCard {
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 1.25rem 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+}
+
+.lobbyListCard:hover {
+    border-color: rgba(0, 156, 59, 0.35);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+.lobbyListCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.lobbyListCardArena {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+    margin-bottom: 4px;
+}
+
+.lobbyListCardMeta {
+    font-size: 0.85rem;
+    color: var(--textMuted);
+    line-height: 1.5;
+}
+
+.lobbyBadgePublic {
+    background-color: rgba(0, 156, 59, 0.12);
+    color: var(--verdeBandeira);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.lobbyBadgeHost {
+    background-color: rgba(59, 130, 246, 0.12);
+    color: #2563eb;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.lobbyCodigoHint {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: var(--bgSection);
+    border-radius: var(--radiusSm);
+    font-size: 0.85rem;
+    color: var(--textMuted);
+}
+
+.lobbyCodigoHint strong {
+    color: var(--textPrimary);
+    letter-spacing: 0.06em;
+}
+
+.lobbyListCardFooter {
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.lobbyJoinBtn {
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--radiusMd);
+    background-color: var(--verdeBandeira);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.lobbyJoinBtn:hover {
+    background-color: var(--verdeEscuro);
+    transform: translateY(-1px);
+}
+
+.lobbyEmptyState {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--textMuted);
+    border: 1px dashed var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    background-color: var(--bgSection);
+}
