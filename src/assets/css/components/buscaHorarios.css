@@ -1,0 +1,102 @@
+/* components/buscaHorarios.css – Slot search filters and results | camelCase enforced */
+
+.buscaHorariosHero {
+    background: linear-gradient(135deg, var(--verdeEscuro) 0%, var(--verdeBandeira) 100%);
+    padding: 2.5rem 0 2rem;
+    margin-bottom: 2rem;
+}
+
+.buscaHorariosTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.35rem;
+}
+
+.buscaHorariosSubtitle {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0;
+}
+
+.buscaFiltrosCard {
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.buscaFiltrosCard .form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--textSecondary);
+}
+
+.buscaResultadoCard {
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+}
+
+.buscaResultadoCard:hover {
+    border-color: rgba(0, 156, 59, 0.35);
+}
+
+.buscaResultadoArena {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+}
+
+.buscaResultadoMeta {
+    font-size: 0.85rem;
+    color: var(--textMuted);
+    line-height: 1.5;
+}
+
+.buscaResultadoHorario {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--verdeBandeira);
+}
+
+.buscaResultadoPreco {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--textPrimary);
+}
+
+.buscaEmptyState {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--textMuted);
+    border: 1px dashed var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    background-color: var(--bgSection);
+}
+
+.buscaInitialHint {
+    text-align: center;
+    padding: 2rem;
+    color: var(--textMuted);
+    font-size: 0.95rem;
+}
+
+.buscaSportChip {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(0, 156, 59, 0.1);
+    color: var(--verdeBandeira);
+    margin-right: 4px;
+}

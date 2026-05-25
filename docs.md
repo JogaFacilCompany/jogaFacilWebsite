@@ -24,6 +24,7 @@ O projeto roda em Docker com PHP 8.2, Apache e MySQL 8.0. O codigo da aplicacao 
 - Reserva de horarios por locatarios autenticados.
 - Modo lobby na reserva (público ou privado com código definido pelo organizador).
 - Lista de lobbies e entrada em lobby público ou privado por locatário autenticado.
+- Busca de horários disponíveis por data, período, tipo de quadra e nome/região da arena.
 - Perfil do usuario com edicao de nome, e-mail, CPF e senha.
 - Protecao CSRF nos formularios sensiveis.
 - Senhas armazenadas com `password_hash` e validacao com `password_verify`.
@@ -435,6 +436,7 @@ Nao pode:
 | Caminho | Arquivo | Descricao |
 | --- | --- | --- |
 | `/index.php` | `src/index.php` | Home com arenas ativas, busca visual e filtros por modalidade. |
+| `/pages/buscarHorarios.php` | `src/pages/buscarHorarios.php` | Busca de horarios disponiveis com filtros (data, periodo, modalidade). |
 | `/pages/arenaDetalhe.php?id={id}` | `src/pages/arenaDetalhe.php` | Detalhes publicos da arena ativa e widget de reserva. |
 | `/pages/escolherLogin.php` | `src/pages/escolherLogin.php` | Escolha do tipo de login. |
 | `/pages/escolherCadastro.php` | `src/pages/escolherCadastro.php` | Escolha do tipo de cadastro. |
@@ -541,6 +543,15 @@ Nao pode:
 7. Cria o usuario gerente.
 8. Insere os vinculos em `gerente_quadras`.
 9. O gerente passa a acessar apenas as quadras vinculadas.
+
+### Busca de horarios (locatario)
+
+1. Usuario acessa `pages/buscarHorarios.php` (header, home ou botao Pesquisar).
+2. Define filtros: data, periodo (manha/tarde/noite), tipo de quadra e opcionalmente nome ou regiao da arena.
+3. Clica em **Aplicar filtros** (`GET` com `aplicar=1`).
+4. `searchHorariosDisponiveis()` garante horarios do dia nas quadras ativas e retorna apenas slots sem reserva ativa.
+5. Se houver resultados, lista arena, horario, preco e link **Reservar** para `arenaDetalhe.php`.
+6. Se nao houver resultados, exibe mensagem informando que nenhum horario foi encontrado para os criterios.
 
 ### Reserva de horario
 
@@ -794,6 +805,10 @@ Arquivo: `src/crud/updateQuadraStatus.php`
 - `updateArenaStatus($arenaId, $status)`: altera status da arena.
 
 ### Horarios
+
+Arquivo: `src/crud/readHorariosBusca.php`
+
+- `searchHorariosDisponiveis($filtros)`: busca horarios livres por data, periodo, modalidade e texto.
 
 Arquivo: `src/crud/readHorarios.php`
 

@@ -8,9 +8,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const handleSearchEvent = () => {
         const queryTerm = searchInput ? searchInput.value.trim() : '';
+        const params = new URLSearchParams();
+        params.set('aplicar', '1');
+        params.set('data', new Date().toISOString().slice(0, 10));
+        params.set('periodo', 'todos');
+        params.set('modalidade', 'todos');
         if (queryTerm) {
-            console.log(`Searching for: ${queryTerm}`);
+            params.set('busca', queryTerm);
         }
+        const activeCategory = document.querySelector('.categoryBtn.active');
+        if (activeCategory) {
+            const cat = activeCategory.getAttribute('data-category');
+            if (cat && cat !== 'todos') {
+                params.set('modalidade', cat);
+            }
+        }
+        window.location.href = `./pages/buscarHorarios.php?${params.toString()}`;
     };
 
     if (searchButton) searchButton.addEventListener('click', handleSearchEvent);

@@ -8,6 +8,7 @@ $baseUrl = (strpos($_SERVER['SCRIPT_NAME'], '/pages/') !== false || strpos($_SER
             <h2 class="logoTitle text-white m-0 fst-italic fw-bold">Joga Fácil</h2>
         </a>
         <nav class="authNav d-flex align-items-center gap-3">
+            <a href="<?= $baseUrl ?>pages/buscarHorarios.php" class="text-white text-decoration-none fw-medium">Buscar Horários</a>
             <?php if (isset($_SESSION['usuarioLogado'])): ?>
                 <?php
                     // Build avatar for header

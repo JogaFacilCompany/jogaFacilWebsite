@@ -31,6 +31,7 @@ $activeArenas = getAllApprovedQuadras();
                     <i class="bi bi-search" style="font-size:1.1rem;"></i>
                 </span>
                 <input type="text" id="searchInput" class="form-control border-0 shadow-none bg-transparent" placeholder="Buscar por nome, região ou arena...">
+                <a href="./pages/buscarHorarios.php" class="btn btn-outline-light rounded-pill px-3 ms-1 d-none d-md-inline-block">Horários</a>
                 <button type="button" id="searchButton" class="btn heroSearchBtn rounded-pill px-4 ms-2">Pesquisar</button>
             </div>
 
