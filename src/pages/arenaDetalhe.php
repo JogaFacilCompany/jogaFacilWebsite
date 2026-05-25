@@ -172,6 +172,25 @@ if (!empty($quadra['imagem'])) {
                             </div>
                         </button>
 
+                        <div class="lobbyOptionsPanel d-none" id="lobbyOptionsPanel">
+                            <div class="lobbyOptionsLabel">Visibilidade do lobby</div>
+                            <div class="lobbyVisibilityTabs">
+                                <label class="lobbyVisibilityOption">
+                                    <input type="radio" name="visibilidade_lobby" value="publico" checked>
+                                    <span><i class="bi bi-globe2"></i> Público</span>
+                                </label>
+                                <label class="lobbyVisibilityOption">
+                                    <input type="radio" name="visibilidade_lobby" value="privado">
+                                    <span><i class="bi bi-lock-fill"></i> Privado</span>
+                                </label>
+                            </div>
+                            <div class="lobbyCodeField d-none" id="lobbyCodeField">
+                                <label class="form-label small text-secondary mb-1" for="codigoAcessoInput">Código de acesso</label>
+                                <input type="text" class="form-control" id="codigoAcessoInput" name="codigo_acesso" maxlength="20" placeholder="Ex: JOGA2026" autocomplete="off">
+                                <div class="form-text">Defina um código e compartilhe com quem pode entrar na partida.</div>
+                            </div>
+                        </div>
+
                         <button class="bookingConfirmBtn disabled" id="confirmBtn" type="submit" disabled>
                             Selecione um horário
                         </button>

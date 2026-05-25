@@ -22,8 +22,8 @@ O projeto roda em Docker com PHP 8.2, Apache e MySQL 8.0. O codigo da aplicacao 
 - Pagina publica de detalhes da arena com informacoes, contato, facilidades e horarios.
 - Criacao automatica de horarios do dia conforme funcionamento da quadra.
 - Reserva de horarios por locatarios autenticados.
-- Modo lobby na reserva para abrir uma partida compartilhada.
-- Lista de lobbies e entrada em lobby por locatário autenticado.
+- Modo lobby na reserva (público ou privado com código definido pelo organizador).
+- Lista de lobbies e entrada em lobby público ou privado por locatário autenticado.
 - Perfil do usuario com edicao de nome, e-mail, CPF e senha.
 - Protecao CSRF nos formularios sensiveis.
 - Senhas armazenadas com `password_hash` e validacao com `password_verify`.
@@ -223,6 +223,8 @@ Campos principais:
 - `usuario_id`: locatario responsavel.
 - `status`: `pendente`, `confirmada` ou `cancelada`.
 - `modo_lobby`: indica se a reserva foi aberta como lobby.
+- `visibilidade_lobby`: `publico` ou `privado` quando `modo_lobby` está ativo.
+- `codigo_acesso`: código definido pelo organizador para lobby privado (normalizado em maiúsculas).
 - `created_at`: data da reserva.
 
 ### Tabela `lobby_participantes`
@@ -548,19 +550,19 @@ Nao pode:
 4. Horarios sao agrupados por manha, tarde e noite.
 5. Horarios com reserva `pendente` ou `confirmada` aparecem como indisponiveis.
 6. O locatario seleciona um horario.
-7. Opcionalmente ativa o modo lobby.
+7. Opcionalmente ativa o modo lobby e escolhe publico ou privado (com codigo definido pelo usuario).
 8. O formulario envia POST para `crud/createReserva.php`.
 9. O endpoint exige usuario logado do tipo `locatario`.
-10. `createReserva()` abre transacao, trava o horario com `FOR UPDATE`, confirma que o horario pertence a arena aberta, confere duplicidade e cria reserva `pendente` com `modo_lobby` quando aplicavel.
+10. `createReserva()` abre transacao, trava o horario com `FOR UPDATE`, confirma que o horario pertence a arena aberta, confere duplicidade e cria reserva `pendente` com dados de lobby quando aplicavel.
 11. O usuario volta para a pagina da arena com mensagem de sucesso ou erro.
 
 ### Entrada em lobby (locatario)
 
 1. Locatario autenticado acessa `pages/listaLobbies.php` (link **Lobbies** no header).
-2. A pagina lista reservas com `modo_lobby = 1` e status ativo, excluindo lobbies do proprio usuario ou onde ja participa.
-3. Locatario clica em **Entrar no lobby**; POST para `crud/joinLobby.php` com `reserva_id`.
-4. `joinLobby()` valida o lobby e insere em `lobby_participantes` com transacao.
-5. Redirecionamento para `listaLobbies.php` com mensagem flash de sucesso ou erro.
+2. **Publico:** lista lobbies com `visibilidade_lobby = publico`; clica em **Solicitar entrada** (`tipo_entrada=publico`, `reserva_id`).
+3. **Privado:** informa o codigo no formulario inferior (`tipo_entrada=privado`, `codigo_acesso`).
+4. `joinLobbyPublico()` ou `joinLobbyPrivado()` insere em `lobby_participantes` com transacao.
+5. Redirecionamento para `listaLobbies.php` com mensagem flash.
 
 ## Regras de negocio
 
@@ -573,7 +575,9 @@ Nao pode:
 - Locatario precisa estar autenticado como `locatario` para reservar.
 - Um horario com reserva ativa nao pode ser reservado novamente.
 - Reservas sao criadas como `pendente` (aguardando gestao da quadra).
-- Lobby: reserva com `modo_lobby = 1`; outros locatarios entram pela lista em `listaLobbies.php`; o organizador ve em **Meus lobbies**.
+- Lobby público: visível em `listaLobbies.php` para outros locatarios entrarem.
+- Lobby privado: entrada apenas com `codigo_acesso` (4 a 20 caracteres, definido na reserva).
+- Organizador ve seus lobbies em **Meus lobbies** em `listaLobbies.php`.
 - Organizador do lobby (`reservas.usuario_id`) nao pode entrar como participante.
 - Um locatario nao pode entrar duas vezes no mesmo lobby.
 - CPF e obrigatorio para locatario cadastrado pela tela publica e para gerente.
@@ -801,7 +805,7 @@ Arquivo: `src/crud/readHorarios.php`
 
 Arquivo: `src/crud/createReserva.php`
 
-- `createReserva($data)`: cria reserva com transacao e flag `modo_lobby`.
+- `createReserva($data)`: cria reserva com transacao, `modo_lobby`, `visibilidade_lobby` e `codigo_acesso` (privado).
 - Usa `FOR UPDATE` para travar o horario durante a verificacao.
 - Confirma que o horario enviado pertence a arena enviada no formulario.
 - Impede reserva duplicada em horario com status `pendente` ou `confirmada`.
@@ -814,12 +818,14 @@ Arquivo: `src/crud/readReservasLocatario.php`
 
 Arquivo: `src/crud/readLobbies.php`
 
-- `getLobbiesDisponiveis($usuarioId)`: lista lobbies de outros jogadores disponiveis para entrada.
+- `getPublicLobbies($usuarioId)`: lista lobbies publicos de outros jogadores.
+- `getLobbyByCodigoAcesso($codigo)`: busca lobby privado pelo codigo.
 - `usuarioParticipaLobby($reservaId, $usuarioId)`: verifica participacao existente.
 
 Arquivo: `src/crud/joinLobby.php`
 
-- `joinLobby($reservaId, $usuarioId)`: adiciona participante ao lobby.
+- `joinLobbyPublico($reservaId, $usuarioId)`: entrada em lobby publico.
+- `joinLobbyPrivado($codigo, $usuarioId)`: entrada em lobby privado pelo codigo.
 - Endpoint POST exige CSRF e sessao `locatario`.
 
 ## Testes manuais recomendados

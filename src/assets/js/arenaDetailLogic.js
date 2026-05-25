@@ -1,26 +1,27 @@
 // assets/js/arenaDetailLogic.js – camelCase enforced
 
 (() => {
-    // ---- State -------------------------------------------------------
     let activePeriod    = 'manha';
     let selectedSlotId  = null;
     let isLobbyMode     = false;
 
-    // ---- Elements ----------------------------------------------------
-    const slotsGrid      = document.getElementById('slotsGrid');
-    const confirmBtn     = document.getElementById('confirmBtn');
-    const lobbyToggle    = document.getElementById('lobbyToggle');
+    const slotsGrid         = document.getElementById('slotsGrid');
+    const confirmBtn        = document.getElementById('confirmBtn');
+    const lobbyToggle       = document.getElementById('lobbyToggle');
+    const lobbyOptionsPanel = document.getElementById('lobbyOptionsPanel');
+    const lobbyCodeField    = document.getElementById('lobbyCodeField');
+    const codigoAcessoInput = document.getElementById('codigoAcessoInput');
+    const visibilidadeRadios = document.querySelectorAll('input[name="visibilidade_lobby"]');
     const selectedHorarioId = document.getElementById('selectedHorarioId');
     const selectedModoLobby = document.getElementById('selectedModoLobby');
-    const periodTabs     = document.querySelectorAll('.periodTab');
-    const slotsData      = slotsGrid ? JSON.parse(slotsGrid.dataset.slots || '{}') : {};
+    const periodTabs        = document.querySelectorAll('.periodTab');
+    const slotsData         = slotsGrid ? JSON.parse(slotsGrid.dataset.slots || '{}') : {};
 
     const formatPrice = (price) => Number(price).toLocaleString('pt-BR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
 
-    // ---- Render slots ------------------------------------------------
     const renderSlots = () => {
         slotsGrid.innerHTML = '';
 
@@ -55,7 +56,6 @@
         });
     };
 
-    // ---- Update confirm button ---------------------------------------
     const updateConfirmButton = (selectedSlot) => {
         confirmBtn.disabled          = false;
         confirmBtn.className         = 'bookingConfirmBtn enabled';
@@ -63,7 +63,6 @@
         selectedHorarioId.value      = selectedSlot.id;
     };
 
-    // ---- Period tabs -------------------------------------------------
     periodTabs.forEach(tabEl => {
         tabEl.addEventListener('click', () => {
             activePeriod   = tabEl.getAttribute('data-period');
@@ -78,16 +77,35 @@
         });
     });
 
-    // ---- Lobby toggle ------------------------------------------------
+    const updateLobbyVisibilityUi = () => {
+        const isPrivate = document.querySelector('input[name="visibilidade_lobby"]:checked')?.value === 'privado';
+        if (lobbyCodeField) {
+            lobbyCodeField.classList.toggle('d-none', !isPrivate);
+        }
+        if (codigoAcessoInput) {
+            codigoAcessoInput.required = isPrivate && isLobbyMode;
+            if (!isPrivate) {
+                codigoAcessoInput.value = '';
+            }
+        }
+    };
+
     if (lobbyToggle) {
         lobbyToggle.addEventListener('click', () => {
             isLobbyMode = !isLobbyMode;
             lobbyToggle.classList.toggle('active', isLobbyMode);
             selectedModoLobby.value = isLobbyMode ? '1' : '0';
+            if (lobbyOptionsPanel) {
+                lobbyOptionsPanel.classList.toggle('d-none', !isLobbyMode);
+            }
+            updateLobbyVisibilityUi();
         });
     }
 
-    // ---- Initial render ----------------------------------------------
+    visibilidadeRadios.forEach(radioEl => {
+        radioEl.addEventListener('change', updateLobbyVisibilityUi);
+    });
+
     if (slotsGrid) {
         renderSlots();
     }

@@ -3,11 +3,36 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/readLobbies.php';
 
-function joinLobby(int $reservaId, int $usuarioId): array {
+function normalizarCodigoAcesso(string $codigo): string {
+    return strtoupper(preg_replace('/\s+/', '', trim($codigo)));
+}
+
+function joinLobbyPublico(int $reservaId, int $usuarioId): array {
     $lobby = getLobbyByIdForJoin($reservaId);
 
     if (!$lobby || !(int)$lobby['modo_lobby']) {
         return ['sucesso' => false, 'mensagem' => 'Lobby não encontrado.'];
+    }
+
+    $visibilidade = $lobby['visibilidade_lobby'] ?? 'publico';
+    if ($visibilidade === 'privado') {
+        return ['sucesso' => false, 'mensagem' => 'Este lobby é privado. Use o código de acesso.'];
+    }
+
+    return inserirParticipanteLobby($lobby, $usuarioId);
+}
+
+function joinLobbyPrivado(string $codigo, int $usuarioId): array {
+    $codigoNormalizado = normalizarCodigoAcesso($codigo);
+
+    if (strlen($codigoNormalizado) < 4) {
+        return ['sucesso' => false, 'mensagem' => 'Informe um código de acesso válido.'];
+    }
+
+    $lobby = getLobbyByCodigoAcesso($codigoNormalizado);
+
+    if (!$lobby) {
+        return ['sucesso' => false, 'mensagem' => 'Código de acesso inválido ou lobby indisponível.'];
     }
 
     return inserirParticipanteLobby($lobby, $usuarioId);
@@ -102,12 +127,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
 
     $usuarioId = (int)$_SESSION['usuarioLogado'];
-    $reservaId = (int)($_POST['reserva_id'] ?? 0);
+    $tipoEntrada = $_POST['tipo_entrada'] ?? 'publico';
 
-    if ($reservaId <= 0) {
-        $responseData = ['sucesso' => false, 'mensagem' => 'Lobby inválido.'];
+    if ($tipoEntrada === 'privado') {
+        $responseData = joinLobbyPrivado($_POST['codigo_acesso'] ?? '', $usuarioId);
     } else {
-        $responseData = joinLobby($reservaId, $usuarioId);
+        $reservaId = (int)($_POST['reserva_id'] ?? 0);
+        if ($reservaId <= 0) {
+            $responseData = ['sucesso' => false, 'mensagem' => 'Lobby inválido.'];
+        } else {
+            $responseData = joinLobbyPublico($reservaId, $usuarioId);
+        }
     }
 
     setFlashFromResponse($responseData);

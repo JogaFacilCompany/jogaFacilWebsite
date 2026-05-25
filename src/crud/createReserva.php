@@ -2,11 +2,27 @@
 // crud/createReserva.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 
+function normalizarCodigoLobby(string $codigo): string {
+    return strtoupper(preg_replace('/\s+/', '', trim($codigo)));
+}
+
 function createReserva(array $data): array {
     $usuarioId = (int)($data['usuario_id'] ?? 0);
     $arenaId = (int)($data['arena_id'] ?? 0);
     $horarioId = (int)($data['horario_id'] ?? 0);
     $modoLobby = !empty($data['modo_lobby']) ? 1 : 0;
+    $visibilidadeLobby = null;
+    $codigoAcesso = null;
+
+    if ($modoLobby) {
+        $visibilidadeLobby = ($data['visibilidade_lobby'] ?? 'publico') === 'privado' ? 'privado' : 'publico';
+        if ($visibilidadeLobby === 'privado') {
+            $codigoAcesso = normalizarCodigoLobby((string)($data['codigo_acesso'] ?? ''));
+            if (strlen($codigoAcesso) < 4 || strlen($codigoAcesso) > 20) {
+                return ['sucesso' => false, 'mensagem' => 'Informe um código de acesso entre 4 e 20 caracteres para lobby privado.'];
+            }
+        }
+    }
 
     if ($usuarioId <= 0 || $arenaId <= 0 || $horarioId <= 0) {
         return ['sucesso' => false, 'mensagem' => 'Dados de reserva inválidos.'];
@@ -42,10 +58,17 @@ function createReserva(array $data): array {
         }
 
         $insertStmt = $pdo->prepare(
-            "INSERT INTO reservas (horario_id, quadra_id, usuario_id, status, modo_lobby)
-             VALUES (?, ?, ?, 'pendente', ?)"
+            "INSERT INTO reservas (horario_id, quadra_id, usuario_id, status, modo_lobby, visibilidade_lobby, codigo_acesso)
+             VALUES (?, ?, ?, 'pendente', ?, ?, ?)"
         );
-        $insertStmt->execute([$horarioId, (int)$horario['quadra_id'], $usuarioId, $modoLobby]);
+        $insertStmt->execute([
+            $horarioId,
+            (int)$horario['quadra_id'],
+            $usuarioId,
+            $modoLobby,
+            $visibilidadeLobby,
+            $codigoAcesso,
+        ]);
 
         $pdo->commit();
         return ['sucesso' => true, 'mensagem' => 'Reserva solicitada com sucesso! Aguardando aprovação da quadra.'];

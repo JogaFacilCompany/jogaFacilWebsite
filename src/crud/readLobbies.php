@@ -2,7 +2,7 @@
 // crud/readLobbies.php – camelCase enforced
 require_once __DIR__ . '/../config/database.php';
 
-function getLobbiesDisponiveis(int $usuarioId): array {
+function getPublicLobbies(int $usuarioId): array {
     $pdo = getDbConnection();
     try {
         $stmt = $pdo->prepare(
@@ -17,16 +17,13 @@ function getLobbiesDisponiveis(int $usuarioId): array {
                     q.endereco AS quadra_endereco,
                     u.id AS host_id,
                     u.nome AS host_nome,
-                    (SELECT COUNT(*) FROM lobby_participantes lp WHERE lp.reserva_id = r.id) AS total_participantes,
-                    EXISTS(
-                        SELECT 1 FROM lobby_participantes lp2
-                        WHERE lp2.reserva_id = r.id AND lp2.usuario_id = ?
-                    ) AS ja_participa
+                    (SELECT COUNT(*) FROM lobby_participantes lp WHERE lp.reserva_id = r.id) AS total_participantes
              FROM reservas r
              INNER JOIN horarios h ON h.id = r.horario_id
              INNER JOIN quadras q ON q.id = r.quadra_id
              INNER JOIN usuarios u ON u.id = r.usuario_id
              WHERE r.modo_lobby = 1
+               AND (r.visibilidade_lobby = 'publico' OR r.visibilidade_lobby IS NULL)
                AND r.status IN ('pendente', 'confirmada')
                AND q.status = 'ativo'
                AND r.usuario_id != ?
@@ -36,10 +33,10 @@ function getLobbiesDisponiveis(int $usuarioId): array {
                )
              ORDER BY h.data ASC, h.hora_inicio ASC"
         );
-        $stmt->execute([$usuarioId, $usuarioId, $usuarioId]);
+        $stmt->execute([$usuarioId, $usuarioId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     } catch (Throwable $e) {
-        error_log('Error in getLobbiesDisponiveis: ' . $e->getMessage());
+        error_log('Error in getPublicLobbies: ' . $e->getMessage());
         return [];
     }
 }
@@ -51,6 +48,7 @@ function getLobbyByIdForJoin(int $reservaId): ?array {
             "SELECT r.id AS reserva_id,
                     r.usuario_id AS host_id,
                     r.modo_lobby,
+                    r.visibilidade_lobby,
                     r.status,
                     q.status AS quadra_status
              FROM reservas r
@@ -63,6 +61,33 @@ function getLobbyByIdForJoin(int $reservaId): ?array {
         return $row ?: null;
     } catch (Throwable $e) {
         error_log('Error in getLobbyByIdForJoin: ' . $e->getMessage());
+        return null;
+    }
+}
+
+function getLobbyByCodigoAcesso(string $codigo): ?array {
+    $pdo = getDbConnection();
+    try {
+        $stmt = $pdo->prepare(
+            "SELECT r.id AS reserva_id,
+                    r.usuario_id AS host_id,
+                    r.modo_lobby,
+                    r.visibilidade_lobby,
+                    r.status,
+                    q.status AS quadra_status
+             FROM reservas r
+             INNER JOIN quadras q ON q.id = r.quadra_id
+             WHERE r.modo_lobby = 1
+               AND r.visibilidade_lobby = 'privado'
+               AND r.codigo_acesso = ?
+               AND r.status IN ('pendente', 'confirmada')
+             LIMIT 1"
+        );
+        $stmt->execute([$codigo]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    } catch (Throwable $e) {
+        error_log('Error in getLobbyByCodigoAcesso: ' . $e->getMessage());
         return null;
     }
 }

@@ -9,6 +9,8 @@ function getReservasByLocatario(int $usuarioId): array {
             "SELECT r.id AS reserva_id,
                     r.status,
                     r.modo_lobby,
+                    r.visibilidade_lobby,
+                    r.codigo_acesso,
                     r.created_at,
                     h.data,
                     h.hora_inicio,
@@ -38,6 +40,8 @@ function getLobbiesOrganizadosByLocatario(int $usuarioId): array {
         $stmt = $pdo->prepare(
             "SELECT r.id AS reserva_id,
                     r.status,
+                    r.visibilidade_lobby,
+                    r.codigo_acesso,
                     h.data,
                     h.hora_inicio,
                     h.hora_fim,
@@ -67,6 +71,7 @@ function getLobbiesParticipandoByLocatario(int $usuarioId): array {
         $stmt = $pdo->prepare(
             "SELECT r.id AS reserva_id,
                     r.status,
+                    r.visibilidade_lobby,
                     h.data,
                     h.hora_inicio,
                     h.hora_fim,

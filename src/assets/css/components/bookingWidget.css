@@ -191,6 +191,68 @@
     display: block;
 }
 
+.lobbyOptionsPanel {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    background-color: var(--bgSection);
+}
+
+.lobbyOptionsLabel {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--textMuted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.lobbyVisibilityTabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.lobbyVisibilityOption {
+    flex: 1;
+    margin: 0;
+    cursor: pointer;
+}
+
+.lobbyVisibilityOption input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lobbyVisibilityOption span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusSm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--textMuted);
+    background: var(--bgMain);
+    transition: var(--transition);
+}
+
+.lobbyVisibilityOption input:checked + span {
+    border-color: var(--verdeBandeira);
+    color: var(--verdeBandeira);
+    background-color: rgba(0, 156, 59, 0.08);
+}
+
+.lobbyCodeField .form-control {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}
+
 /* Booking CTA button */
 .bookingConfirmBtn {
     width: 100%;

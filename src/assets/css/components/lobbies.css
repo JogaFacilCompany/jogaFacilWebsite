@@ -59,6 +59,16 @@
     white-space: nowrap;
 }
 
+.lobbyBadgePrivate {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: #ca8a04;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
 .lobbyBadgeHost {
     background-color: rgba(59, 130, 246, 0.12);
     color: #2563eb;
@@ -103,6 +113,27 @@
 .lobbyJoinBtn:hover {
     background-color: var(--verdeEscuro);
     transform: translateY(-1px);
+}
+
+.lobbyPrivateCard {
+    background-color: var(--bgCard);
+    border: 1px solid var(--bgCardBorder);
+    border-radius: var(--radiusMd);
+    padding: 1.75rem;
+    max-width: 480px;
+}
+
+.lobbyPrivateCardTitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--textPrimary);
+    margin-bottom: 0.5rem;
+}
+
+.lobbyPrivateCardDesc {
+    font-size: 0.9rem;
+    color: var(--textMuted);
+    margin-bottom: 1.25rem;
 }
 
 .lobbyEmptyState {

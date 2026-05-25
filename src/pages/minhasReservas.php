@@ -60,6 +60,7 @@ $pageDescription = 'Acompanhe suas reservas de quadras e partidas em lobby.';
                     $precoFmt = number_format((float)$reserva['preco'], 2, ',', '.');
                     $status = $reserva['status'];
                     $isLobby = (int)$reserva['modo_lobby'] === 1;
+                    $visibilidade = $reserva['visibilidade_lobby'] ?? '';
                     $participantes = $isLobby ? (int)$reserva['total_participantes'] + 1 : 0;
                 ?>
                 <article class="reservaCard">
@@ -81,8 +82,14 @@ $pageDescription = 'Acompanhe suas reservas de quadras e partidas em lobby.';
                         <?php if ($isLobby): ?>
                             <div class="reservaLobbyBadge">
                                 <i class="bi bi-people-fill"></i>
-                                Modo lobby · <?= $participantes ?> participante(s)
+                                Lobby <?= $visibilidade === 'privado' ? 'privado' : 'público' ?>
+                                · <?= $participantes ?> participante(s)
                             </div>
+                            <?php if ($visibilidade === 'privado' && !empty($reserva['codigo_acesso'])): ?>
+                                <div class="reservaCodigoBox">
+                                    Código de acesso: <strong><?= htmlspecialchars($reserva['codigo_acesso']) ?></strong>
+                                </div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                     <div class="mt-3">
