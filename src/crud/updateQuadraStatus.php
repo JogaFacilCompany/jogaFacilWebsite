@@ -10,11 +10,26 @@ function updateArenaStatus(int $arenaId, string $status): array {
         return ['sucesso' => false, 'mensagem' => 'Status inválido.'];
     }
 
+    $quadraStmt = $pdo->prepare("SELECT nome, locador_id FROM quadras WHERE id = ? LIMIT 1");
+    $quadraStmt->execute([$arenaId]);
+    $quadraData = $quadraStmt->fetch();
+
     $stmt    = $pdo->prepare("UPDATE quadras SET status = :status WHERE id = :arenaId");
     $success = $stmt->execute(['status' => $status, 'arenaId' => $arenaId]);
 
     $labels = ['ativo' => 'aprovada', 'rejeitado' => 'rejeitada', 'pendente' => 'em análise'];
     $label  = $labels[$status] ?? $status;
+
+    if ($success && $quadraData && in_array($status, ['ativo', 'rejeitado'])) {
+        require_once __DIR__ . '/readNotificacoes.php';
+        $nomeArena = $quadraData['nome'];
+        $locadorId = (int)$quadraData['locador_id'];
+        $linkArena = '../pages/dashboardLocador.php?arena_id=' . $arenaId;
+        $mensagem  = $status === 'ativo'
+            ? "Sua arena \"{$nomeArena}\" foi aprovada!"
+            : "Sua arena \"{$nomeArena}\" foi rejeitada.";
+        inserirNotificacao($locadorId, $mensagem, $linkArena);
+    }
 
     return ['sucesso' => $success, 'mensagem' => $success ? "Arena {$label} com sucesso!" : 'Erro ao atualizar status.'];
 }

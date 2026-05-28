@@ -45,7 +45,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare("UPDATE reservas SET status = ? WHERE id = ?");
         $stmt->execute([$novoStatus, $reservaId]);
-        
+
+        // Busca o locatário e o nome da arena para montar a notificação
+        $reservaInfoStmt = $pdo->prepare(
+            "SELECT r.usuario_id, q.nome AS quadra_nome
+             FROM reservas r
+             INNER JOIN quadras q ON q.id = r.quadra_id
+             WHERE r.id = ? LIMIT 1"
+        );
+        $reservaInfoStmt->execute([$reservaId]);
+        $reservaInfo = $reservaInfoStmt->fetch();
+
+        if ($reservaInfo) {
+            require_once __DIR__ . '/readNotificacoes.php';
+            $locatarioId = (int)$reservaInfo['usuario_id'];
+            $nomeArena   = $reservaInfo['quadra_nome'];
+            $mensagem    = $novoStatus === 'confirmada'
+                ? "Sua reserva na arena \"{$nomeArena}\" foi confirmada!"
+                : "Sua reserva na arena \"{$nomeArena}\" foi cancelada.";
+            inserirNotificacao($locatarioId, $mensagem, '../pages/minhasReservas.php');
+        }
+
         $msg = $novoStatus === 'confirmada' ? 'Reserva aprovada com sucesso.' : 'Reserva recusada.';
         setFlash($msg, 'success');
 

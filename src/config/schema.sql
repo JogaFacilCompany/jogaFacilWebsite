@@ -86,6 +86,15 @@ CREATE TABLE IF NOT EXISTS quadra_imagens (
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS notificacoes (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id  INT NOT NULL,
+    mensagem    VARCHAR(500) NOT NULL,
+    link        VARCHAR(255) DEFAULT NULL,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Inserindo usuários de teste (senha para todos é: password)
 INSERT INTO usuarios (nome, email, senha, tipo, cpf) VALUES
 ('Locador Teste', 'locador@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'locador', '11111111111'),
