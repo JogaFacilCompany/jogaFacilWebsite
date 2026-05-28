@@ -52,6 +52,16 @@
 .btn-recusar:hover {
     background-color: rgba(239, 68, 68, 0.1) !important;
 }
+.btn-concluir {
+    background-color: #3b82f6 !important;
+    color: #fff !important;
+    border: none !important;
+    font-weight: 500;
+}
+.btn-concluir:hover {
+    background-color: #2563eb !important;
+    color: #fff !important;
+}
 </style>
 
 <div class="row g-4 mt-3">
@@ -129,7 +139,16 @@
                                     <i class="bi bi-envelope me-1"></i> <?= htmlspecialchars($reserva['usuario_email'] ?? 'Sem contato') ?>
                                 </small>
                             </div>
-                            <div class="align-self-start align-self-sm-center">
+                            <div class="d-flex gap-2 align-self-start align-self-sm-center">
+                                <form action="../crud/updateReservaStatus.php" method="POST" class="d-inline m-0" onsubmit="return confirm('Confirmar a chegada de <?= htmlspecialchars($reserva['usuario_nome'], ENT_QUOTES) ?>?');">
+                                    <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
+                                    <input type="hidden" name="reserva_id" value="<?= $reserva['reserva_id'] ?>">
+                                    <input type="hidden" name="arena_id" value="<?= $quadra['id'] ?>">
+                                    <input type="hidden" name="status" value="concluida">
+                                    <button type="submit" class="btn btn-sm btn-concluir rounded-pill px-3" title="Confirmar chegada">
+                                        <i class="bi bi-person-check me-1"></i> Confirmar Chegada
+                                    </button>
+                                </form>
                                 <form action="../crud/updateReservaStatus.php" method="POST" class="d-inline m-0" onsubmit="return confirm('Tem certeza que deseja CANCELAR esta reserva que já estava confirmada?');">
                                     <input type="hidden" name="csrfToken" value="<?= generateCsrfToken() ?>">
                                     <input type="hidden" name="reserva_id" value="<?= $reserva['reserva_id'] ?>">

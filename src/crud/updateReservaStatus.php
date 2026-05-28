@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (!in_array($novoStatus, ['confirmada', 'cancelada'])) {
+    if (!in_array($novoStatus, ['confirmada', 'cancelada', 'concluida'])) {
         setFlash('Status inválido.', 'danger');
         header('Location: ' . $redirectUrl);
         exit;
@@ -46,12 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE reservas SET status = ? WHERE id = ?");
         $stmt->execute([$novoStatus, $reservaId]);
         
-        $msg = $novoStatus === 'confirmada' ? 'Reserva aprovada com sucesso.' : 'Reserva recusada.';
+        $msg = match($novoStatus) {
+            'confirmada' => 'Reserva aprovada com sucesso.',
+            'concluida'  => 'Chegada do locatário confirmada com sucesso.',
+            default      => 'Reserva recusada.',
+        };
         setFlash($msg, 'success');
 
     } catch (Throwable $e) {
         error_log('Error updating reserva status: ' . $e->getMessage());
-        setFlash('Erro ao atualizar status da reserva.', 'danger');
+        setFlash('Erro: ' . $e->getMessage(), 'danger');
     }
 
     header('Location: ' . $redirectUrl);
