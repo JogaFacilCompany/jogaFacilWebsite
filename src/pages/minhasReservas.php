@@ -92,6 +92,7 @@ $pageDescription = 'Acompanhe suas reservas de quadras e partidas em lobby.';
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
+                    //aqui aparece o campo
                     <div class="mt-3">
                         <a href="arenaDetalhe.php?id=<?= (int)$reserva['quadra_id'] ?>" class="btn btn-sm btn-outline-success rounded-pill">
                             Ver arena

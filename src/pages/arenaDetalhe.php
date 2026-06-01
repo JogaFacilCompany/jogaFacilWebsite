@@ -191,6 +191,8 @@ if (!empty($quadra['imagem'])) {
                             </div>
                         </div>
 
+                        //aqui insere o form
+
                         <button class="bookingConfirmBtn disabled" id="confirmBtn" type="submit" disabled>
                             Selecione um horário
                         </button>
