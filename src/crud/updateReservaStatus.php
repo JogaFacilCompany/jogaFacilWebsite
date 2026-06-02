@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (!in_array($novoStatus, ['confirmada', 'cancelada'])) {
+    if (!in_array($novoStatus, ['confirmada', 'cancelada', 'concluida'])) {
         setFlash('Status inválido.', 'danger');
         header('Location: ' . $redirectUrl);
         exit;
@@ -45,13 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare("UPDATE reservas SET status = ? WHERE id = ?");
         $stmt->execute([$novoStatus, $reservaId]);
-
         // Busca o locatário e o nome da arena para montar a notificação
         $reservaInfoStmt = $pdo->prepare(
             "SELECT r.usuario_id, q.nome AS quadra_nome
-             FROM reservas r
-             INNER JOIN quadras q ON q.id = r.quadra_id
-             WHERE r.id = ? LIMIT 1"
+            FROM reservas r
+            INNER JOIN quadras q ON q.id = r.quadra_id
+            WHERE r.id = ? LIMIT 1"
         );
         $reservaInfoStmt->execute([$reservaId]);
         $reservaInfo = $reservaInfoStmt->fetch();
@@ -60,18 +59,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require_once __DIR__ . '/readNotificacoes.php';
             $locatarioId = (int)$reservaInfo['usuario_id'];
             $nomeArena   = $reservaInfo['quadra_nome'];
-            $mensagem    = $novoStatus === 'confirmada'
-                ? "Sua reserva na arena \"{$nomeArena}\" foi confirmada!"
-                : "Sua reserva na arena \"{$nomeArena}\" foi cancelada.";
+
+            if ($novoStatus === 'confirmada') {
+                $mensagem = "Sua reserva na arena \"{$nomeArena}\" foi confirmada!";
+            } elseif ($novoStatus === 'cancelada') {
+                $mensagem = "Sua reserva na arena \"{$nomeArena}\" foi cancelada.";
+            } else {
+                $mensagem = "Sua reserva na arena \"{$nomeArena}\" foi concluída.";
+            }
+
             inserirNotificacao($locatarioId, $mensagem, '../pages/minhasReservas.php');
         }
 
-        $msg = $novoStatus === 'confirmada' ? 'Reserva aprovada com sucesso.' : 'Reserva recusada.';
+        $msg = match($novoStatus) {
+            'confirmada' => 'Reserva aprovada com sucesso.',
+            'concluida'  => 'Chegada do locatário confirmada com sucesso.',
+            default      => 'Reserva recusada.',
+        };
         setFlash($msg, 'success');
 
     } catch (Throwable $e) {
         error_log('Error updating reserva status: ' . $e->getMessage());
-        setFlash('Erro ao atualizar status da reserva.', 'danger');
+        setFlash('Erro: ' . $e->getMessage(), 'danger');
     }
 
     header('Location: ' . $redirectUrl);

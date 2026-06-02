@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS reservas (
     horario_id  INT NOT NULL,
     quadra_id   INT NOT NULL,
     usuario_id  INT NOT NULL,
-    status              ENUM('pendente', 'confirmada', 'cancelada') NOT NULL DEFAULT 'pendente',
+    status              ENUM('pendente', 'confirmada', 'cancelada', 'concluida') NOT NULL DEFAULT 'pendente',
     modo_lobby          BOOLEAN DEFAULT FALSE,
     visibilidade_lobby  ENUM('publico', 'privado') DEFAULT NULL,
     codigo_acesso       VARCHAR(20) DEFAULT NULL,
@@ -57,6 +57,9 @@ CREATE TABLE IF NOT EXISTS reservas (
     FOREIGN KEY (quadra_id) REFERENCES quadras(id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE reservas 
+MODIFY COLUMN status ENUM('pendente', 'confirmada', 'cancelada', 'concluida') NOT NULL DEFAULT 'pendente';
 
 CREATE TABLE IF NOT EXISTS lobby_participantes (
     id          INT AUTO_INCREMENT PRIMARY KEY,
