@@ -27,6 +27,7 @@
                         <label class="form-label fw-medium">CNPJ *</label>
                         <input type="text" class="form-control formInput cnpj-mask" name="cnpj" placeholder="00.000.000/0000-00" required>
                     </div>
+                    //aqui insere o form
                     <div class="col-12">
                         <label class="form-label fw-medium">Endereço Completo *</label>
                         <input type="text" class="form-control formInput" name="endereco" required>

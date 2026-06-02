@@ -85,6 +85,7 @@
             <div class="detailCancelText">
                 Cancelamento grátis até <?= htmlspecialchars($quadra['cancelamento_horas']) ?>h antes.
             </div>
+            //aqui o campo novo aparece
         </div>
 
         <div class="detailInfoCard shadow-sm mb-4">

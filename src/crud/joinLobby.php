@@ -96,6 +96,30 @@ function inserirParticipanteLobby(array $lobby, int $usuarioId): array {
         );
         $insertStmt->execute([$reservaId, $usuarioId]);
 
+        $infoStmt = $pdo->prepare(
+            "SELECT u.nome AS participante_nome, q.nome AS quadra_nome
+             FROM usuarios u, quadras q
+             INNER JOIN reservas r ON r.quadra_id = q.id
+             WHERE u.id = ? AND r.id = ? LIMIT 1"
+        );
+        $infoStmt->execute([$usuarioId, $reservaId]);
+        $infoLobby = $infoStmt->fetch(PDO::FETCH_ASSOC);
+
+        $pdo->commit();
+
+        if ($infoLobby) {
+            require_once __DIR__ . '/readNotificacoes.php';
+            $nomePart  = $infoLobby['participante_nome'];
+            $nomeArena = $infoLobby['quadra_nome'];
+            inserirNotificacao(
+                $hostId,
+                "{$nomePart} entrou no seu lobby da arena \"{$nomeArena}\"!",
+                '../pages/listaLobbies.php'
+            );
+        }
+
+        return ['sucesso' => true, 'mensagem' => 'Você entrou no lobby com sucesso!'];
+
         $pdo->commit();
         return ['sucesso' => true, 'mensagem' => 'Você entrou no lobby com sucesso!'];
     } catch (Throwable $error) {
